@@ -8,12 +8,12 @@ const Model = {
   namespace: 'Auth',
   state: {},
   effects: {
-    *auth({ payload }, { select, call }) {
-      const result = yield call(heartbeat);
-      if (!result.data) {
-        history.replace('/login');
-      }
-    },
+    // *auth({ payload }, { select, call }) {
+    //   const result = yield call(heartbeat);
+    //   if (!result.data) {
+    //     history.replace('/login');
+    //   }
+    // },
   },
 };
 export default Model;

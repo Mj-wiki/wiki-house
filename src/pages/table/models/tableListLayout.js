@@ -50,39 +50,7 @@ export default {
     //     });
     //   }
     // },
-    *userList({}, { select, call, put }) {
-      const values = yield put({ type: 'getSearchValues' });
-      const { sort, start, length, sortValue, pageNum, search } = yield values;
-      const listQuery = {
-        search,
-        start,
-        length,
-        sort,
-        sortValue,
-      };
 
-      const data = yield call(requestGetUserList, listQuery);
-      if (data.code === 0) {
-        yield put({
-          type: 'changeState',
-          payload: {
-            dataSource: data.data.data,
-            total: data.data.total,
-            search,
-          },
-        });
-      } else {
-        yield put({
-          type: 'changeState',
-          payload: {
-            dataSource: [],
-            total: 0,
-            search,
-          },
-        });
-      }
-      return data;
-    },
     *changeList({ key, value }, { select, call, put }) {
       const v = yield put({ type: 'getSearchValues' });
       const { sort } = yield v;
@@ -96,40 +64,40 @@ export default {
 
       yield put({ type: 'userList' });
     },
-    *searchList({ value }, { select, call, put }) {
-      const v = yield put({ type: 'getSearchValues' });
-      const { sort, length, sortValue } = yield v;
+    // *searchList({ value }, { select, call, put }) {
+    //   const v = yield put({ type: 'getSearchValues' });
+    //   const { sort, length, sortValue } = yield v;
 
-      const listQuery = {
-        search: value,
-        start: 0,
-        length,
-        sort,
-        sortValue,
-      };
+    //   const listQuery = {
+    //     search: value,
+    //     start: 0,
+    //     length,
+    //     sort,
+    //     sortValue,
+    //   };
 
-      const data = yield call(requestGetUserList, listQuery);
-      if (data.code === 0) {
-        yield put({
-          type: 'changeState',
-          payload: {
-            dataSource: data.data.data,
-            total: data.data.total,
-            search: value,
-            pageNum: 1,
-          },
-        });
-      } else {
-        yield put({
-          type: 'changeState',
-          payload: {
-            dataSource: [],
-            total: 0,
-            search: value,
-          },
-        });
-      }
-    },
+    //   const data = yield call(requestGetUserList, listQuery);
+    //   if (data.code === 0) {
+    //     yield put({
+    //       type: 'changeState',
+    //       payload: {
+    //         dataSource: data.data.data,
+    //         total: data.data.total,
+    //         search: value,
+    //         pageNum: 1,
+    //       },
+    //     });
+    //   } else {
+    //     yield put({
+    //       type: 'changeState',
+    //       payload: {
+    //         dataSource: [],
+    //         total: 0,
+    //         search: value,
+    //       },
+    //     });
+    //   }
+    // },
     *getSearchValues(action, { select }) {
       const {
         total,
