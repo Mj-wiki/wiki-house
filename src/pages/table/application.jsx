@@ -14,51 +14,61 @@ const listData = [
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 1,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 2,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 3,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 4,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 5,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 6,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 7,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 8,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 9,
   },
   {
     appName: '归一查询',
     appIntroduction: '在公开的项目中查询归一词并查看图谱',
     coverUrl: appImg,
+    appId: 10,
   },
 ];
 function TableEdit(props) {
@@ -74,6 +84,7 @@ function TableEdit(props) {
   }, [editData]);
   const skipDetailLecture = appId => {
     if (!appId) appId = 1;
+    history.push('/table/checkAppDetail/' + appId);
     console.log(appId);
   };
   const changeItemLecture = (record, index) => {

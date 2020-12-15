@@ -35,6 +35,11 @@ export default defineConfig({
           component: '@/pages/table/application',
           title: '应用页',
         },
+        {
+          path: '/table/checkAppDetail/:appId',
+          component: '@/pages/table/checkAppDetail',
+          title: '查询页',
+        },
       ],
     },
   ],
