@@ -2,11 +2,65 @@ import React, { useState, useEffect } from 'react';
 import styles from './application.less';
 import { Tabs, Form, Tag, Breadcrumb } from 'antd';
 import { connect } from 'umi';
-
+import ColumnLayout from '@/components/ColumnLayout';
+import ContentCard from '@/components/ContentCard';
+import appImg from '../../assets/layouticon/detail_count_percent_1.png';
 import moment from 'moment';
 const { CheckableTag } = Tag;
-
 const { TabPane } = Tabs;
+//mock数据
+const listData = [
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+  {
+    appName: '归一查询',
+    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    coverUrl: appImg,
+  },
+];
 function TableEdit(props) {
   const { editData, history, onInit } = props;
   const {
@@ -18,9 +72,24 @@ function TableEdit(props) {
   useEffect(() => {
     onInit();
   }, [editData]);
-
+  const skipDetailLecture = appId => {
+    if (!appId) appId = 1;
+    console.log(appId);
+  };
+  const changeItemLecture = (record, index) => {
+    return (
+      <div style={{ cursor: 'pointer' }}>
+        <ContentCard
+          imgUrl={record.coverUrl}
+          appName={record.appName}
+          appIntroduction={record.appIntroduction}
+          onClick={skipDetailLecture.bind(this, record.appId)}
+        />
+      </div>
+    );
+  };
   return (
-    <div className={styles.header}>
+    <div className={styles.content}>
       <Breadcrumb style={{ marginBottom: 20 }}>
         <Breadcrumb.Item
           href="#"
@@ -32,7 +101,14 @@ function TableEdit(props) {
         </Breadcrumb.Item>
         <Breadcrumb.Item>应用</Breadcrumb.Item>
       </Breadcrumb>
-      <span style={{ color: '#f40' }}>这是应用页 </span>
+      <div>
+        <ColumnLayout
+          list={listData}
+          renderItem={changeItemLecture}
+          column={4}
+          direction={'horizontal'}
+        />
+      </div>
     </div>
   );
 }
