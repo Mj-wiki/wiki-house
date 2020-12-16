@@ -22,22 +22,22 @@ export default defineConfig({
         { exact: true, path: '/', redirect: '/table/homePage' },
         {
           path: '/table/homePage',
-          component: '@/pages/table/homePage',
+          component: '@/pages/table/homePage/homePage',
           title: '首页',
         },
         {
           path: '/table/projectManagement',
-          component: '@/pages/table/projectManagement',
+          component: '@/pages/table/projectManagement/projectManagement',
           title: '项目管理页',
         },
         {
           path: '/table/application',
-          component: '@/pages/table/application',
+          component: '@/pages/table/application/application',
           title: '应用页',
         },
         {
           path: '/table/checkAppDetail/:appId',
-          component: '@/pages/table/checkAppDetail',
+          component: '@/pages/table/application/checkAppDetail',
           title: '查询页',
         },
       ],

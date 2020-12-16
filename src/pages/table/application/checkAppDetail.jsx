@@ -4,7 +4,7 @@ import { Form, Input, Icon, Message, Select } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import ContentCard from '@/components/ContentCard';
-import appImg from '../../assets/layouticon/detail_count_percent_1.png';
+import appImg from '../../../assets/layouticon/detail_count_percent_1.png';
 const { Option } = Select;
 const { Search } = Input;
 //mock数据
