@@ -85,7 +85,6 @@ function TableEdit(props) {
   const skipDetailLecture = appId => {
     if (!appId) appId = 1;
     history.push('/table/checkAppDetail/' + appId);
-    console.log(appId);
   };
   const changeItemLecture = (record, index) => {
     return (

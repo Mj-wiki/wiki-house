@@ -87,7 +87,10 @@ function CheckAppDetail(props) {
   const changeItem = value => {
     setItems(value);
   };
-  const skipDetailLecture = () => {};
+  const skipDetailLecture = appId => {
+    if (!appId) appId = 1;
+    history.push('/table/checkConceptDetail/' + appId);
+  };
   const changeItemLecture = (record, index) => {
     return (
       <div style={{ cursor: 'pointer' }}>
