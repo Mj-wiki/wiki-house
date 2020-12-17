@@ -76,7 +76,7 @@ function CheckConceptDetail(props) {
           type: 'graph',
           layout: 'force',
           data,
-          links: graphLinks.links,
+          links: graphLinks,
           categories: categories,
           roam: true,
           focusNodeAdjacency: true,
