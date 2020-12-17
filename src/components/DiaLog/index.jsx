@@ -1,10 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { Modal, Card } from 'antd';
+import React from 'react';
 import styles from './index.less';
 
 const LoginLogs = props => {
   const { x, y, hidden, item } = props;
-  const chartRef = useRef(null);
 
   return (
     <div className={styles.wrap}>

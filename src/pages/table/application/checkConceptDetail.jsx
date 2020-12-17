@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkConceptDetail.less';
-import { Form, Input, Icon, Message, Breadcrumb } from 'antd';
+import { Form, Input, Breadcrumb } from 'antd';
 import { connect } from 'umi';
 import graphData from './mock.js';
 import graphLinks from './data.js';
@@ -10,8 +10,6 @@ const { Search } = Input;
 
 function CheckConceptDetail(props) {
   const { history, onInit } = props;
-  const [myChart, setMyChart] = useState(null);
-  const [cacheData, setCacheData] = useState(null);
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
     diglogHidden: false, //是否展示右键弹出层
@@ -21,7 +19,6 @@ function CheckConceptDetail(props) {
   });
   useEffect(() => {
     const myChart = echarts.init(chartRef.current);
-    setMyChart(myChart);
     myChart.showLoading();
     // 干掉浏览器默认右键事件
     document.oncontextmenu = function() {
@@ -38,7 +35,7 @@ function CheckConceptDetail(props) {
         name: '类目' + i,
       };
     }
-    setCacheData(data);
+    //setCacheData(data);
     data.forEach(function(node) {
       node.itemStyle = null;
       node.value = node.symbolSize;
@@ -58,15 +55,6 @@ function CheckConceptDetail(props) {
         left: 'right',
       },
       tooltip: {},
-
-      // legend: [
-      //   {
-      //     // selectedMode: 'single',
-      //     data: categories.map(function (a) {
-      //       return a.name;
-      //     }),
-      //   },
-      // ],
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',
       animation: false,
@@ -108,6 +96,7 @@ function CheckConceptDetail(props) {
     });
     // 右键元素
     myChart.on('contextmenu', function(params) {
+      console.log(params);
       if (typeof params === 'object') {
         setDiglogConfig({
           diglogHidden: true,
@@ -126,7 +115,7 @@ function CheckConceptDetail(props) {
         y: params.event.offsetY,
       });
       if (
-        myChart.getOption()?.series?.[0].data[params.target.dataIndex] ==
+        myChart.getOption()?.series?.[0].data[params.target?.dataIndex] ==
         undefined
       )
         return;
@@ -171,7 +160,12 @@ function CheckConceptDetail(props) {
         ref={chartRef}
         style={{ width: '100%', height: '800px', margin: '0 auto' }}
       ></div>
-      <Dialog></Dialog>
+      <Dialog
+        item={diglogConfig.diglogItems}
+        hidden={diglogConfig.diglogHidden}
+        x={diglogConfig.x}
+        y={diglogConfig.y}
+      ></Dialog>
     </div>
   );
 }
