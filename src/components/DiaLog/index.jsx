@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.less';
 
-const LoginLogs = props => {
+const DiaLog = props => {
   const { x, y, hidden, item } = props;
 
   return (
@@ -21,4 +21,4 @@ const LoginLogs = props => {
     </div>
   );
 };
-export default LoginLogs;
+export default DiaLog;
