@@ -3,7 +3,7 @@ import styles from './checkConceptDetail.less';
 import { Form, Input, Breadcrumb } from 'antd';
 import { connect } from 'umi';
 import graphData from './mock.js';
-import graphLinks from './data.js';
+import graphLinks from './data1.js';
 import * as echarts from 'echarts';
 import Dialog from '@/components/DiaLog';
 const { Search } = Input;
