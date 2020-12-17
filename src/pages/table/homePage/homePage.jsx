@@ -1,99 +1,98 @@
 import React, { useState, useEffect } from 'react';
+import EachartsTable from '../../../components/eachartstable/eacharts';
 import styles from './homePage.less';
-import LoginLogs from '@/components/LoginLogs';
-import { Card, Table, Button, Input } from 'antd';
-
 import { connect } from 'umi';
-const { Search } = Input;
+const Blundeventcount = () => {
+  location.reload();
+};
 function TableList(props) {
-  const { changeList, onInit, userLoginLogs, logObject } = props;
-  const [visible, setVisible] = useState(false);
-  const [LoginLogData, setLoginLogData] = useState({});
-  useEffect(() => {
-    onInit();
-  }, []);
-
-  useEffect(() => {
-    setLoginLogData(logObject);
-  }, [logObject]);
-  //日志
-  const log = record => {
-    return () => {
-      const uid = record.id;
-      setVisible(true);
-      userLoginLogs({ uid });
-    };
-  };
-
-  const onFilter = ({ target }) => {
-    console.log(target);
-    changeList('sortValue', target.value || '');
-  };
-
-  const handleOk = () => {
-    setVisible(false);
-  };
-  const handleCancel = () => {
-    setVisible(false);
-  };
-  //分页跳转
-  const changePage = ({ current }) => {
-    changeList('pageNum', current);
-  };
-
   return (
     <div className={styles.wrap}>
-      这是首页
-      <LoginLogs
-        visible={visible}
-        title={'登录日志'}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        data={LoginLogData}
-      ></LoginLogs>
+      <div className={styles.auto}>
+        <div className={styles.autotop}>
+          <div className={styles.eachartleft}>
+            <div className={styles.eacharslide}>
+              <div className={styles.eachartsimg}></div>
+              <div className={styles.eacharstext}>
+                <p onClick={() => Blundeventcount()}>项目总数</p>
+                <p className={styles.eachrsp}>123个</p>
+              </div>
+            </div>
+            <div className={styles.eacharslide}>
+              {' '}
+              <div className={styles.eachartsimg}></div>
+              <div className={styles.eacharstext}>
+                <p>三元组数</p>
+                <p className={styles.eachrsp}>21万9878个</p>
+              </div>
+            </div>
+            <div className={styles.eacharslide}>
+              {' '}
+              <div className={styles.eachartsimg}></div>
+              <div className={styles.eacharstext}>
+                <p>概念总数</p>
+                <p className={styles.eachrsp}>20万1288个</p>
+              </div>
+            </div>
+          </div>
+          <div className={styles.eachartright}>
+            <EachartsTable />
+            <p className={styles.textadd}>项目数增涨图</p>
+          </div>
+        </div>
+        <div className={styles.autobottom}>
+          <div className={styles.bottomslide}>
+            <div className={styles.slidetop}>归一项目</div>
+            <div className={styles.xiangmu}>
+              <div className={styles.xiangmuscroll}>
+                <div className={styles.xiangmuwrapper}>
+                  <div>归一项目1</div>
+                  <div>
+                    <span className={styles.colorgreen}>1万2千</span> 个概念
+                  </div>
+                </div>
+                <div className={styles.xiangmuwrapper}>
+                  <div>归一项目1</div>
+                  <div>
+                    <span className={styles.colorgreen}>1万2千</span> 个概念
+                  </div>
+                </div>
+                <div className={styles.xiangmuwrapper}>
+                  <div>归一项目1</div>
+                  <div>
+                    <span className={styles.colorgreen}>1万2千</span> 个概念
+                  </div>
+                </div>
+                <div className={styles.xiangmuwrapper}>
+                  <div>归一项目1</div>
+                  <div>
+                    <span className={styles.colorgreen}>1万2千</span> 个概念
+                  </div>
+                </div>
+                <div className={styles.xiangmuwrapper}>
+                  <div>归一项目1</div>
+                  <div>
+                    <span className={styles.colorgreen}>1万2千</span> 个概念
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.bottomslide}>
+            <div className={styles.slidetop}>我的应用</div>
+          </div>
+          <div className={styles.bottomslide}>
+            <div className={styles.slidetop}>任务通知</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 const mapStateProps = ({ list }) => {
-  return {
-    search: list.search,
-    sort: list.sort,
-    sortValue: list.sortValue,
-    start: list.start,
-    length: list.length,
-    dataSource: list.dataSource,
-    total: list.total,
-    logObject: list.logObject,
-    pageSize: list.pageSize,
-    pageNum: list.pageNum,
-  };
+  return {};
 };
 const mapDispatchProps = dispatch => {
-  return {
-    onInit: () => {
-      dispatch({ type: 'list/onInit' });
-    },
-    userDelete: values => {
-      dispatch({ type: 'list/userDelete', values });
-    },
-    userList: search => {
-      dispatch({ type: 'list/userList', search });
-    },
-    changeList: (key, value) => {
-      dispatch({ type: 'list/changeList', key, value });
-    },
-    searchList: value => {
-      dispatch({ type: 'list/searchList', value });
-    },
-    login: values => {
-      dispatch({ type: 'list/login', values });
-    },
-    userLoginLogs: values => {
-      dispatch({ type: 'list/userLoginLogs', values });
-    },
-    getEdit: uid => {
-      dispatch({ type: 'edit/getEdit', uid });
-    },
-  };
+  return {};
 };
 export default connect(mapStateProps, mapDispatchProps)(TableList);
