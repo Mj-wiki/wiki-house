@@ -80,9 +80,11 @@ function TableList(props) {
           </div>
           <div className={styles.bottomslide}>
             <div className={styles.slidetop}>我的应用</div>
+            hahhah
           </div>
           <div className={styles.bottomslide}>
             <div className={styles.slidetop}>任务通知</div>
+            hahah
           </div>
         </div>
       </div>
