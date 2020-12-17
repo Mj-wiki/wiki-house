@@ -19,7 +19,7 @@ export default defineConfig({
       wrappers: ['@/wrappers/auth'],
       component: '@/pages/table/_layout',
       routes: [
-        { exact: true, path: '/', redirect: '/table/homePage' },
+        { exact: true, path: '/', redirect: '/login' },
         {
           path: '/table/homePage',
           component: '@/pages/table/homePage/homePage',
