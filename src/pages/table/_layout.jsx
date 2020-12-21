@@ -131,18 +131,8 @@ function BackStageLayout(props) {
             </Menu.Item>
           </Menu>
         </Header>
-        <Layout style={{ padding: '30px' }}>
-          <Content
-            className={styles.site}
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 610,
-              //height: '100%',
-            }}
-          >
-            {props.children}
-          </Content>
+        <Layout>
+          <Content className={styles.site}>{props.children}</Content>
         </Layout>
       </Layout>
     </div>

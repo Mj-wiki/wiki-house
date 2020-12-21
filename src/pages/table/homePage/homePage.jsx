@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import EachartsTable from '../../../components/eachartstable/eacharts';
 import styles from './homePage.less';
+import {
+  ProfileOutlined,
+  HourglassOutlined,
+  FormatPainterOutlined,
+} from '@ant-design/icons';
+
 import { connect } from 'umi';
 const Blundeventcount = () => {
   location.reload();
@@ -12,7 +18,9 @@ function TableList(props) {
         <div className={styles.autotop}>
           <div className={styles.eachartleft}>
             <div className={styles.eacharslide}>
-              <div className={styles.eachartsimg}></div>
+              <div className={styles.eachartsimg}>
+                <FormatPainterOutlined />
+              </div>
               <div className={styles.eacharstext}>
                 <p onClick={() => Blundeventcount()}>项目总数</p>
                 <p className={styles.eachrsp}>123个</p>
@@ -20,7 +28,9 @@ function TableList(props) {
             </div>
             <div className={styles.eacharslide}>
               {' '}
-              <div className={styles.eachartsimg}></div>
+              <div className={styles.eachartsimg}>
+                <HourglassOutlined />
+              </div>
               <div className={styles.eacharstext}>
                 <p>三元组数</p>
                 <p className={styles.eachrsp}>21万9878个</p>
@@ -28,7 +38,9 @@ function TableList(props) {
             </div>
             <div className={styles.eacharslide}>
               {' '}
-              <div className={styles.eachartsimg}></div>
+              <div className={styles.eachartsimg}>
+                <ProfileOutlined />
+              </div>
               <div className={styles.eacharstext}>
                 <p>概念总数</p>
                 <p className={styles.eachrsp}>20万1288个</p>
@@ -80,11 +92,9 @@ function TableList(props) {
           </div>
           <div className={styles.bottomslide}>
             <div className={styles.slidetop}>我的应用</div>
-            hahhah
           </div>
           <div className={styles.bottomslide}>
             <div className={styles.slidetop}>任务通知</div>
-            hahah
           </div>
         </div>
       </div>

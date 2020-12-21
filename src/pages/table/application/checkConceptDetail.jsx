@@ -19,6 +19,7 @@ function CheckConceptDetail(props) {
   });
   useEffect(() => {
     const myChart = echarts.init(chartRef.current);
+    console.log(chartRef);
     myChart.showLoading();
     // 干掉浏览器默认右键事件
     document.oncontextmenu = function() {
