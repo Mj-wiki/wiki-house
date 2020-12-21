@@ -50,9 +50,11 @@ export default defineConfig({
   ],
   proxy: {
     '/api': {
-      target: 'http://120.221.160.4:9002/',
+      target: 'http://10.88.6.222:8000',
       changeOrigin: true,
-      // pathRewrite: { '^/api': '/api' },
+      // pathRewrite: {
+      //   '^/api': '/api'
+      // }
     },
   },
   alias: {

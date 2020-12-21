@@ -42,7 +42,7 @@ const Model = {
         return;
       }
       const result = yield call(Login, {
-        email: userName,
+        username: userName,
         password: passWord,
       });
       if (result.code === 0) {
