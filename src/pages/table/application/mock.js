@@ -1,12 +1,12 @@
 export default [
   {
-    id: '0',
-    name: 'Myriel',
-    itemStyle: { normal: { color: 'rgb(235,81,72)' } },
-    symbolSize: 28.685715,
-    x: -266.82776,
-    y: 299.6904,
-    attributes: { modularity_class: 0 },
+    id: '0', //节点id
+    name: 'Myriel', //节点名称
+    itemStyle: { normal: { color: 'rgb(235,81,72)' } }, //节点样式
+    symbolSize: 28.685715, //节点value值
+    x: -266.82776, //节点横坐标
+    y: 299.6904, //节点纵坐标
+    attributes: { modularity_class: 0 }, //节点类别
   },
   {
     id: '1',

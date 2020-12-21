@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.less';
 
-const LoginLogs = props => {
+const DiaLog = props => {
   const { x, y, hidden, item } = props;
   return (
     <div className={styles.wrap}>
@@ -22,7 +22,4 @@ const LoginLogs = props => {
     </div>
   );
 };
-const Blundeventitem = item => {
-  console.log(item);
-};
-export default LoginLogs;
+export default DiaLog;

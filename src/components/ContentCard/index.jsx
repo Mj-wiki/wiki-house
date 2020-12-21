@@ -48,11 +48,11 @@ export default function ContentCard({
 }
 
 ContentCard.propTypes = {
-  imgUrl: PropTypes.string, // 图片路径
-  appName: PropTypes.string,
-  appIntroduction: PropTypes.string, //讲课人
+  imgUrl: PropTypes.string, // 应用图标
+  appName: PropTypes.string, //应用名称
+  appIntroduction: PropTypes.string, //应用简介
   onClick: PropTypes.func,
-  courseCredit: PropTypes.number, //评分
+  courseCredit: PropTypes.number,
 };
 
 ContentCard.defaultProps = {
