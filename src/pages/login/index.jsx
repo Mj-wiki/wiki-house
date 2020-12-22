@@ -18,7 +18,7 @@ const Login = props => {
   };
   const signin = () => {
     console.log('登录');
-    //signIn();
+    signIn();
     history.push('/table/homePage');
   };
   const onEnter = e => {

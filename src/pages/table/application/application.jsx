@@ -88,7 +88,7 @@ function TableEdit(props) {
   };
   const changeItemLecture = (record, index) => {
     return (
-      <div style={{ cursor: 'pointer' }}>
+      <div>
         <ContentCard
           imgUrl={record.coverUrl}
           appName={record.appName}
@@ -100,7 +100,7 @@ function TableEdit(props) {
   };
   return (
     <div className={styles.content}>
-      <Breadcrumb style={{ marginBottom: 20 }}>
+      {/* <Breadcrumb style={{ marginBottom: 20 }}>
         <Breadcrumb.Item
           href="#"
           onClick={() => {
@@ -110,8 +110,8 @@ function TableEdit(props) {
           <span>首页</span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>应用</Breadcrumb.Item>
-      </Breadcrumb>
-      <div>
+      </Breadcrumb> */}
+      <div style={{ marginTop: '40px' }}>
         <ColumnLayout
           list={listData}
           renderItem={changeItemLecture}

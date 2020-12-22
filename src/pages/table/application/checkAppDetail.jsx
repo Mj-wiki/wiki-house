@@ -3,8 +3,9 @@ import styles from './checkAppDetail.less';
 import { Form, Input, Icon, Message, Select } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
-import ContentCard from '@/components/ContentCard';
-import appImg from '../../../assets/layouticon/detail_count_percent_1.png';
+import SearchNormalizeCard from '@/components/SearchNormalizeCard';
+import xhs_lls_1 from '../../../assets/layouticon/KG_2.jpg';
+import SearchModal from '@/components/SearchModal';
 const { Option } = Select;
 const { Search } = Input;
 //mock数据
@@ -15,58 +16,48 @@ const itemData = [
 ];
 const listData = [
   {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 1,
+    conceptName: '概念名1',
+    projectName: '项目名称',
+    fieldType: '领域类型名称',
+    standardWord: '标注词',
+    synonym: ['同义词1', '同义词2', '同义词3', '同义词4', '同义词5'],
+    coverUrl: xhs_lls_1,
+    itemId: 1,
   },
   {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 2,
+    conceptName: '概念名1',
+    projectName: '项目名称',
+    fieldType: '领域类型名称',
+    standardWord: '标注词',
+    synonym: ['同义词1', '同义词2', '同义词3', '同义词4', '同义词5'],
+    coverUrl: xhs_lls_1,
+    itemId: 2,
   },
   {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 3,
+    conceptName: '概念名1',
+    projectName: '项目名称',
+    fieldType: '领域类型名称',
+    standardWord: '标注词',
+    synonym: ['同义词1', '同义词2', '同义词3', '同义词4', '同义词5'],
+    coverUrl: xhs_lls_1,
+    itemId: 3,
   },
   {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 4,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 5,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 6,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 7,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 8,
+    conceptName: '概念名1',
+    projectName: '项目名称',
+    fieldType: '领域类型名称',
+    standardWord: '标注词',
+    synonym: ['同义词1', '同义词2', '同义词3', '同义词4', '同义词5'],
+    coverUrl: xhs_lls_1,
+    itemId: 4,
   },
 ];
 function CheckAppDetail(props) {
   const { editData, history, onInit } = props;
   const [items, setItems] = useState(undefined);
   const [searchNumber, setSearchNumber] = useState(0);
+  const [searchModalStatus, setSearchModalStatus] = useState(false);
+  const [quitBlur, setQuitBlur] = useState(false);
   const {
     query: { uid },
   } = history.location;
@@ -91,14 +82,34 @@ function CheckAppDetail(props) {
     if (!appId) appId = 1;
     history.push('/table/checkConceptDetail/' + appId);
   };
+  const getFocus = e => {
+    console.log(e, '----鼠标获取焦点----');
+    setQuitBlur(false);
+    setSearchModalStatus(true);
+    if (quitBlur) {
+      setSearchModalStatus(false);
+    }
+  };
+  const onOk = () => {
+    setSearchModalStatus(false);
+    setQuitBlur(true);
+  };
+  const onCancel = () => {
+    setSearchModalStatus(false);
+    setQuitBlur(true);
+  };
+
   const changeItemLecture = (record, index) => {
     return (
-      <div style={{ cursor: 'pointer' }}>
-        <ContentCard
+      <div>
+        <SearchNormalizeCard
           imgUrl={record.coverUrl}
-          appName={record.appName}
-          appIntroduction={record.appIntroduction}
-          onClick={skipDetailLecture.bind(this, record.appId)}
+          conceptName={record.conceptName}
+          projectName={record.projectName}
+          fieldType={record.fieldType}
+          standardWord={record.standardWord}
+          synonym={record.synonym}
+          onClick={skipDetailLecture.bind(this, record.itemId)}
         />
       </div>
     );
@@ -128,6 +139,7 @@ function CheckAppDetail(props) {
             prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
             style={{ width: 380, height: '100px !important' }}
             onSearch={changeSearch}
+            onFocus={getFocus}
             enterButton="搜索"
             maxLength={30}
           />
@@ -144,6 +156,13 @@ function CheckAppDetail(props) {
           direction={'horizontal'}
         />
       ) : null}
+      <SearchModal
+        visible={searchModalStatus}
+        title={undefined}
+        onOk={onOk}
+        onCancel={onCancel}
+        data={{}}
+      />
     </div>
   );
 }
