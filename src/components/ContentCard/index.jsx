@@ -25,8 +25,8 @@ export default function ContentCard({
     onClick();
   };
   return (
-    <div onClick={clickSkip.bind(this)}>
-      <div className={style.totalBox}>
+    <div>
+      <div className={style.totalBox} onClick={clickSkip.bind(this)}>
         <div className={style.appIntroduction_img}>
           <img src={imgUrl} className={style.topBox}></img>
         </div>

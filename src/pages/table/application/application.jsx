@@ -88,7 +88,7 @@ function TableEdit(props) {
   };
   const changeItemLecture = (record, index) => {
     return (
-      <div style={{ cursor: 'pointer' }}>
+      <div>
         <ContentCard
           imgUrl={record.coverUrl}
           appName={record.appName}

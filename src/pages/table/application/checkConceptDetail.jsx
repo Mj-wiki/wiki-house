@@ -19,7 +19,6 @@ function CheckConceptDetail(props) {
   });
   useEffect(() => {
     const myChart = echarts.init(chartRef.current);
-    console.log(chartRef);
     myChart.showLoading();
     // 干掉浏览器默认右键事件
     document.oncontextmenu = function() {
@@ -145,7 +144,7 @@ function CheckConceptDetail(props) {
 
   return (
     <div className={styles.content}>
-      <Breadcrumb style={{ marginBottom: 20 }}>
+      <Breadcrumb style={{ marginTop: '40px' }}>
         <Breadcrumb.Item
           href="#"
           onClick={() => {
