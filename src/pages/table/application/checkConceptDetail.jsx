@@ -48,12 +48,12 @@ function CheckConceptDetail(props) {
     });
 
     myChart.setOption({
-      title: {
-        text: 'text',
-        subtext: 'subtext',
-        top: 'bottom',
-        left: 'right',
-      },
+      // title: {
+      //   text: 'text',
+      //   subtext: 'subtext',
+      //   top: 'bottom',
+      //   left: 'right',
+      // },
       tooltip: {},
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',
@@ -101,8 +101,8 @@ function CheckConceptDetail(props) {
         setDiglogConfig({
           diglogHidden: true,
           diglogItems: params,
-          x: params.event.offsetX,
-          y: params.event.offsetY,
+          x: params.event.offsetX + 200,
+          y: params.event.offsetY + 100,
         });
       }
     });
