@@ -5,6 +5,7 @@ import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import SearchNormalizeCard from '@/components/SearchNormalizeCard';
 import xhs_lls_1 from '../../../assets/layouticon/KG_2.jpg';
+import SearchModal from '@/components/SearchModal';
 const { Option } = Select;
 const { Search } = Input;
 //mock数据
@@ -55,6 +56,8 @@ function CheckAppDetail(props) {
   const { editData, history, onInit } = props;
   const [items, setItems] = useState(undefined);
   const [searchNumber, setSearchNumber] = useState(0);
+  const [searchModalStatus, setSearchModalStatus] = useState(false);
+  const [quitBlur, setQuitBlur] = useState(false);
   const {
     query: { uid },
   } = history.location;
@@ -79,6 +82,23 @@ function CheckAppDetail(props) {
     if (!appId) appId = 1;
     history.push('/table/checkConceptDetail/' + appId);
   };
+  const getFocus = e => {
+    console.log(e, '----鼠标获取焦点----');
+    setQuitBlur(false);
+    setSearchModalStatus(true);
+    if (quitBlur) {
+      setSearchModalStatus(false);
+    }
+  };
+  const onOk = () => {
+    setSearchModalStatus(false);
+    setQuitBlur(true);
+  };
+  const onCancel = () => {
+    setSearchModalStatus(false);
+    setQuitBlur(true);
+  };
+
   const changeItemLecture = (record, index) => {
     return (
       <div>
@@ -119,6 +139,7 @@ function CheckAppDetail(props) {
             prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
             style={{ width: 380, height: '100px !important' }}
             onSearch={changeSearch}
+            onFocus={getFocus}
             enterButton="搜索"
             maxLength={30}
           />
@@ -135,6 +156,13 @@ function CheckAppDetail(props) {
           direction={'horizontal'}
         />
       ) : null}
+      <SearchModal
+        visible={searchModalStatus}
+        title={undefined}
+        onOk={onOk}
+        onCancel={onCancel}
+        data={{}}
+      />
     </div>
   );
 }

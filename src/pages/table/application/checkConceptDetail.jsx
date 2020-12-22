@@ -1,13 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkConceptDetail.less';
-import { Form, Input, Breadcrumb } from 'antd';
+import { Form, Input, Breadcrumb, Icon, Button } from 'antd';
 import { connect } from 'umi';
 import graphData from './mock.js';
 import graphLinks from './data.js';
 import * as echarts from 'echarts';
 import Dialog from '@/components/DiaLog';
-const { Search } = Input;
 
+const { Search } = Input;
+const buttonAddStyle = {
+  color: '#fff',
+  borderRadius: '5px',
+  marginRight: '10px',
+  fontSize: '25px',
+  lineHeight: '20px',
+  padding: '4px 12px',
+};
+const buttonMinusStyle = {
+  color: '#fff',
+  borderRadius: '5px',
+  marginRight: '10px',
+  fontSize: '25px',
+  lineHeight: '20px',
+};
 function CheckConceptDetail(props) {
   const { history, onInit } = props;
   const chartRef = useRef(null);
@@ -141,7 +156,12 @@ function CheckConceptDetail(props) {
       myChart.hideLoading();
     }, 1200);
   };
-
+  const add = () => {
+    console.log('+');
+  };
+  const minus = () => {
+    console.log('-');
+  };
   return (
     <div className={styles.content}>
       <Breadcrumb style={{ marginTop: '40px' }}>
@@ -155,11 +175,40 @@ function CheckConceptDetail(props) {
         </Breadcrumb.Item>
         <Breadcrumb.Item>概念详情</Breadcrumb.Item>
       </Breadcrumb>
-      <div
-        id="main"
-        ref={chartRef}
-        style={{ width: '100%', height: '800px', margin: '0 auto' }}
-      ></div>
+      <div className={styles.bigBox}>
+        <div className={styles.informationBox}></div>
+        <div className={styles.echartsBox}>
+          <div style={{ textAlign: 'right' }}>
+            <Search
+              placeholder="请输入关键词搜索"
+              prefix={
+                <Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
+              style={{ width: 200, height: '100px !important' }}
+              maxLength={30}
+            />
+          </div>
+          <div>
+            <Button type="primary" style={buttonAddStyle} onClick={add}>
+              +
+            </Button>
+            <Button type="primary" style={buttonMinusStyle} onClick={minus}>
+              -
+            </Button>
+            <div
+              id="main"
+              ref={chartRef}
+              style={{
+                width: '100%',
+                minHeight: '500px',
+                height: '100%',
+                margin: '0 auto',
+              }}
+            ></div>
+          </div>
+        </div>
+      </div>
+
       <Dialog
         item={diglogConfig.diglogItems}
         hidden={diglogConfig.diglogHidden}
