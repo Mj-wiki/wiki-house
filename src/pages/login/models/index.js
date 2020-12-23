@@ -45,8 +45,7 @@ const Model = {
         username: userName,
         password: passWord,
       });
-      console.log(result);
-      if (result.code === 0) {
+      if (result.result === 'success') {
         yield put({
           type: 'save',
           payload: {
@@ -58,10 +57,27 @@ const Model = {
         yield put({
           type: 'save',
           payload: {
-            errorInfo: result.msg,
+            errorInfo: '登录账号或密码错误,请重新登录!',
           },
         });
       }
+
+      // if (result.code === 0) {
+      //   yield put({
+      //     type: 'save',
+      //     payload: {
+      //       errorInfo: '',
+      //     },
+      //   });
+      //   history.replace('/table/homePage');
+      // } else {
+      //   yield put({
+      //     type: 'save',
+      //     payload: {
+      //       errorInfo: result.msg,
+      //     },
+      //   });
+      // }
     },
     *signout({ payload }, { call }) {
       const result = yield call(logout);

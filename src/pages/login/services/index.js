@@ -8,8 +8,8 @@ export const Login = data => {
 };
 
 //退出登陆
-// export const logout = () => {
-//   return request('/api/logout', {
-//     method: 'post',
-//   });
-// };
+export const logout = () => {
+  return request('/api/logout', {
+    method: 'post',
+  });
+};
