@@ -45,6 +45,11 @@ export default defineConfig({
           component: '@/pages/table/application/checkConceptDetail',
           title: '概念详情页',
         },
+        {
+          path: '/table/projectDetail',
+          component: '@/pages/table/projectDetail/projectDetail',
+          title: '概念详情页',
+        },
       ],
     },
   ],

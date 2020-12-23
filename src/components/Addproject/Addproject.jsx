@@ -12,7 +12,7 @@ export default class Addproject extends Component {
       width,
     } = this.props;
     return (
-      <div>
+      <div style={{ position: 'relative', zIndex: '990', background: '#fff' }}>
         <Modal
           title={title}
           visible={isModalVisible}
