@@ -19,8 +19,9 @@ export default class projectManagement extends Component {
       wrapperCol: { span: 16 },
     };
     const areas = [
-      { label: '领域', value: '领域' },
+      { label: '全部领域', value: '全部领域' },
       { label: '领域1', value: '领域1' },
+      { label: '领域2', value: '领域2' },
     ];
     const normFile = e => {
       if (e.fileList.length === 2) {
@@ -77,7 +78,11 @@ export default class projectManagement extends Component {
               <div className={Style.Setstatetext}>
                 最新由张三修改于2020/11/23
               </div>
-              <Button type="primary" className={Style.antdbutton}>
+              <Button
+                type="primary"
+                className={Style.antdbutton}
+                onClick={() => this.blundeventToDetail()}
+              >
                 查看
               </Button>
             </div>
@@ -155,7 +160,16 @@ export default class projectManagement extends Component {
             </div>
             <div className={Style.listDialog}>
               <div className={Style.listTextdalog}>
-                <p>上传文件失败，请点击此处重新上传</p>
+                <p>
+                  上传文件失败，请点击
+                  <span
+                    style={{ color: 'blue', cursor: 'pointer' }}
+                    onClick={() => this.blundeventReupload()}
+                  >
+                    此处
+                  </span>
+                  重新上传
+                </p>
                 <Button type="primary" className={Style.cancelbtn}>
                   取消
                 </Button>
@@ -347,6 +361,14 @@ export default class projectManagement extends Component {
     this.setState({
       isRemoveVisible: false,
     });
+  };
+  blundeventReupload = () => {
+    this.setState({
+      isModalVisible: true,
+    });
+  };
+  blundeventToDetail = () => {
+    this.props.history.push('/table/projectDetail');
   };
 }
 
