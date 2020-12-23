@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 //登录
 export const Login = data => {
-  return request('/api/login', {
+  return request('/api/login/', {
     method: 'post',
     data,
   });

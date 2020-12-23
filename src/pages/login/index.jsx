@@ -17,9 +17,8 @@ const Login = props => {
     };
   };
   const signin = () => {
-    console.log('登录');
     signIn();
-    history.push('/table/homePage');
+    if (errorInfo) return;
   };
   const onEnter = e => {
     if (e.nativeEvent.keyCode !== 13) return;

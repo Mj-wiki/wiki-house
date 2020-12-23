@@ -34,7 +34,7 @@ function BackStageLayout(props) {
         type="primary"
         size="small"
         onClick={() => {
-          signOut();
+          //signOut();
           history.push(BACK_URL);
           notification.close(key);
         }}
