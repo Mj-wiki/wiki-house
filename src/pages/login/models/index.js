@@ -45,6 +45,7 @@ const Model = {
         username: userName,
         password: passWord,
       });
+      console.log(result);
       if (result.code === 0) {
         yield put({
           type: 'save',
