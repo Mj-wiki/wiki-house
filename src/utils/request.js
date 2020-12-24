@@ -15,7 +15,7 @@ request.interceptors.request.use((url, options) => {
       ...options,
       data: qs.stringify(options.data),
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
     },
   };
