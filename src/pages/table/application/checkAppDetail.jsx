@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkAppDetail.less';
-import { Form, Input, Icon, Message, Select } from 'antd';
+import { Form, Input, Icon, Message, Select, Button } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import SearchNormalizeCard from '@/components/SearchNormalizeCard';
 import xhs_lls_1 from '../../../assets/layouticon/KG_2.jpg';
-import SearchModal from '@/components/SearchModal';
+
 const { Option } = Select;
 const { Search } = Input;
 //mock数据
@@ -54,26 +54,46 @@ const listData = [
 ];
 function CheckAppDetail(props) {
   const { editData, history, onInit } = props;
+  const cookieListData = localStorage.getItem('cookieList');
   const [items, setItems] = useState(undefined);
   const [searchNumber, setSearchNumber] = useState(0);
   const [searchModalStatus, setSearchModalStatus] = useState(false);
-  const [quitBlur, setQuitBlur] = useState(false);
+  const [emptyStatus, setEmptyStatus] = useState(0);
+  const [transArr, setTransArr] = useState([]);
+  const [cookieList, setCookieList] = useState([]);
+  const [hotWord, setHotWord] = useState(null);
+  const chartRef = useRef(null);
   const {
     query: { uid },
   } = history.location;
   useEffect(() => {
-    //初始化方法
+    //   chartRef.current.addEventListener('click', (e) => {
+    //     setSearchModalStatus(false);
+    // });
   }, []);
+  useEffect(() => {
+    if (cookieListData) {
+      setTransArr(cookieListData.split(','));
+    }
+  }, [cookieListData]);
+  useEffect(() => {
+    setCookieList(transArr);
+  }, [transArr]);
   const [form] = Form.useForm();
   //查询
   const changeSearch = value => {
-    let sliceValue = value;
-    if (value?.length > 30) {
-      sliceValue = value.slice(0, 30);
-      Message.error('不能输入超过30个字符~');
-    }
     setSearchNumber(1);
-    console.log('点击查询');
+    if (value) {
+      cookieList.unshift(value);
+    }
+    value = null;
+    if (cookieList.length > 5) {
+      cookieList.pop();
+    }
+    setCookieList([...new Set(cookieList)]);
+    setEmptyStatus(0);
+    setHotWord(null);
+    localStorage.setItem('cookieList', [...new Set(cookieList)]);
   };
   const changeItem = value => {
     setItems(value);
@@ -83,22 +103,37 @@ function CheckAppDetail(props) {
     history.push('/table/checkConceptDetail/' + appId);
   };
   const getFocus = e => {
-    console.log(e, '----鼠标获取焦点----');
-    setQuitBlur(false);
+    console.log(e.target.value, '---获取焦点---');
+    //stopPropagation(e)
     setSearchModalStatus(true);
-    if (quitBlur) {
-      setSearchModalStatus(false);
-    }
   };
-  const onOk = () => {
-    setSearchModalStatus(false);
-    setQuitBlur(true);
+  const loseFocus = e => {
+    // console.log(e.target.value,'---失去焦点---')
+    // if(!e.target.value ){
+    //   setSearchModalStatus(false);
+    // }
   };
-  const onCancel = () => {
+  const closeModal = e => {
     setSearchModalStatus(false);
-    setQuitBlur(true);
+  };
+  const enterKeyword = e => {
+    setHotWord(e.target.value);
   };
 
+  const setHistoryWord = v => {
+    setHotWord(v);
+    setSearchModalStatus(false);
+  };
+  const empty = () => {
+    setEmptyStatus(1);
+    setCookieList([]);
+    setSearchModalStatus(false);
+    localStorage.removeItem('cookieList');
+  };
+  //阻止冒泡
+  const stopPropagation = e => {
+    e.nativeEvent.stopImmediatePropagation();
+  };
   const changeItemLecture = (record, index) => {
     return (
       <div>
@@ -115,7 +150,7 @@ function CheckAppDetail(props) {
     );
   };
   return (
-    <div className={styles.content}>
+    <div className={styles.content} ref={chartRef}>
       <div className={styles.checkTitle}>归一查询</div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div className={styles.searchArea}>
@@ -134,15 +169,49 @@ function CheckAppDetail(props) {
             })}
           </Select>
           <div className={styles.line}></div>
-          <Search
-            placeholder="请输入关键词搜索"
-            prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            style={{ width: 380, height: '100px !important' }}
-            onSearch={changeSearch}
-            onFocus={getFocus}
-            enterButton="搜索"
-            maxLength={30}
-          />
+          <div className={styles.hotWordSearch}>
+            <Search
+              placeholder="请输入关键词搜索"
+              prefix={
+                <Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
+              style={{ width: 380, height: '100px !important' }}
+              onSearch={changeSearch}
+              onFocus={getFocus}
+              onBlur={loseFocus}
+              onChange={enterKeyword}
+              enterButton="搜索"
+              maxLength={30}
+              value={hotWord}
+            />
+            <div
+              className={styles.line_hover}
+              style={{ display: searchModalStatus ? 'block' : 'none' }}
+              onClick={stopPropagation}
+            >
+              {!emptyStatus
+                ? cookieList.map((v, k) => {
+                    let sliceV = v;
+                    if (v && v.length > 12) {
+                      sliceV = v.slice(0, 12) + '...';
+                    }
+                    return (
+                      <div
+                        key={k}
+                        className={styles.cookieLine}
+                        onClick={setHistoryWord.bind(this, v)}
+                        title={v}
+                      >
+                        {sliceV}
+                      </div>
+                    );
+                  })
+                : null}
+              <Button className={styles.emptyHistory} onClick={() => empty()}>
+                清空历史
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
       {searchNumber ? (
@@ -156,13 +225,6 @@ function CheckAppDetail(props) {
           direction={'horizontal'}
         />
       ) : null}
-      <SearchModal
-        visible={searchModalStatus}
-        title={undefined}
-        onOk={onOk}
-        onCancel={onCancel}
-        data={{}}
-      />
     </div>
   );
 }

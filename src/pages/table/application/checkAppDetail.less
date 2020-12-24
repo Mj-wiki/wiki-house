@@ -22,6 +22,61 @@
     background: rgba(255, 255, 255, 1);
     border-radius: 2px;
     border: 1px solid rgba(0, 0, 0, 0.15);
+    .hotWordSearch {
+      display: inline-block;
+      .emptyHistory {
+        width: 290px;
+        height: 20px;
+        background: rgba(232, 232, 232, 0.3);
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 400;
+        color: #666666;
+        border: 0px;
+      }
+      .hotSearch {
+        color: #333333;
+        text-align: left;
+      }
+      // &:hover .line_hover{
+      //   display: block;
+      // }
+    }
+    .line_hover {
+      //display: none;
+      position: relative;
+      top: 2px;
+      width: 315px;
+      height: auto;
+      line-height: 24px;
+      padding: 10px;
+      border-top: 0px;
+      text-align: center;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.09);
+      border-radius: 4px;
+      z-index: 1000;
+      .serial {
+        width: 14px;
+        height: 14px;
+        background: @colorB;
+        border-radius: 2px;
+        vertical-align: middle;
+        font-size: 10px;
+        color: #fff;
+        line-height: 14px;
+        margin: 5px 5px 0 0px;
+      }
+      .cookieLine {
+        text-align: left;
+        cursor: pointer;
+        font-weight: 400;
+        color: #999999;
+        &:hover {
+          color: #4abf61;
+        }
+      }
+    }
     .line {
       width: 1px;
       height: 20px;

@@ -69,7 +69,7 @@ function BackStageLayout(props) {
   return (
     <div className={styles.normal}>
       <Layout>
-        <Header className="header" style={{ padding: 0 }}>
+        <Header style={{ padding: 0 }}>
           <Menu theme="dark" mode="horizontal" selectable="false">
             <Menu.Item key="0"></Menu.Item>
             <Menu.Item
