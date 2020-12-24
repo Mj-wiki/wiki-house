@@ -62,15 +62,11 @@ function CheckAppDetail(props) {
   const [transArr, setTransArr] = useState([]);
   const [cookieList, setCookieList] = useState([]);
   const [hotWord, setHotWord] = useState(null);
-  const chartRef = useRef(null);
+  const btnElement = useRef(null);
   const {
     query: { uid },
   } = history.location;
-  useEffect(() => {
-    //   chartRef.current.addEventListener('click', (e) => {
-    //     setSearchModalStatus(false);
-    // });
-  }, []);
+
   useEffect(() => {
     if (cookieListData) {
       setTransArr(cookieListData.split(','));
@@ -103,36 +99,25 @@ function CheckAppDetail(props) {
     history.push('/table/checkConceptDetail/' + appId);
   };
   const getFocus = e => {
-    console.log(e.target.value, '---获取焦点---');
-    //stopPropagation(e)
+    e.stopPropagation();
     setSearchModalStatus(true);
   };
-  const loseFocus = e => {
-    // console.log(e.target.value,'---失去焦点---')
-    // if(!e.target.value ){
-    //   setSearchModalStatus(false);
-    // }
-  };
-  const closeModal = e => {
-    setSearchModalStatus(false);
-  };
+
   const enterKeyword = e => {
     setHotWord(e.target.value);
   };
 
   const setHistoryWord = v => {
     setHotWord(v);
-    setSearchModalStatus(false);
   };
   const empty = () => {
     setEmptyStatus(1);
     setCookieList([]);
-    setSearchModalStatus(false);
     localStorage.removeItem('cookieList');
   };
   //阻止冒泡
   const stopPropagation = e => {
-    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
   };
   const changeItemLecture = (record, index) => {
     return (
@@ -150,7 +135,7 @@ function CheckAppDetail(props) {
     );
   };
   return (
-    <div className={styles.content} ref={chartRef}>
+    <div className={styles.content}>
       <div className={styles.checkTitle}>归一查询</div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div className={styles.searchArea}>
@@ -178,16 +163,19 @@ function CheckAppDetail(props) {
               style={{ width: 380, height: '100px !important' }}
               onSearch={changeSearch}
               onFocus={getFocus}
-              onBlur={loseFocus}
               onChange={enterKeyword}
               enterButton="搜索"
               maxLength={30}
               value={hotWord}
+              ref={btnElement}
             />
             <div
               className={styles.line_hover}
               style={{ display: searchModalStatus ? 'block' : 'none' }}
               onClick={stopPropagation}
+              onMouseLeave={() => {
+                setSearchModalStatus(false);
+              }}
             >
               {!emptyStatus
                 ? cookieList.map((v, k) => {
@@ -228,7 +216,7 @@ function CheckAppDetail(props) {
     </div>
   );
 }
-const mapStateProps = ({ detail, edit }) => {
+const mapStateProps = ({ detail }) => {
   return {};
 };
 const mapDispatchProps = dispatch => {
