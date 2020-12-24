@@ -19,7 +19,7 @@ export default class SearchFrom extends Component {
             style={{ width: 300 }}
             onChange={this.handleChange}
           >
-            <Option value="领域">全部领域</Option>
+            <Option value="全部领域">全部领域</Option>
             <Option value="领域1">领域1</Option>
             <Option value="领域2">领域2</Option>
           </Select>
@@ -33,9 +33,16 @@ export default class SearchFrom extends Component {
     );
   }
   handleChange = value => {
-    console.log(value);
+    this.setState({
+      optionValue: value,
+    });
   };
   onSearch = value => {
-    console.log(value);
+    this.setState({
+      SelectValue: value,
+    });
+    const { SearchFromValue } = this.props;
+    const { optionValue } = this.state;
+    SearchFromValue(optionValue, value);
   };
 }

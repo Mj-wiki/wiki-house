@@ -6,12 +6,26 @@ import {
   HourglassOutlined,
   FormatPainterOutlined,
 } from '@ant-design/icons';
-
 import { connect } from 'umi';
-const Blundeventcount = () => {
-  location.reload();
-};
+import { initHomeStatistics } from '@/api/Project.jsx';
+
 function TableList(props) {
+  const [projects, setprojects] = useState('');
+  const [triples, settriples] = useState('');
+  const [concepts, setconcepts] = useState('');
+  useEffect(() => {
+    initHomeStatistics().then(res => {
+      console.log(res);
+      const { result, projects, triples, concepts } = res;
+      if (result == 'success') {
+        setprojects(projects);
+        settriples(triples);
+        setconcepts(concepts);
+      } else {
+        return;
+      }
+    });
+  }, []);
   return (
     <div className={styles.wrap}>
       <div className={styles.auto}>
@@ -22,8 +36,8 @@ function TableList(props) {
                 <FormatPainterOutlined />
               </div>
               <div className={styles.eacharstext}>
-                <p onClick={() => Blundeventcount()}>项目总数</p>
-                <p className={styles.eachrsp}>123个</p>
+                <p>项目总数</p>
+                <p className={styles.eachrsp}>{projects}个</p>
               </div>
             </div>
             <div className={styles.eacharslide}>
@@ -33,7 +47,7 @@ function TableList(props) {
               </div>
               <div className={styles.eacharstext}>
                 <p>三元组数</p>
-                <p className={styles.eachrsp}>21万9878个</p>
+                <p className={styles.eachrsp}>{concepts}个</p>
               </div>
             </div>
             <div className={styles.eacharslide}>
@@ -43,7 +57,7 @@ function TableList(props) {
               </div>
               <div className={styles.eacharstext}>
                 <p>概念总数</p>
-                <p className={styles.eachrsp}>20万1288个</p>
+                <p className={styles.eachrsp}>{concepts}个</p>
               </div>
             </div>
           </div>
