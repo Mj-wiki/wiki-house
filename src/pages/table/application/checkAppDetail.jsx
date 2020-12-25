@@ -88,7 +88,7 @@ function CheckAppDetail(props) {
     }
     setCookieList([...new Set(cookieList)]);
     setEmptyStatus(0);
-    setHotWord(null);
+    //setHotWord(null);
     localStorage.setItem('cookieList', [...new Set(cookieList)]);
   };
   const changeItem = value => {
