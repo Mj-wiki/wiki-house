@@ -109,6 +109,7 @@ function CheckConceptDetail(props) {
         },
       ],
     });
+
     // 右键元素
     myChart.on('contextmenu', function(params) {
       console.log(params);
@@ -156,12 +157,23 @@ function CheckConceptDetail(props) {
       myChart.hideLoading();
     }, 1200);
   };
-  const add = () => {
-    console.log('+');
+  //点击按钮放大或缩小
+  const zoomGraph = v => {
+    const myChart = echarts.init(chartRef.current);
+    let currentZoom = myChart.getOption().series[0].zoom;
+    let increaseAmplitude = 1.2;
+    if (v == 1) {
+      increaseAmplitude = 0.8;
+    }
+    myChart.setOption({
+      series: [
+        {
+          zoom: currentZoom * increaseAmplitude,
+        },
+      ],
+    });
   };
-  const minus = () => {
-    console.log('-');
-  };
+
   return (
     <div className={styles.content}>
       <Breadcrumb style={{ marginTop: '40px' }}>
@@ -236,10 +248,18 @@ function CheckConceptDetail(props) {
             />
           </div>
           <div>
-            <Button type="primary" style={buttonAddStyle} onClick={add}>
+            <Button
+              type="primary"
+              style={buttonAddStyle}
+              onClick={zoomGraph.bind(this, 0)}
+            >
               +
             </Button>
-            <Button type="primary" style={buttonMinusStyle} onClick={minus}>
+            <Button
+              type="primary"
+              style={buttonMinusStyle}
+              onClick={zoomGraph.bind(this, 1)}
+            >
               -
             </Button>
             <div
