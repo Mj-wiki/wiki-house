@@ -25,7 +25,7 @@ export default class projectManagement extends Component {
     action: 'http://127.0.0.1:8000/api/project/upload/',
     // listType:"picture",
     headers: {
-      ContentType: 'multipart/form-data',
+      // ContentType: 'multipart/form-data',
     },
     data: {},
     beforeUpload: file => {
@@ -371,14 +371,9 @@ export default class projectManagement extends Component {
     this.setState({
       isModalVisible: true,
     });
-    console.log(item);
   };
   Blundeventcloseproject = async () => {
     //创建项目弹框下的提交按钮
-    this.setState({
-      isModalVisible: false,
-      uploadkeys: true,
-    });
     const form = this.formRef.current;
     try {
       const values = await form.validateFields([
@@ -386,6 +381,7 @@ export default class projectManagement extends Component {
         'project_fieldcode',
         'project_code',
         'project_introduction',
+        'upload',
       ]);
       const {
         project_name,
@@ -394,17 +390,25 @@ export default class projectManagement extends Component {
         project_introduction,
       } = values;
       let obj = {
-        project_name: '康俊3',
-        project_code: 'kangjun',
+        project_name,
+        project_fieldcode,
+        project_code,
+        project_introduction,
         project_status: 1,
-        project_introduction: 'kangjun',
-        project_photo: 'kangjun',
-        project_fieldcode: '10089',
+        project_photo: '图片',
         project_fieldname: 'kangjun',
         create_user: 'kangjun',
       };
       CreateProject(obj).then(res => {
-        console.log(res.data);
+        if (res.result == 'success') {
+          console.log(res.data);
+          this.initProjectlist();
+          this.setState({
+            isModalVisible: false,
+          });
+        } else {
+          return;
+        }
       });
     } catch (err) {
       // console.log(err)
@@ -446,10 +450,9 @@ export default class projectManagement extends Component {
       ProjectId,
       userName,
     };
-    console.log(obj);
     deleteProject(obj).then(res => {
       if (res.result == 'success') {
-        this.initProjectlist('kangjun', 'kangjun');
+        this.initProjectlist();
         console.log(res.data);
         this.setState({
           isRemoveVisible: false,
@@ -472,7 +475,7 @@ export default class projectManagement extends Component {
     console.log(value);
   };
   componentDidMount() {
-    this.initProjectlist('kangjun', 'kangjun');
+    this.initProjectlist();
   }
   initProjectlist = (projectFieldcode, projectName) => {
     let obj = {
