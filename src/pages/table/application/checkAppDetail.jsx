@@ -4,8 +4,7 @@ import { Form, Input, Icon, Message, Select, Button } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import SearchNormalizeCard from '@/components/SearchNormalizeCard';
-import xhs_lls_1 from '../../../assets/layouticon/KG_2.jpg';
-
+import listData from './listData.js';
 const { Option } = Select;
 const { Search } = Input;
 //mock数据
@@ -14,46 +13,9 @@ const itemData = [
   { projectId: '1', projectName: '领域1' },
   { projectId: '2', projectName: '领域2' },
 ];
-const listData = [
-  {
-    conceptName: '概念名1',
-    projectName: '项目名称',
-    fieldType: '领域类型名称',
-    standardWord: '标注词',
-    synonym: ['同义词1', '同义词2', '同义词3', '同义词4', '同义词5'],
-    coverUrl: xhs_lls_1,
-    itemId: 1,
-  },
-  {
-    conceptName: '概念名1',
-    projectName: '项目名称',
-    fieldType: '领域类型名称',
-    standardWord: '标注词',
-    synonym: ['同义词1', '同义词2', '同义词3', '同义词4', '同义词5'],
-    coverUrl: xhs_lls_1,
-    itemId: 2,
-  },
-  {
-    conceptName: '概念名1',
-    projectName: '项目名称',
-    fieldType: '领域类型名称',
-    standardWord: '标注词',
-    synonym: ['同义词1', '同义词2', '同义词3', '同义词4', '同义词5'],
-    coverUrl: xhs_lls_1,
-    itemId: 3,
-  },
-  {
-    conceptName: '概念名1',
-    projectName: '项目名称',
-    fieldType: '领域类型名称',
-    standardWord: '标注词',
-    synonym: ['同义词1', '同义词2', '同义词3', '同义词4', '同义词5'],
-    coverUrl: xhs_lls_1,
-    itemId: 4,
-  },
-];
+
 function CheckAppDetail(props) {
-  const { editData, history, onInit } = props;
+  const { history, onInit } = props;
   const cookieListData = localStorage.getItem('cookieList');
   const [items, setItems] = useState(undefined);
   const [searchNumber, setSearchNumber] = useState(0);
