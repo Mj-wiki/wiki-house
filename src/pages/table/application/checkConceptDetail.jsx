@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkConceptDetail.less';
-import { Form, Input, Breadcrumb, Icon, Button } from 'antd';
+import { Form, Input, Breadcrumb, Icon, Button, Divider } from 'antd';
 import { connect } from 'umi';
 import graphData from './mock.js';
 import graphLinks from './data.js';
 import * as echarts from 'echarts';
 import Dialog from '@/components/DiaLog';
-
+import listData from './listData.js';
 const { Search } = Input;
 const buttonAddStyle = {
   color: '#fff',
@@ -116,8 +116,8 @@ function CheckConceptDetail(props) {
         setDiglogConfig({
           diglogHidden: true,
           diglogItems: params,
-          x: params.event.offsetX + 200,
-          y: params.event.offsetY + 100,
+          x: params.event.offsetX + 400,
+          y: params.event.offsetY + 200,
         });
       }
     });
@@ -175,8 +175,55 @@ function CheckConceptDetail(props) {
         </Breadcrumb.Item>
         <Breadcrumb.Item>概念详情</Breadcrumb.Item>
       </Breadcrumb>
+      <Divider style={{ background: '#353d58' }}></Divider>
       <div className={styles.bigBox}>
-        <div className={styles.informationBox}></div>
+        <div className={styles.informationBox}>
+          <div className={styles.lecturerLayout}>
+            <div className={styles.lecturerLeft}>
+              <span title={listData[0].conceptName}>
+                {listData[0].conceptName}
+              </span>
+            </div>
+          </div>
+          <div className={styles.bottomBox}>
+            <div className={styles.lectureHospital}>
+              <span className={styles.projectName}>所属项目:</span>
+              <span title={listData[0].projectName}>
+                {listData[0].projectName}
+              </span>
+            </div>
+            <div className={styles.lectureHospital}>
+              <span className={styles.projectName}>项目描述:</span>
+              <span title={listData[0].projectName}>
+                {
+                  '这是项目描述这是项目描述这是项目描述这是项目balablabalbalabalbalalabalb这是项目描述这是项目描述这是项目描述这是项目balablabalbalabalbalalabalb...'
+                }
+              </span>
+            </div>
+            <div className={styles.lectureHospital}>
+              <span className={styles.projectName}>领域类型:</span>
+              <span title={listData[0].fieldType}>{listData[0].fieldType}</span>
+            </div>
+            <div className={styles.lectureHospital}>
+              <span className={styles.projectName}>标准词:</span>
+              <span title={listData[0].standardWord}>
+                {listData[0].standardWord}
+              </span>
+            </div>
+            <div className={styles.lectureHospital}>
+              <div style={{ display: 'flex' }}>
+                <div className={styles.synonym}>同义词:</div>
+                <span title={listData[0].synonym.join('; ')}>
+                  {listData[0].synonym.join('; ')
+                    ? listData[0].synonym.join('; ').length > 50
+                      ? listData[0].synonym.join('; ').slice(0, 50) + '...'
+                      : listData[0].synonym.join('; ')
+                    : undefined}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className={styles.echartsBox}>
           <div style={{ textAlign: 'right' }}>
             <Search

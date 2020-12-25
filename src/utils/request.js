@@ -9,11 +9,12 @@ const request = extend({
 });
 
 request.interceptors.request.use((url, options) => {
+  console.log(options);
   return {
     url: `${url}`,
     options: {
       ...options,
-      data: qs.stringify(options.data),
+      //data: qs.stringify(options.data),
       headers: {
         'Content-Type': 'application/json',
       },
