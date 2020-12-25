@@ -154,7 +154,12 @@ function CheckAppDetail(props) {
             })}
           </Select>
           <div className={styles.line}></div>
-          <div className={styles.hotWordSearch}>
+          <div
+            className={styles.hotWordSearch}
+            onMouseLeave={() => {
+              setSearchModalStatus(false);
+            }}
+          >
             <Search
               placeholder="请输入关键词搜索"
               prefix={
@@ -173,9 +178,6 @@ function CheckAppDetail(props) {
               className={styles.line_hover}
               style={{ display: searchModalStatus ? 'block' : 'none' }}
               onClick={stopPropagation}
-              onMouseLeave={() => {
-                setSearchModalStatus(false);
-              }}
             >
               {!emptyStatus
                 ? cookieList.map((v, k) => {
