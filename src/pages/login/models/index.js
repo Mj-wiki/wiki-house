@@ -52,6 +52,7 @@ const Model = {
             errorInfo: '',
           },
         });
+        localStorage.setItem('username', result.data);
         history.replace('/table/homePage');
       } else {
         yield put({

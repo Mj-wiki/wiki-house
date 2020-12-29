@@ -14,8 +14,10 @@ function TableList(props) {
   const [triples, settriples] = useState('');
   const [concepts, setconcepts] = useState('');
   useEffect(() => {
+    initProjectdata();
+  }, []);
+  const initProjectdata = () => {
     initHomeStatistics().then(res => {
-      console.log(res);
       const { result, projects, triples, concepts } = res;
       if (result == 'success') {
         setprojects(projects);
@@ -25,7 +27,7 @@ function TableList(props) {
         return;
       }
     });
-  }, []);
+  };
   return (
     <div className={styles.wrap}>
       <div className={styles.auto}>

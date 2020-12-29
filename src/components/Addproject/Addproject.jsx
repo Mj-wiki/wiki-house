@@ -10,6 +10,7 @@ export default class Addproject extends Component {
       closable,
       centered,
       width,
+      forceRender,
     } = this.props;
     return (
       <div style={{ position: 'relative', zIndex: '990', background: '#fff' }}>
@@ -23,6 +24,8 @@ export default class Addproject extends Component {
           closable={closable}
           centered={centered}
           width={width}
+          forceRender={forceRender}
+          // destroyOnClose={false}
         >
           {this.props.children}
         </Modal>

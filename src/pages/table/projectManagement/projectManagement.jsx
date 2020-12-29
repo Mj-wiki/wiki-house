@@ -9,7 +9,11 @@ import {
   CreateProject,
   GetProjectList,
   deleteProject,
+  uploadFile,
+  Getfield,
 } from '@/api/Project.jsx';
+// import UpFile from './index'
+import { transformationTime } from '@/utils/dateUtil.js';
 export default class projectManagement extends Component {
   state = {
     isModalVisible: false,
@@ -17,29 +21,29 @@ export default class projectManagement extends Component {
     uploadkeys: false,
     ProjectData: [],
     ProjectId: '',
-    userName: 'kangjun',
+    username: '',
+    fileList: [],
+    fileloadShow: true,
+    GetfieldList: [],
+    locationCount: '',
+    locationshow: false,
   };
   formRef = React.createRef();
+  //  form = Form.useForm();
+  //  Form.useForm();
   uploadprops = {
     name: 'file',
-    action: 'http://127.0.0.1:8000/api/project/upload/',
-    // listType:"picture",
     headers: {
       // ContentType: 'multipart/form-data',
     },
-    data: {},
-    beforeUpload: file => {
-      return true;
+    data: {
+      project_name: '10',
     },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+    beforeUpload: file => {
+      this.setState(state => ({
+        fileList: [...state.fileList, file],
+      }));
+      return false;
     },
   };
   render() {
@@ -48,6 +52,10 @@ export default class projectManagement extends Component {
       isRemoveVisible,
       uploadkeys,
       ProjectData,
+      fileloadShow,
+      GetfieldList,
+      locationCount,
+      locationshow,
     } = this.state;
     const layout = {
       labelCol: { span: 6 },
@@ -69,14 +77,20 @@ export default class projectManagement extends Component {
       return e && e.fileList;
     };
     return (
+      // # 1 上传中 2 失败  3 完成  0 删除
       <div className={Style.projectwrapper}>
         <SearchFrom
           SearchFromValue={(select, ipt) => this.SearchFromValue(select, ipt)}
         />
         <div className={Style.projectBox}>
           <div className={Style.projectheader}>
-            <p>查询到10086条结果</p>
-            <Button type="primary" onClick={() => this.Blundeventshowproject()}>
+            {locationshow == true ? <p>查询到{locationCount}条结果</p> : null}
+            <p></p>
+            <Button
+              type="primary"
+              onClick={() => this.Blundeventshowproject()}
+              className={Style.addbtn}
+            >
               + 创建项目
             </Button>
           </div>
@@ -89,7 +103,7 @@ export default class projectManagement extends Component {
                   <div></div>
                   <div>
                     <SwitcherTwoTone
-                      onClick={() => this.Blundeventshowproject(item)}
+                      onClick={() => this.BlundeventCopyProject(item)}
                     />
                     <DeleteTwoTone
                       style={{ marginLeft: '10px' }}
@@ -117,11 +131,15 @@ export default class projectManagement extends Component {
                 </p>
                 <p className={Style.xiangmuname}>
                   概念总数：
-                  <span className={Style.marginLeft}>{item.concepts}</span>
+                  <span className={Style.marginLeft}>
+                    {item.project_concepts}
+                  </span>
                 </p>
                 <p className={Style.xiangmuname}>
                   三元数组：
-                  <span className={Style.marginLeft}>{item.triples}</span>
+                  <span className={Style.marginLeft}>
+                    {item.project_triples}
+                  </span>
                 </p>
                 <p className={Style.xiangmuname}>
                   项目描述：
@@ -132,16 +150,42 @@ export default class projectManagement extends Component {
                 <div className={Style.xiangmubuton}>
                   <div className={Style.Setstatetext}>
                     最新由{item.update_user || item.create_user}修改于
-                    {item.create_time}
+                    {transformationTime(item.create_time)}
                   </div>
                   <Button
                     type="primary"
                     className={Style.antdbutton}
-                    onClick={() => this.blundeventToDetail()}
+                    onClick={() => this.blundeventToDetail(item)}
                   >
                     查看
                   </Button>
                 </div>
+                {item.project_status == 1 ? (
+                  <div className={Style.listDialog}></div>
+                ) : null}
+                {item.project_status == 2 ? (
+                  <div className={Style.listDialog}>
+                    <div className={Style.listTextdalog}>
+                      <p>
+                        上传文件失败，请点击
+                        <span
+                          style={{ color: 'blue', cursor: 'pointer' }}
+                          onClick={() => this.blundeventReupload(item)}
+                        >
+                          此处
+                        </span>
+                        重新上传
+                      </p>
+                      <Button
+                        type="primary"
+                        className={Style.cancelbtn}
+                        onClick={() => this.blundEventcancelPrijects(item)}
+                      >
+                        取消
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             );
           })}
@@ -273,14 +317,15 @@ export default class projectManagement extends Component {
         </div>
         <AddPorject
           isModalVisible={isModalVisible}
-          Blundeventcloseproject={() => this.Blundeventcloseproject()}
-          Blundeventcancelproject={() => this.Blundeventcancelproject()}
-          cancelText={'提交'}
-          okText={'返回'}
+          Blundeventcloseproject={() => this.Blundeventcancelproject()}
+          Blundeventcancelproject={() => this.Blundeventcloseproject()}
+          cancelText={'返回'}
+          okText={'提交'}
           title={'创建项目'}
           closable={false}
           centered={true}
           width={620}
+          forceRender={true}
         >
           <div>
             <Form
@@ -317,7 +362,7 @@ export default class projectManagement extends Component {
                   },
                 ]}
               >
-                <Select options={areas} onChange={this.blundSelect} />
+                <Select options={GetfieldList} onChange={this.blundSelect} />
               </Form.Item>
               <Form.Item
                 name="project_code"
@@ -334,26 +379,28 @@ export default class projectManagement extends Component {
               <Form.Item name="project_introduction" label="项目简介">
                 <Input.TextArea maxLength="50" />
               </Form.Item>
-              <Form.Item
-                name="upload"
-                label="上传文件"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
-                rules={[{ required: true, message: '文件不能为空！' }]}
-              >
-                <Upload {...this.uploadprops}>
-                  <Button>选择文件</Button>
-                </Upload>
-              </Form.Item>
+              {fileloadShow ? (
+                <Form.Item
+                  name="upload"
+                  label="上传文件"
+                  valuePropName="fileList"
+                  getValueFromEvent={normFile}
+                  rules={[{ required: true, message: '文件不能为空！' }]}
+                >
+                  <Upload {...this.uploadprops}>
+                    <Button>选择文件</Button>
+                  </Upload>
+                </Form.Item>
+              ) : null}
             </Form>
           </div>
         </AddPorject>
         <AddPorject
           isModalVisible={isRemoveVisible}
-          Blundeventcloseproject={() => this.blundeventdalogok()}
-          Blundeventcancelproject={() => this.blundeventremovedalogclose()}
-          cancelText={'确定'}
-          okText={'取消'}
+          Blundeventcloseproject={() => this.blundeventremovedalogclose()}
+          Blundeventcancelproject={() => this.blundeventdalogok()}
+          cancelText={'取消'}
+          okText={'确定'}
           title={'删除项目'}
           closable={false}
           centered={true}
@@ -364,16 +411,40 @@ export default class projectManagement extends Component {
       </div>
     );
   }
+  BlundeventCopyProject = item => {
+    this.setState({
+      isModalVisible: true,
+      fileloadShow: false,
+    });
+    const {
+      project_name,
+      project_fieldcode,
+      project_code,
+      project_introduction,
+    } = item;
+    const form = this.formRef.current;
+    // console.log(form)
+    form.setFieldsValue({
+      project_name,
+      project_fieldcode,
+      project_code,
+      project_introduction,
+    });
+  };
   SearchFromValue = (select, ipt) => {
+    this.setState({
+      locationshow: true,
+    });
     this.initProjectlist(select, ipt);
   };
   Blundeventshowproject = item => {
     this.setState({
       isModalVisible: true,
+      fileloadShow: true,
     });
   };
   Blundeventcloseproject = async () => {
-    //创建项目弹框下的提交按钮
+    const { username } = this.state;
     const form = this.formRef.current;
     try {
       const values = await form.validateFields([
@@ -395,24 +466,43 @@ export default class projectManagement extends Component {
         project_code,
         project_introduction,
         project_status: 1,
-        project_photo: '图片',
-        project_fieldname: 'kangjun',
-        create_user: 'kangjun',
+        project_photo:
+          'https://dev.lrhealth.com/api/base/util/DownloadFile/0800bfc6-e9f3-40ee-9d52-6c4ab10333d1.jpg',
+        project_fieldname: project_fieldcode,
+        create_user: username,
       };
       CreateProject(obj).then(res => {
         if (res.result == 'success') {
-          console.log(res.data);
-          this.initProjectlist();
           this.setState({
             isModalVisible: false,
           });
+          const form = this.formRef.current;
+          form.resetFields();
+          this.uplodaderfile(res.data);
         } else {
+          message.error(res.message);
           return;
         }
       });
     } catch (err) {
       // console.log(err)
     }
+  };
+  uplodaderfile = data => {
+    const { fileList } = this.state;
+    const formData = new FormData();
+    this.initProjectlist();
+    formData.append('file', fileList[0]);
+    formData.append('project_id', data);
+    uploadFile(formData).then(res => {
+      if (res.result == 'success') {
+        // message.success('upload successfully.');
+      } else {
+        // message.error('upload failed.');
+        return;
+      }
+      console.log(res);
+    });
   };
   Blundeventcancelproject = async () => {
     //创建项目弹框下的返回按钮
@@ -445,15 +535,15 @@ export default class projectManagement extends Component {
     });
   };
   blundeventdalogok = () => {
-    const { ProjectId, userName } = this.state;
+    const { ProjectId, username } = this.state;
     let obj = {
       ProjectId,
-      userName,
+      username,
     };
+    console.log(obj);
     deleteProject(obj).then(res => {
       if (res.result == 'success') {
         this.initProjectlist();
-        console.log(res.data);
         this.setState({
           isRemoveVisible: false,
         });
@@ -463,32 +553,82 @@ export default class projectManagement extends Component {
     });
     //确定删除 调用接口
   };
-  blundeventReupload = () => {
+  blundeventReupload = item => {
     this.setState({
       isModalVisible: true,
     });
+    const {
+      project_name,
+      project_fieldcode,
+      project_code,
+      project_introduction,
+    } = item;
+    const form = this.formRef.current;
+    // console.log(form)
+    form.setFieldsValue({
+      project_name,
+      project_fieldcode,
+      project_code,
+      project_introduction,
+    });
   };
-  blundeventToDetail = () => {
-    this.props.history.push('/table/projectDetail');
+
+  blundEventcancelPrijects = item => {
+    console.log(item);
+    const { id } = item;
+    this.setState({
+      ProjectId: id,
+    });
+    this.blundeventdalogok();
+  };
+  blundeventToDetail = item => {
+    let id = item.id;
+    this.props.history.push({
+      pathname: '/table/projectDetail',
+      state: { id: id },
+    });
   };
   blundSelect = value => {
     console.log(value);
   };
   componentDidMount() {
     this.initProjectlist();
+    this.initfiled();
+    let username = localStorage.getItem('username');
+    this.setState({
+      username: username,
+    });
   }
+  initfiled = () => {
+    Getfield().then(res => {
+      if (res.result == 'success') {
+        let data = [];
+        res.data.forEach(item => {
+          let obj = {
+            label: item.field_code,
+            value: item.field_name,
+          };
+          data.push(obj);
+        });
+        this.setState({
+          GetfieldList: data,
+        });
+      } else {
+        return;
+      }
+    });
+  };
   initProjectlist = (projectFieldcode, projectName) => {
     let obj = {
-      projectFieldcode: projectFieldcode,
-      projectName: projectName,
+      project_fieldcode: projectFieldcode,
+      project_name: projectName,
     };
     GetProjectList(obj).then(res => {
       if (res.result == 'success') {
-        console.log(res.data);
         this.setState({
           ProjectData: res.data,
+          locationCount: res.total,
         });
-        // console.log(res.data)
       } else {
         return;
       }

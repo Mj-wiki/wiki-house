@@ -22,10 +22,10 @@ export default class projectDetail extends Component {
             tabBarGutter={100}
           >
             <TabPane tab="项目概览" key="1">
-              <ProjectOverview />
+              <ProjectOverview {...this.props} />
             </TabPane>
             <TabPane tab="项目图谱" key="2">
-              <ProjectMap />
+              <ProjectMap {...this.props} />
             </TabPane>
           </Tabs>
         </div>

@@ -6,7 +6,7 @@ export default [
     symbolSize: 28.685715, //节点value值
     x: -266.82776, //节点横坐标
     y: 299.6904, //节点纵坐标
-    attributes: { modularity_class: 0 }, //节点类别
+    attributes: { modularity_class: 1 }, //节点类别
   },
   {
     id: '1',
@@ -15,7 +15,7 @@ export default [
     symbolSize: 4,
     x: -418.08344,
     y: 446.8853,
-    attributes: { modularity_class: 0 },
+    attributes: { modularity_class: 2 },
   },
   {
     id: '2',

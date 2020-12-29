@@ -129,6 +129,19 @@ const dateStringSplit = dateString => {
   };
 };
 
+const transformationTime = time => {
+  let date = new Date(time); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  let Y = date.getFullYear();
+  let M = date.getMonth() + 1;
+  let D = date.getDate();
+  return Y + '/' + setZero(M) + '/' + setZero(D); //时分秒可以根据自己的需求加上
+};
+function setZero(num) {
+  if (num < 10) {
+    return '0' + num;
+  }
+  return num;
+}
 export {
   dateHandle,
   dateNumberHandle,
@@ -136,4 +149,5 @@ export {
   getDateFromGap,
   dateGapCalculate,
   dateStringSplit,
+  transformationTime,
 };

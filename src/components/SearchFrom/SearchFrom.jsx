@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { Select, Input } from 'antd';
 import Style from './index.less';
+import { Getfield } from '@/api/Project.jsx';
 const { Search } = Input;
 const { Option } = Select;
 export default class SearchFrom extends Component {
   state = {
     SelectValue: '',
     optionValue: '',
+    GetfieldList: [],
   };
   render() {
-    const { SelectValue, optionValue } = this.state;
+    const { GetfieldList } = this.state;
     return (
       <div className={Style.wrapper}>
         <span className={Style.wrappertitle}>项目管理</span>
@@ -19,9 +21,13 @@ export default class SearchFrom extends Component {
             style={{ width: 300 }}
             onChange={this.handleChange}
           >
-            <Option value="全部领域">全部领域</Option>
-            <Option value="领域1">领域1</Option>
-            <Option value="领域2">领域2</Option>
+            {GetfieldList.map((item, index) => {
+              return (
+                <Option value={item.label} key={index}>
+                  {item.value}
+                </Option>
+              );
+            })}
           </Select>
           <Search
             placeholder="输入关键词查询项目"
@@ -44,5 +50,27 @@ export default class SearchFrom extends Component {
     const { SearchFromValue } = this.props;
     const { optionValue } = this.state;
     SearchFromValue(optionValue, value);
+  };
+  componentDidMount() {
+    this.initfiled();
+  }
+  initfiled = () => {
+    Getfield().then(res => {
+      if (res.result == 'success') {
+        let data = [];
+        res.data.forEach(item => {
+          let obj = {
+            label: item.field_code,
+            value: item.field_name,
+          };
+          data.push(obj);
+        });
+        this.setState({
+          GetfieldList: data,
+        });
+      } else {
+        return;
+      }
+    });
   };
 }

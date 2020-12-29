@@ -2,6 +2,7 @@ import request from '@/utils/request';
 import { objToSearchUrl } from '@/utils/stringUtil';
 //登录
 export const Login = data => {
+  console.log(data);
   request('/api/site/login', {
     method: 'post',
     data,

@@ -1,25 +1,19 @@
 import React, { Component } from 'react';
 import Style from './eacharts.less';
 import ReactEcharts from 'echarts-for-react';
+import { initEachartsData } from '@/api/Project.jsx';
 export default class componentName extends Component {
   state = {
-    option: {
+    X: [],
+    xState: [],
+    NUmberBig: '',
+  };
+  render() {
+    const { X, xState, NUmberBig } = this.state;
+    const option = {
       xAxis: {
         type: 'category',
-        data: [
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-          '2020.12',
-        ],
+        data: X,
         axisLabel: {
           color: '#465054',
         },
@@ -51,7 +45,7 @@ export default class componentName extends Component {
         name: '项目数',
         nameLocation: 'middle',
         min: 0,
-        max: 6000,
+        max: NUmberBig,
         axisLabel: {
           margin: 15,
           color: '#465054',
@@ -70,20 +64,7 @@ export default class componentName extends Component {
       },
       series: [
         {
-          data: [
-            220,
-            932,
-            901,
-            934,
-            5290,
-            1330,
-            1320,
-            820,
-            932,
-            901,
-            934,
-            1290,
-          ],
+          data: xState,
           type: 'line',
           itemStyle: {
             color: '#4469BC',
@@ -92,10 +73,7 @@ export default class componentName extends Component {
           },
         },
       ],
-    },
-  };
-  render() {
-    const { option } = this.state;
+    };
     return (
       <div className={Style.eachwrapper}>
         <ReactEcharts
@@ -104,5 +82,25 @@ export default class componentName extends Component {
         />
       </div>
     );
+  }
+  componentDidMount() {
+    initEachartsData().then(res => {
+      if (res.result === 'success') {
+        const data = res.data;
+        const Arrlist = [];
+        const timeX = Object.values(res.data);
+        const NUmberBig = Math.max(...timeX); //左侧区域数
+        for (const key in data) {
+          Arrlist.push(key);
+        }
+        this.setState({
+          X: Arrlist,
+          xState: timeX,
+          NUmberBig: 100,
+        });
+      } else {
+        return;
+      }
+    });
   }
 }
