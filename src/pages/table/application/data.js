@@ -12,8 +12,8 @@ export default [
   {
     id: '13',
     name: null,
-    source: '11',
-    target: '0',
+    source: '11', //指向子节点
+    target: '0', //原节点
     lineStyle: { normal: {} },
   },
   {

@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkConceptDetail.less';
 import { Form, Input, Breadcrumb, Icon, Button, Divider } from 'antd';
 import { connect } from 'umi';
-import graphData from './mock.js';
-import graphLinks from './data.js';
+// import graphData from './mock.js';
+// import graphLinks from './data.js';
+import graph from './realData.js';
 import * as echarts from 'echarts';
 import Dialog from '@/components/DiaLog';
 import listData from './listData.js';
@@ -39,7 +40,17 @@ function CheckConceptDetail(props) {
     document.oncontextmenu = function() {
       return false;
     };
-    myEcharts(graphData, myChart);
+    console.log(graph['nodes']);
+    if (Array.isArray(graph['nodes'])) {
+      graph['nodes'].map((v, k) => {
+        (v.itemStyle = { normal: { color: 'rgb(236,81,72)' } }),
+          (v.symbolSize = 18.685715);
+        v.x = Math.random() * -400;
+        v.y = Math.random() * 400;
+      });
+    }
+    myEcharts(graph['nodes'], myChart);
+
     //初始化方法
   }, []);
 
@@ -52,14 +63,15 @@ function CheckConceptDetail(props) {
     }
     //setCacheData(data);
     data.forEach(function(node) {
-      node.itemStyle = null;
+      //node.itemStyle = null;
       node.value = node.symbolSize;
       node.fixed = true;
       node.symbolSize /= 1.5;
       node.label = {
         show: node.symbolSize > 1,
       };
-      node.category = node.attributes.modularity_class;
+      //node.category = node.attributes.modularity_class;
+      node.category = node.properties.code;
     });
 
     myChart.setOption({
@@ -79,7 +91,7 @@ function CheckConceptDetail(props) {
           type: 'graph',
           layout: 'force',
           data,
-          links: graphLinks,
+          links: graph['rels'],
           categories: categories,
           roam: true,
           focusNodeAdjacency: true,
