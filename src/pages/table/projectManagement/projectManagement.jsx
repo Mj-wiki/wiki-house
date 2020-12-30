@@ -11,6 +11,7 @@ import {
   deleteProject,
   uploadFile,
   Getfield,
+  PrijectUpdate,
 } from '@/api/Project.jsx';
 // import UpFile from './index'
 import { transformationTime } from '@/utils/dateUtil.js';
@@ -444,7 +445,7 @@ export default class projectManagement extends Component {
     });
   };
   Blundeventcloseproject = async () => {
-    const { username } = this.state;
+    const { username, uploadkeys, ProjectId } = this.state;
     const form = this.formRef.current;
     try {
       const values = await form.validateFields([
@@ -460,30 +461,60 @@ export default class projectManagement extends Component {
         project_code,
         project_introduction,
       } = values;
-      let obj = {
-        project_name,
-        project_fieldcode,
-        project_code,
-        project_introduction,
-        project_status: 1,
-        project_photo:
-          'https://dev.lrhealth.com/api/base/util/DownloadFile/0800bfc6-e9f3-40ee-9d52-6c4ab10333d1.jpg',
-        project_fieldname: project_fieldcode,
-        create_user: username,
-      };
-      CreateProject(obj).then(res => {
-        if (res.result == 'success') {
-          this.setState({
-            isModalVisible: false,
-          });
-          const form = this.formRef.current;
-          form.resetFields();
-          this.uplodaderfile(res.data);
-        } else {
-          message.error(res.message);
-          return;
-        }
-      });
+
+      if (uploadkeys) {
+        let obj = {
+          project_name,
+          id: ProjectId,
+          project_fieldcode,
+          project_code,
+          project_introduction,
+          project_status: 1,
+          project_photo:
+            'https://dev.lrhealth.com/api/base/util/DownloadFile/0800bfc6-e9f3-40ee-9d52-6c4ab10333d1.jpg',
+          project_fieldname: project_fieldcode,
+          update_user: username,
+        };
+        PrijectUpdate(obj).then(res => {
+          if (res.result == 'success') {
+            this.setState({
+              isModalVisible: false,
+              uploadkeys: false,
+            });
+            const form = this.formRef.current;
+            form.resetFields();
+            this.uplodaderfile(res.data);
+          } else {
+            message.error(res.message);
+            return;
+          }
+        });
+      } else {
+        let obj = {
+          project_name,
+          project_fieldcode,
+          project_code,
+          project_introduction,
+          project_status: 1,
+          project_photo:
+            'https://dev.lrhealth.com/api/base/util/DownloadFile/0800bfc6-e9f3-40ee-9d52-6c4ab10333d1.jpg',
+          project_fieldname: project_fieldcode,
+          create_user: username,
+        };
+        CreateProject(obj).then(res => {
+          if (res.result == 'success') {
+            this.setState({
+              isModalVisible: false,
+            });
+            const form = this.formRef.current;
+            form.resetFields();
+            this.uplodaderfile(res.data);
+          } else {
+            message.error(res.message);
+            return;
+          }
+        });
+      }
     } catch (err) {
       // console.log(err)
     }
@@ -496,12 +527,11 @@ export default class projectManagement extends Component {
     formData.append('project_id', data);
     uploadFile(formData).then(res => {
       if (res.result == 'success') {
-        // message.success('upload successfully.');
+        message.success('upload successfully.');
       } else {
-        // message.error('upload failed.');
+        message.error('upload failed.');
         return;
       }
-      console.log(res);
     });
   };
   Blundeventcancelproject = async () => {
@@ -554,8 +584,11 @@ export default class projectManagement extends Component {
     //确定删除 调用接口
   };
   blundeventReupload = item => {
+    const { id } = item;
     this.setState({
       isModalVisible: true,
+      uploadkeys: true,
+      ProjectId: id,
     });
     const {
       project_name,
@@ -564,7 +597,6 @@ export default class projectManagement extends Component {
       project_introduction,
     } = item;
     const form = this.formRef.current;
-    // console.log(form)
     form.setFieldsValue({
       project_name,
       project_fieldcode,

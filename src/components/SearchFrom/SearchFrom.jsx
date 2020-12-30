@@ -17,7 +17,7 @@ export default class SearchFrom extends Component {
         <span className={Style.wrappertitle}>项目管理</span>
         <div className={Style.Fromdiv}>
           <Select
-            defaultValue="领域"
+            defaultValue="全部领域"
             style={{ width: 300 }}
             onChange={this.handleChange}
           >
@@ -64,6 +64,10 @@ export default class SearchFrom extends Component {
             value: item.field_name,
           };
           data.push(obj);
+        });
+        data.unshift({
+          label: '',
+          value: '全部领域',
         });
         this.setState({
           GetfieldList: data,
