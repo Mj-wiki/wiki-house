@@ -41,12 +41,8 @@ export const uploadFile = data => {
   return request(`/api/project/upload/`, {
     method: 'post',
     data: data,
-    headers: {
-      ContentType: 'multipart/form-data',
-    },
   });
 };
-///api/project/detail/?id=1
 
 export const ProjectDetail = data => {
   return request(`/api/project/detail/?id=${data}`, {
@@ -57,5 +53,12 @@ export const ProjectDetail = data => {
 export const Getfield = data => {
   return request(`/api/project/fieldList/`, {
     method: 'get',
+  });
+};
+
+export const PrijectUpdate = data => {
+  return request(`/api/project/update/`, {
+    method: 'post',
+    data: data,
   });
 };
