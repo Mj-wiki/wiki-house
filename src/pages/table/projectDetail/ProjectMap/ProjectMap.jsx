@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import Style from './index.less';
 import * as echarts from 'echarts';
-import Dialog from '@/components/DiaLog/index';
 import { Input, Button } from 'antd';
+import {
+  CloseSquareOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
+import InputDialog from '@/components/Addproject/Addproject';
 import SolidData from '../../../../../mock/solide';
 import lint from '../../../../../mock/lint';
 const { Search } = Input;
@@ -14,6 +19,7 @@ export default class ProjectMap extends Component {
     y: 0,
     eachartBigorSmall: 1,
     lintData: [],
+    InputDialogShow: false,
   };
   render() {
     const {
@@ -21,6 +27,7 @@ export default class ProjectMap extends Component {
       diglogItems, //弹出层数据对象
       x,
       y,
+      InputDialogShow,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -56,56 +63,97 @@ export default class ProjectMap extends Component {
               />
             </div>
             <div className={Style.Graphwrapper} id="main" ref="main"></div>
-            <Dialog
-              item={diglogItems}
-              hidden={diglogHidden}
-              x={x}
-              y={y}
-            ></Dialog>
+            {diglogHidden ? (
+              <div
+                className={Style.editEacharts}
+                style={{ top: y + 80 + 'px', left: x + 'px' }}
+              >
+                <p className={Style.editslide}>
+                  {' '}
+                  <CloseSquareOutlined />
+                  聚焦
+                </p>
+                <p
+                  className={Style.editslide}
+                  onClick={() => this.BlundeventshowDialog()}
+                >
+                  {' '}
+                  <PlusOutlined /> 添加关系
+                </p>
+                <p className={Style.editslide}>
+                  {' '}
+                  <DeleteOutlined />
+                  删除概念
+                </p>
+              </div>
+            ) : null}
           </div>
         </div>
+        <InputDialog
+          isModalVisible={InputDialogShow}
+          Blundeventcloseproject={() => this.BlundeventPreservation()}
+          Blundeventcancelproject={() => this.BlundeventCancel()}
+          cancelText={'返回'}
+          okText={'保存'}
+          title={'添加关系'}
+          closable={false}
+          centered={true}
+          width={620}
+          forceRender={true}
+        />
       </div>
     );
   }
+  BlundeventshowDialog = () => {
+    this.setState({
+      InputDialogShow: true,
+      diglogHidden: false,
+    });
+  };
+  BlundeventPreservation = () => {
+    this.setState({
+      InputDialogShow: false,
+    });
+  };
+  BlundeventCancel = () => {
+    this.setState({
+      InputDialogShow: false,
+    });
+  };
   componentDidMount() {
     const myChart = echarts.init(this.refs.main);
     myChart.showLoading();
     document.oncontextmenu = function() {
       return false;
     };
-    this.myEcharts(SolidData, myChart, lint);
-  }
-  blundmapbigadd = v => {
-    const myChart = echarts.init(this.refs.main);
-    let currentZoom = myChart.getOption().series[0].zoom;
-    console.log(currentZoom);
-    let increaseAmplitude = 1.2;
-    if (v == 1) {
-      increaseAmplitude = 0.8;
-    }
-    myChart.setOption({
-      series: [
-        {
-          zoom: currentZoom * increaseAmplitude,
-        },
-      ],
+
+    let solidda = SolidData.map(item => {
+      if (item.labels == '标准词') {
+        (item.attributes = { modularity_class: 0 }), (item.symbolSize = 50);
+        item.itemStyle = { normal: { color: '#BD731A' } };
+      } else {
+        (item.attributes = { modularity_class: 1 }), (item.symbolSize = 30);
+        item.itemStyle = { normal: { color: '#508F97' } };
+      }
+      return item;
     });
-  };
+    let lintData = lint.map(item => {
+      item.lineStyle = { normal: { width: 3 } };
+      return item;
+    });
+    this.myEcharts(solidda, myChart, lintData);
+  }
   myEcharts = (data, myChart, arr) => {
     let that = this;
-    const { eachartBigorSmall } = this.state;
-    var categories = [];
-
     data.forEach(function(node, index) {
-      node.itemStyle = null;
       node.dataIndex = index;
-      // node.fixed = true;
-      // node.symbolSize /= 1.5;
+      node.value = node.symbolSize;
+      node.symbolSize /= 1.5;
       node.label = {
         show: node.symbolSize > 1,
       };
-      //  node.category = node.attributes.modularity_class;
-      // node.category = node.name;
+      // node.category = node.attributes.modularity_class;
+      node.category = node.properties.code;
     });
 
     myChart.setOption({
@@ -114,13 +162,11 @@ export default class ProjectMap extends Component {
           return x.data.name; //设置提示框的内容和格式 节点和边都显示name属性
         },
       },
-      toolbox: {
-        show: true, //是否显示工具箱
-        feature: {
-          magicType: ['line', 'bar'], // 图表类型切换，当前仅支持直角系下的折线图、柱状图转换，上图icon左数6/7，分别是切换折线图，切换柱形图
-          restore: true, // 还原，复位原始图表，
-          saveAsImage: true, // 保存为图片，
-        },
+      toolbox: {},
+      grid: {
+        height: '100%',
+        width: '100%',
+        // show: true,
       },
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',
@@ -133,13 +179,12 @@ export default class ProjectMap extends Component {
           layout: 'force',
           data,
           links: arr,
-          categories: categories,
           roam: true,
           focusNodeAdjacency: true,
           draggable: true,
           itemStyle: {
             borderColor: '#fff',
-            borderWidth: 1,
+            borderWidth: 0,
             shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.3)',
           },
@@ -153,16 +198,16 @@ export default class ProjectMap extends Component {
           },
           force: {
             // initLayout:'circular',
-            repulsion: 200,
+            repulsion: 400,
             gravity: 0.1,
             edgeLength: 300,
-            layoutAnimation: true,
+            layoutAnimation: false,
             friction: 0.3,
             initLayout: 'none',
           },
           emphasis: {
             lineStyle: {
-              width: 2,
+              width: 5,
             },
           },
         },
@@ -170,7 +215,7 @@ export default class ProjectMap extends Component {
     });
     // 右键元素
     myChart.on('contextmenu', function(params) {
-      console.log(params.event.offsetX, params.event.offsetY);
+      console.log(params);
       if (typeof params === 'object') {
         that.setState(state => {
           return {
@@ -192,25 +237,20 @@ export default class ProjectMap extends Component {
           y: params.event.offsetY,
         };
       });
-      if (
-        myChart.getOption()?.series?.[0].data[params.target?.dataIndex] ==
-        undefined
-      )
-        return;
     });
     // 拖动中
     myChart.on('mousemove', function(params) {});
     // 松开元素
     myChart.on('mouseup', function(params) {
-      if (myChart.getOption()?.series?.[0].data[params.dataIndex] == undefined)
-        return;
-      var optionS = myChart.getOption();
-      if (myChart.getOption()) {
-        optionS.series[0].data[params.dataIndex].x = params.event.offsetX;
-        optionS.series[0].data[params.dataIndex].y = params.event.offsetY;
-        optionS.series[0].data[params.dataIndex].fixed = true;
-      }
-      myChart.setOption(optionS);
+      // if (myChart.getOption()?.series?.[0].data[params.dataIndex] == undefined)
+      //   return;
+      // var optionS = myChart.getOption();
+      // if (myChart.getOption()) {
+      //   optionS.series[0].data[params.dataIndex].x = params.event.offsetX;
+      //   optionS.series[0].data[params.dataIndex].y = params.event.offsetY;
+      //   optionS.series[0].data[params.dataIndex].fixed = true;
+      // }
+      // myChart.setOption(optionS);
     });
 
     // 关闭loding
@@ -219,5 +259,20 @@ export default class ProjectMap extends Component {
     }, 1200);
   };
   onSearch = () => {};
+  blundmapbigadd = v => {
+    const myChart = echarts.init(this.refs.main);
+    let currentZoom = myChart.getOption().series[0].zoom;
+    let increaseAmplitude = 1.2;
+    if (v == 1) {
+      increaseAmplitude = 0.8;
+    }
+    myChart.setOption({
+      series: [
+        {
+          zoom: currentZoom * increaseAmplitude,
+        },
+      ],
+    });
+  };
 }
 // 135201711712016086

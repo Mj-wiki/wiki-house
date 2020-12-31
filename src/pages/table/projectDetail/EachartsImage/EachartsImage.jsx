@@ -21,33 +21,34 @@ export default class graph extends Component {
     document.oncontextmenu = function() {
       return false;
     };
-    this.myEcharts(SolidData, myChart, Lindein);
-  }
-  blundmapbigadd = () => {
-    console.log(1);
-    this.setState({
-      eachartBigorSmall: this.state.eachartBigorSmall + 1,
+    let solidda = SolidData.map(item => {
+      if (item.labels == '标准词') {
+        (item.attributes = { modularity_class: 0 }), (item.symbolSize = 50);
+        item.itemStyle = { normal: { color: '#BD731A' } };
+      } else {
+        (item.attributes = { modularity_class: 1 }), (item.symbolSize = 30);
+        item.itemStyle = { normal: { color: '#508F97' } };
+      }
+      return item;
     });
-  };
+    let lintData = Lindein.map(item => {
+      item.lineStyle = { normal: { width: 3 } };
+      return item;
+    });
+    this.myEcharts(solidda, myChart, lintData);
+  }
+
   blundmapbigrenove = () => {};
   myEcharts = (data, myChart, Lindein) => {
-    let that = this;
-    const { eachartBigorSmall } = this.state;
-    var categories = [];
-    for (var i = 0; i < 9; i++) {
-      categories[i] = {
-        name: '类目' + i,
-      };
-    }
-    data.forEach(function(node) {
-      node.itemStyle = null;
+    data.forEach(function(node, index) {
+      node.dataIndex = index;
       node.value = node.symbolSize;
-      // node.fixed = true;
       node.symbolSize /= 1.5;
       node.label = {
         show: node.symbolSize > 1,
       };
       // node.category = node.attributes.modularity_class;
+      node.category = node.properties.code;
     });
 
     myChart.setOption({
@@ -55,23 +56,21 @@ export default class graph extends Component {
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',
       animation: false,
+      legendHoverLink: true,
       series: [
         {
-          // center: [0, 0],
-          legendHoverLink: true,
-          zoom: 0.2,
+          zoom: 0.1,
           type: 'graph',
           layout: 'force',
           data,
           links: Lindein,
-          categories: categories,
           roam: true,
           focusNodeAdjacency: true,
           draggable: true,
           itemStyle: {
             borderColor: '#fff',
-            borderWidth: 1,
-            shadowBlur: 10,
+            borderWidth: 2,
+            shadowBlur: 100,
             shadowColor: 'rgba(0, 0, 0, 0.3)',
           },
           label: {
@@ -80,15 +79,15 @@ export default class graph extends Component {
           },
           lineStyle: {
             color: 'source',
-            curveness: 0.3,
+            curveness: 1,
           },
           force: {
             // initLayout:'circular',
             repulsion: 1000,
             gravity: 0.1,
-            edgeLength: 400,
+            edgeLength: 2000,
             layoutAnimation: false,
-            friction: 0.3,
+            friction: 1,
           },
           emphasis: {
             lineStyle: {

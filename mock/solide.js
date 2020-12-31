@@ -657,7 +657,7 @@ export default [
   },
   {
     id: 885526,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '某些传染病和寄生虫病9948',
     properties: {
       code: 'A00-B99',
@@ -666,7 +666,7 @@ export default [
   },
   {
     id: 885525,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '肠道传染病9948',
     properties: {
       code: 'A00-A09',
@@ -675,7 +675,7 @@ export default [
   },
   {
     id: 884163,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '某些传染病和寄生虫病9921',
     properties: {
       code: 'A00-B99',
@@ -684,7 +684,7 @@ export default [
   },
   {
     id: 884162,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '肠道传染病9921',
     properties: {
       code: 'A00-A09',
@@ -693,7 +693,7 @@ export default [
   },
   {
     id: 883885,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '某些传染病和寄生虫病9849',
     properties: {
       code: 'A00-B99',
@@ -702,7 +702,7 @@ export default [
   },
   {
     id: 883884,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '肠道传染病9849',
     properties: {
       code: 'A00-A09',
@@ -711,7 +711,7 @@ export default [
   },
   {
     id: 885721,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '某些传染病和寄生虫病9952',
     properties: {
       code: 'A00-B99',
@@ -720,7 +720,7 @@ export default [
   },
   {
     id: 885720,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '肠道传染病9952',
     properties: {
       code: 'A00-A09',
@@ -729,7 +729,7 @@ export default [
   },
   {
     id: 885086,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '某些传染病和寄生虫病9875',
     properties: {
       code: 'A00-B99',
@@ -738,7 +738,7 @@ export default [
   },
   {
     id: 885085,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '肠道传染病9875',
     properties: {
       code: 'A00-A09',
@@ -747,7 +747,7 @@ export default [
   },
   {
     id: 884693,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '某些传染病和寄生虫病9867',
     properties: {
       code: 'A00-B99',
@@ -756,7 +756,7 @@ export default [
   },
   {
     id: 884692,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '肠道传染病9867',
     properties: {
       code: 'A00-A09',
@@ -765,7 +765,7 @@ export default [
   },
   {
     id: 883315,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '某些传染病和寄生虫病9838',
     properties: {
       code: 'A00-B99',
@@ -774,7 +774,7 @@ export default [
   },
   {
     id: 883314,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '肠道传染病9838',
     properties: {
       code: 'A00-A09',
@@ -783,7 +783,7 @@ export default [
   },
   {
     id: 884844,
-    labels: ['标准词'],
+    labels: ['同义词'],
     name: '某些传染病和寄生虫病9806',
     properties: {
       code: 'A00-B99',

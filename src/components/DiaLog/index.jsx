@@ -13,9 +13,7 @@ const DiaLog = props => {
           display: hidden ? 'block' : 'none',
         }}
       >
-        <div className={styles.items} onClick={() => Blundeventitem(item)}>
-          聚焦
-        </div>
+        <div className={styles.items}>聚焦</div>
         <div className={styles.items}>添加关系</div>
         <div className={styles.items}>删除概念</div>
       </div>

@@ -16,7 +16,7 @@ export default class projectDetail extends Component {
         </div>
         <div className={Styles.Main}>
           <Tabs
-            defaultActiveKey="1"
+            defaultActiveKey="2"
             onChange={this.callback}
             centered={true}
             size={'default'}
