@@ -1,6 +1,6 @@
 {
   "private": true,
-  "homepage":".",
+  "homepage":"./",
     "scripts": {
     "start": "umi dev",
     "build": "umi build",
