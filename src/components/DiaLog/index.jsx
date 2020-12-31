@@ -8,7 +8,7 @@ const DiaLog = props => {
       <div
         className={styles.dialog}
         style={{
-          top: y + 'px',
+          top: y + 82 + 'px',
           left: x + 'px',
           display: hidden ? 'block' : 'none',
         }}

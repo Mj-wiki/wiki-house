@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import * as echarts from 'echarts';
-import graphData from '../../../table/application/mock';
-import graphLinks from '../../../table/application/data';
-
+import SolidData from '../../../../../mock/solide';
+import Lindein from '../../../../../mock/lint';
 export default class graph extends Component {
   state = {};
   render() {
@@ -22,7 +21,7 @@ export default class graph extends Component {
     document.oncontextmenu = function() {
       return false;
     };
-    this.myEcharts(graphData, myChart, this);
+    this.myEcharts(SolidData, myChart, Lindein);
   }
   blundmapbigadd = () => {
     console.log(1);
@@ -31,7 +30,7 @@ export default class graph extends Component {
     });
   };
   blundmapbigrenove = () => {};
-  myEcharts = (data, myChart) => {
+  myEcharts = (data, myChart, Lindein) => {
     let that = this;
     const { eachartBigorSmall } = this.state;
     var categories = [];
@@ -43,12 +42,12 @@ export default class graph extends Component {
     data.forEach(function(node) {
       node.itemStyle = null;
       node.value = node.symbolSize;
-      node.fixed = true;
+      // node.fixed = true;
       node.symbolSize /= 1.5;
       node.label = {
         show: node.symbolSize > 1,
       };
-      node.category = node.attributes.modularity_class;
+      // node.category = node.attributes.modularity_class;
     });
 
     myChart.setOption({
@@ -58,12 +57,13 @@ export default class graph extends Component {
       animation: false,
       series: [
         {
-          center: [0, 0],
-          zoom: eachartBigorSmall,
+          // center: [0, 0],
+          legendHoverLink: true,
+          zoom: 0.2,
           type: 'graph',
           layout: 'force',
           data,
-          links: graphLinks,
+          links: Lindein,
           categories: categories,
           roam: true,
           focusNodeAdjacency: true,

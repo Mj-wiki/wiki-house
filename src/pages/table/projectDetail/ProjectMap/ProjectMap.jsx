@@ -56,8 +56,13 @@ export default class ProjectMap extends Component {
               />
             </div>
             <div className={Style.Graphwrapper} id="main" ref="main"></div>
+            <Dialog
+              item={diglogItems}
+              hidden={diglogHidden}
+              x={x}
+              y={y}
+            ></Dialog>
           </div>
-          <Dialog item={diglogItems} hidden={diglogHidden} x={x} y={y}></Dialog>
         </div>
       </div>
     );
@@ -73,7 +78,8 @@ export default class ProjectMap extends Component {
   blundmapbigadd = v => {
     const myChart = echarts.init(this.refs.main);
     let currentZoom = myChart.getOption().series[0].zoom;
-    let increaseAmplitude = 1;
+    console.log(currentZoom);
+    let increaseAmplitude = 1.2;
     if (v == 1) {
       increaseAmplitude = 0.8;
     }
@@ -89,32 +95,39 @@ export default class ProjectMap extends Component {
     let that = this;
     const { eachartBigorSmall } = this.state;
     var categories = [];
-    for (var i = 0; i < 9; i++) {
-      categories[i] = {
-        name: '类目' + i,
-      };
-    }
+
     data.forEach(function(node, index) {
       node.itemStyle = null;
       node.dataIndex = index;
-      //  node.value = node.symbolSize;
       // node.fixed = true;
       // node.symbolSize /= 1.5;
       node.label = {
         show: node.symbolSize > 1,
       };
       //  node.category = node.attributes.modularity_class;
-      //  node.category = node.relation;
+      // node.category = node.name;
     });
 
     myChart.setOption({
-      tooltip: {},
+      tooltip: {
+        formatter: function(x) {
+          return x.data.name; //设置提示框的内容和格式 节点和边都显示name属性
+        },
+      },
+      toolbox: {
+        show: true, //是否显示工具箱
+        feature: {
+          magicType: ['line', 'bar'], // 图表类型切换，当前仅支持直角系下的折线图、柱状图转换，上图icon左数6/7，分别是切换折线图，切换柱形图
+          restore: true, // 还原，复位原始图表，
+          saveAsImage: true, // 保存为图片，
+        },
+      },
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',
       animation: false,
       series: [
         {
-          center: [0, 0],
+          // center: [0, 0],
           zoom: 0.5,
           type: 'graph',
           layout: 'force',
@@ -140,11 +153,12 @@ export default class ProjectMap extends Component {
           },
           force: {
             // initLayout:'circular',
-            repulsion: 1000,
+            repulsion: 200,
             gravity: 0.1,
-            edgeLength: 400,
-            layoutAnimation: false,
+            edgeLength: 300,
+            layoutAnimation: true,
             friction: 0.3,
+            initLayout: 'none',
           },
           emphasis: {
             lineStyle: {
@@ -184,7 +198,6 @@ export default class ProjectMap extends Component {
       )
         return;
     });
-
     // 拖动中
     myChart.on('mousemove', function(params) {});
     // 松开元素
