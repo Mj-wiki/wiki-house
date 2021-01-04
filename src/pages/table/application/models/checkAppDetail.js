@@ -1,28 +1,51 @@
-import { requestGetUserList } from '../services';
+import {
+  requestGetFieldList,
+  requestGetList,
+  requestGetCheckList,
+} from '../../services';
 import { Message } from 'antd';
 
 const initState = {
+  fieldData: [],
   dataSource: [],
   total: 0,
   pageSize: 10,
   pageNum: 1,
   search: '',
-  editData: {},
 };
 
 export default {
-  namespace: 'detail',
+  namespace: 'checkAppDetail',
   state: initState,
   effects: {
-    *onInit({ effectTypes }, { all, put, select }) {
-      yield put({
-        type: 'changeState',
-        payload: {
-          dataSource: [],
-          total: 0,
-          date_type: 0,
-        },
-      });
+    *onInit({ effectTypes }, { all, put, call }) {
+      try {
+        const list = yield call(requestGetList);
+        const fieldList = yield call(requestGetFieldList);
+        const fieldAll = { id: 0, field_code: '', field_name: '全部领域' };
+
+        if (fieldList.result === 'success') {
+          const fieldData = fieldList.data;
+          yield put({
+            type: 'changeState',
+            payload: {
+              fieldData: [fieldAll, ...fieldData],
+            },
+          });
+        }
+        if (list.result === 'success') {
+          yield put({
+            type: 'changeState',
+            payload: {
+              dataSource: list.data,
+              total: list.total,
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        Message.error('接口异常');
+      }
     },
 
     // *userList({ search }, { select, call, put }) {
@@ -61,31 +84,15 @@ export default {
     //     return data;
     //   } catch (error) {
     //     console.log(error);
-    //     yield put({
-    //       type: 'changeState',
-    //       payload: {
-    //         dataSource: [],
-    //         total: 0,
-    //       },
-    //     });
     //   }
     // },
 
     *getSearchValues(action, { select }) {
-      const { uid } = yield select(state => state.detail);
-
+      const { dataSource, total } = yield select(state => state.checkAppDetail);
       return {
-        uid,
+        dataSource,
+        total,
       };
-    },
-    *changeDi({ e }, { select, put, call }) {
-      yield put({
-        type: 'changeState',
-        payload: {
-          dataSource: [],
-          dimension: e,
-        },
-      });
     },
 
     *sendDate({ date }, { put }) {
