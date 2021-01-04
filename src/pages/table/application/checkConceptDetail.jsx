@@ -222,37 +222,32 @@ function CheckConceptDetail(props) {
           </div>
           <div className={styles.bottomBox}>
             <div className={styles.lectureHospital}>
-              <span className={styles.projectName}>所属项目:</span>
-              <span title={listData[0].projectName}>
-                {listData[0].projectName}
-              </span>
+              <span className={styles.projectName}>所属项目 :</span>
+              <span title={graph[0].node_name}>{graph[0].node_name}</span>
             </div>
             <div className={styles.lectureHospital}>
-              <span className={styles.projectName}>项目描述:</span>
-              <span title={listData[0].projectName}>
-                {
-                  '这是项目描述这是项目描述这是项目描述这是项目balablabalbalabalbalalabalb这是项目描述这是项目描述这是项目描述这是项目balablabalbalabalbalalabalb...'
-                }
-              </span>
+              <span className={styles.projectName}>项目描述 :</span>
+              <span title={graph[0].prj_name}>{graph[0].prj_name}</span>
             </div>
             <div className={styles.lectureHospital}>
-              <span className={styles.projectName}>领域类型:</span>
-              <span title={listData[0].fieldType}>{listData[0].fieldType}</span>
+              <span className={styles.projectName}>领域类型 :</span>
+              <span title={graph[0].area}>{graph[0].area}</span>
             </div>
             <div className={styles.lectureHospital}>
-              <span className={styles.projectName}>标准词:</span>
-              <span title={listData[0].standardWord}>
-                {listData[0].standardWord}
-              </span>
+              <span className={styles.projectName}>标准词 :</span>
+              <span title={graph[0].std_vocab}>{graph[0].std_vocab}</span>
             </div>
             <div className={styles.lectureHospital}>
               <div style={{ display: 'flex' }}>
-                <div className={styles.synonym}>同义词:</div>
-                <span title={listData[0].synonym.join('; ')}>
-                  {listData[0].synonym.join('; ')
-                    ? listData[0].synonym.join('; ').length > 50
-                      ? listData[0].synonym.join('; ').slice(0, 50) + '...'
-                      : listData[0].synonym.join('; ')
+                <div className={styles.synonym}>同义词 :</div>
+                <span
+                  className={styles.synonymCotent}
+                  title={graph[0].syn_vocab.join(', ')}
+                >
+                  {graph[0].syn_vocab.join(', ')
+                    ? graph[0].syn_vocab.join(', ').length > 100
+                      ? graph[0].syn_vocab.join(', ').slice(0, 100) + '...'
+                      : graph[0].syn_vocab.join(', ')
                     : undefined}
                 </span>
               </div>
