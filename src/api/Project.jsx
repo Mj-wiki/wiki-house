@@ -1,4 +1,5 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
+import request from './request';
 //新增项目
 export const CreateProject = data => {
   return request('/api/project/create/', {
