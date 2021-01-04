@@ -2,12 +2,13 @@ import { defineConfig } from 'umi';
 import path from 'path';
 
 export default defineConfig({
+  title: 'liangkai',
+  base: './',
+  hash: true,
   history: {
     type: 'hash',
   },
-  base: './',
-  publicPath: './',
-  hash: true,
+  // publicPath: './',
   nodeModulesTransform: {
     type: 'none',
   },
@@ -63,9 +64,7 @@ export default defineConfig({
     '/api': {
       target: 'http://120.221.160.106:8000',
       changeOrigin: true,
-      // pathRewrite: {
-      //   '^/api': '/api'
-      // }
+      pathRewrite: { '^/api': '' },
     },
   },
   alias: {

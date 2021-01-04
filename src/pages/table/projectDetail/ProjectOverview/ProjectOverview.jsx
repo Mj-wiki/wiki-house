@@ -94,8 +94,8 @@ export default class ProjectOverview extends Component {
     );
   }
   componentDidMount() {
-    const { id } = this.props.location.state;
-    if (id && this.props.location.state) {
+    if (this.props.location.state) {
+      const { id } = this.props.location.state;
       this.initPrijectId(id);
     }
   }
