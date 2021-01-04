@@ -2,13 +2,12 @@ import { defineConfig } from 'umi';
 import path from 'path';
 
 export default defineConfig({
-  title: 'liangkai',
   base: './',
   hash: true,
   history: {
     type: 'hash',
   },
-  // publicPath: './',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   nodeModulesTransform: {
     type: 'none',
   },
