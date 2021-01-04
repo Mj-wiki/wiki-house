@@ -2,7 +2,6 @@ import { defineConfig } from 'umi';
 import path from 'path';
 
 export default defineConfig({
-  base: './',
   hash: true,
   history: {
     type: 'hash',
@@ -61,7 +60,7 @@ export default defineConfig({
   ],
   proxy: {
     '/api': {
-      target: 'http://120.221.160.106:8000/api',
+      target: 'http://120.221.160.1:8000/api',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
