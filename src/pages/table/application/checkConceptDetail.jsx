@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkConceptDetail.less';
 import { Form, Input, Breadcrumb, Icon, Button, Divider } from 'antd';
 import { connect } from 'umi';
-import graph from './realData.js';
+//import graph from './realData.js';
+import graph from './unificationData.js';
 import * as echarts from 'echarts';
 import Dialog from '@/components/DiaLog';
 import listData from './listData.js';
@@ -38,9 +39,13 @@ function CheckConceptDetail(props) {
     document.oncontextmenu = function() {
       return false;
     };
-    if (Array.isArray(graph['nodes'])) {
-      graph['nodes'].map((v, k) => {
+    const unifcList = graph[0]?.graph['nodes'];
+    const unifcLinksData = graph[0]?.graph['rels'];
+    if (Array.isArray(unifcList)) {
+      unifcList.map((v, k) => {
         if (Array.isArray(v.labels) && v.labels[0] === '标准词') {
+          v.itemStyle = { normal: { color: 'orange' } };
+          v.symbolSize = 48.685715;
           if (v.properties.class === '分类;二级分类') {
             v.itemStyle = { normal: { color: 'rgb(236,81,72)' } };
             v.symbolSize = 18.685715;
@@ -59,12 +64,12 @@ function CheckConceptDetail(props) {
         }
       });
     }
-    myEcharts(graph['nodes'], myChart);
+    myEcharts(unifcList, myChart, unifcLinksData);
 
     //初始化方法
   }, []);
 
-  const myEcharts = (data, myChart) => {
+  const myEcharts = (data, myChart, links) => {
     var categories = [];
     for (var i = 0; i < 9; i++) {
       categories[i] = {
@@ -95,7 +100,7 @@ function CheckConceptDetail(props) {
           type: 'graph',
           layout: 'force',
           data,
-          links: graph['rels'],
+          links,
           categories: categories,
           roam: true,
           focusNodeAdjacency: true,
@@ -115,7 +120,7 @@ function CheckConceptDetail(props) {
             curveness: 0.3,
           },
           force: {
-            repulsion: 100,
+            repulsion: 1000,
             layoutAnimation: false,
           },
 
