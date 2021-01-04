@@ -200,13 +200,16 @@ function CheckConceptDetail(props) {
   return (
     <div className={styles.content}>
       <Breadcrumb style={{ marginTop: '40px' }}>
-        <Breadcrumb.Item
-          href="#"
-          onClick={() => {
-            history.push('/table/checkAppDetail/' + props.match.params.appId);
-          }}
-        >
-          <span>归一查询</span>
+        <Breadcrumb.Item>
+          <span
+            onClick={() => {
+              const appId = props.match.params.appId;
+              history.push('/table/checkAppDetail/' + appId);
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            归一查询
+          </span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>概念详情</Breadcrumb.Item>
       </Breadcrumb>

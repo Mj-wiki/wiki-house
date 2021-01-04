@@ -56,9 +56,10 @@ function CheckAppDetail(props) {
   const changeItem = value => {
     setItems(value);
   };
-  const skipDetailLecture = appId => {
-    if (!appId) appId = 1;
-    history.push('/table/checkConceptDetail/' + appId);
+  const skipDetailLecture = itemId => {
+    const appId = props.match.params.appId;
+    if (!itemId) itemId = 1;
+    history.push(`/table/checkConceptDetail/${appId}/${itemId}`);
   };
   const getFocus = e => {
     e.stopPropagation();
