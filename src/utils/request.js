@@ -10,7 +10,7 @@ const request = extend({
 
 request.interceptors.request.use((url, options) => {
   return {
-    url: `/api${url}`,
+    url: `${url}`,
     options: {
       ...options,
     },

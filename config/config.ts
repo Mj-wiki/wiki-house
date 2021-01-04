@@ -7,7 +7,6 @@ export default defineConfig({
   history: {
     type: 'hash',
   },
-  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   nodeModulesTransform: {
     type: 'none',
   },
@@ -61,7 +60,7 @@ export default defineConfig({
   ],
   proxy: {
     '/api': {
-      target: 'http://120.221.160.106:8000',
+      target: 'http://120.221.160.106:8000/api',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
