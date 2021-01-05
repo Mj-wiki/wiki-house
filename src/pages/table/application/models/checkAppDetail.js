@@ -11,7 +11,8 @@ const initState = {
   total: 0,
   pageSize: 10,
   pageNum: 1,
-  search: '',
+  project_fieldcode: '',
+  project_name: '',
 };
 
 export default {
@@ -47,64 +48,61 @@ export default {
         Message.error('接口异常');
       }
     },
-
-    // *userList({ search }, { select, call, put }) {
-    //   try {
-    //     const values = yield put({ type: 'getSearchValues' });
-    //     const { sort, start, length, sortValue } = yield values;
-
-    //     const searchObj = {
-    //       start: keywords ? 0 : start,
-    //       length,
-    //       sort,
-    //       sortValue,
-    //       search: !search ? null : encodeURIComponent(search),
-    //     };
-
-    //     const data = yield call(requestGetUserList, searchObj);
-    //     if (data.code === 0) {
-    //       yield put({
-    //         type: 'changeState',
-    //         payload: {
-    //           dataSource: data.data.data,
-    //           total: data.data.total,
-    //           search,
-    //         },
-    //       });
-    //     } else {
-    //       yield put({
-    //         type: 'changeState',
-    //         payload: {
-    //           dataSource: [],
-    //           total: 0,
-    //           search,
-    //         },
-    //       });
-    //     }
-    //     return data;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-
-    *getSearchValues(action, { select }) {
-      const { dataSource, total } = yield select(state => state.checkAppDetail);
-      return {
-        dataSource,
-        total,
-      };
-    },
-
-    *sendDate({ date }, { put }) {
-      if (date) {
+    //归一查询搜索列表
+    *searchList(search, { select, call, put }) {
+      try {
         yield put({
           type: 'changeState',
           payload: {
-            dataSource: [],
-            expire_date: date,
+            project_fieldcode: search.code,
+            project_name: search.name,
           },
         });
+        const values = yield put({ type: 'getSearchValues' });
+        const { project_fieldcode, project_name } = yield values;
+        const searchObj = {
+          project_fieldcode,
+          project_name,
+          //search: encodeURIComponent(search),
+        };
+
+        const data = yield call(requestGetCheckList, searchObj);
+        if (data.result === 'success') {
+          yield put({
+            type: 'changeState',
+            payload: {
+              dataSource: data.data,
+              total: data.total,
+            },
+          });
+        } else {
+          yield put({
+            type: 'changeState',
+            payload: {
+              dataSource: [],
+              total: 0,
+            },
+          });
+        }
+        return data;
+      } catch (error) {
+        console.log(error);
       }
+    },
+
+    *getSearchValues(action, { select }) {
+      const {
+        dataSource,
+        total,
+        project_fieldcode,
+        project_name,
+      } = yield select(state => state.checkAppDetail);
+      return {
+        dataSource,
+        total,
+        project_fieldcode,
+        project_name,
+      };
     },
   },
   reducers: {
