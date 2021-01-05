@@ -19,7 +19,7 @@ export default class projectManagement extends Component {
   state = {
     isModalVisible: false,
     isRemoveVisible: false,
-    uploadkeys: false,
+    uploadkeys: 1,
     ProjectData: [],
     ProjectId: '',
     username: '',
@@ -416,6 +416,7 @@ export default class projectManagement extends Component {
     this.setState({
       isModalVisible: true,
       fileloadShow: false,
+      uploadkeys: 3,
     });
     const {
       project_name,
@@ -462,7 +463,7 @@ export default class projectManagement extends Component {
         project_introduction,
       } = values;
 
-      if (uploadkeys) {
+      if (uploadkeys == 2) {
         let obj = {
           project_name,
           id: ProjectId,
@@ -479,7 +480,7 @@ export default class projectManagement extends Component {
           if (res.result == 'success') {
             this.setState({
               isModalVisible: false,
-              uploadkeys: false,
+              uploadkeys: 1,
             });
             const form = this.formRef.current;
             form.resetFields();
@@ -489,7 +490,7 @@ export default class projectManagement extends Component {
             return;
           }
         });
-      } else {
+      } else if (uploadkeys == 1) {
         let obj = {
           project_name,
           project_fieldcode,
@@ -505,10 +506,37 @@ export default class projectManagement extends Component {
           if (res.result == 'success') {
             this.setState({
               isModalVisible: false,
+              uploadkeys: 1,
             });
             const form = this.formRef.current;
             form.resetFields();
             this.uplodaderfile(res.data);
+          } else {
+            message.error(res.message);
+            return;
+          }
+        });
+      } else if (uploadkeys == 3) {
+        let obj = {
+          project_name,
+          project_fieldcode,
+          project_code,
+          project_introduction,
+          project_status: 1,
+          project_photo:
+            'https://dev.lrhealth.com/api/base/util/DownloadFile/0800bfc6-e9f3-40ee-9d52-6c4ab10333d1.jpg',
+          project_fieldname: project_fieldcode,
+          create_user: username,
+        };
+        CreateProject(obj).then(res => {
+          if (res.result == 'success') {
+            this.setState({
+              isModalVisible: false,
+              uploadkeys: 1,
+            });
+            const form = this.formRef.current;
+            form.resetFields();
+            // this.uplodaderfile(res.data);
           } else {
             message.error(res.message);
             return;
@@ -526,6 +554,7 @@ export default class projectManagement extends Component {
     formData.append('file', fileList[0]);
     formData.append('project_id', data);
     uploadFile(formData).then(res => {
+      this.initProjectlist();
       if (res.result == 'success') {
         message.success('upload successfully.');
       } else {
@@ -570,7 +599,6 @@ export default class projectManagement extends Component {
       ProjectId,
       username,
     };
-    console.log(obj);
     deleteProject(obj).then(res => {
       if (res.result == 'success') {
         this.initProjectlist();
@@ -587,7 +615,7 @@ export default class projectManagement extends Component {
     const { id } = item;
     this.setState({
       isModalVisible: true,
-      uploadkeys: true,
+      uploadkeys: 2,
       ProjectId: id,
     });
     const {
@@ -606,12 +634,23 @@ export default class projectManagement extends Component {
   };
 
   blundEventcancelPrijects = item => {
-    console.log(item);
     const { id } = item;
-    this.setState({
+    const { username } = this.state;
+    let obj = {
       ProjectId: id,
+      username,
+    };
+    deleteProject(obj).then(res => {
+      if (res.result == 'success') {
+        this.initProjectlist();
+        this.setState({
+          isRemoveVisible: false,
+        });
+      } else {
+        return;
+      }
     });
-    this.blundeventdalogok();
+    // this.blundeventdalogok();
   };
   blundeventToDetail = item => {
     let id = item.id;

@@ -20,6 +20,8 @@ export default class ProjectMap extends Component {
     eachartBigorSmall: 1,
     lintData: [],
     InputDialogShow: false,
+    eidetText: '编辑模式',
+    isEidet: false,
   };
   render() {
     const {
@@ -28,6 +30,8 @@ export default class ProjectMap extends Component {
       x,
       y,
       InputDialogShow,
+      eidetText,
+      isEidet,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -42,6 +46,15 @@ export default class ProjectMap extends Component {
             </div>
           </div>
           <div className={Style.promap}>
+            {isEidet ? (
+              <Button
+                type="primary"
+                onClick={() => this.blundeventAddconcept()}
+                className={Style.Addconcept}
+              >
+                + 添加概念
+              </Button>
+            ) : null}
             <div
               className={Style.promapAdd}
               onClick={() => this.blundmapbigadd(0)}
@@ -55,14 +68,35 @@ export default class ProjectMap extends Component {
               -
             </div>
             <div className={Style.atlasTop}>
-              <Button type="primary">编辑模式</Button>
+              {isEidet ? (
+                <Button
+                  type="primary"
+                  onClick={() => this.blundeventeidetRemove()}
+                  style={{ width: '100px' }}
+                >
+                  结束编辑
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  onClick={() => this.blundeventeidetstate(true)}
+                  style={{ width: '100px' }}
+                >
+                  编辑模式
+                </Button>
+              )}
               <Search
                 placeholder="输入概念名"
                 onSearch={this.onSearch}
                 style={{ width: 200 }}
               />
             </div>
-            <div className={Style.Graphwrapper} id="main" ref="main"></div>
+            <div
+              className={Style.Graphwrapper}
+              id="main"
+              ref="main"
+              style={{ width: '100%', height: '100%' }}
+            ></div>
             {diglogHidden ? (
               <div
                 className={Style.editEacharts}
@@ -104,6 +138,21 @@ export default class ProjectMap extends Component {
       </div>
     );
   }
+  blundeventAddconcept = () => {
+    //添加概念
+  };
+  blundeventeidetstate = () => {
+    //编辑模式
+    this.setState({
+      isEidet: true,
+    });
+  };
+  blundeventeidetRemove = () => {
+    //结束编辑
+    this.setState({
+      isEidet: false,
+    });
+  };
   BlundeventshowDialog = () => {
     this.setState({
       InputDialogShow: true,
@@ -166,7 +215,6 @@ export default class ProjectMap extends Component {
       grid: {
         height: '100%',
         width: '100%',
-        // show: true,
       },
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',

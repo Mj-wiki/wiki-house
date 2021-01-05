@@ -179,14 +179,24 @@ export default class ProjectOverview extends Component {
     });
 
     myChart.setOption({
-      tooltip: {},
+      tooltip: {
+        formatter: function(x) {
+          return x.data.name; //设置提示框的内容和格式 节点和边都显示name属性
+        },
+      },
+      toolbox: {},
+      grid: {
+        height: '100%',
+        width: '100%',
+        // show: true,
+      },
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',
       animation: false,
-      legendHoverLink: true,
       series: [
         {
-          zoom: 0.1,
+          // center: [0, 0],
+          zoom: 0.3,
           type: 'graph',
           layout: 'force',
           data,
@@ -196,8 +206,8 @@ export default class ProjectOverview extends Component {
           draggable: true,
           itemStyle: {
             borderColor: '#fff',
-            borderWidth: 2,
-            shadowBlur: 100,
+            borderWidth: 0,
+            shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.3)',
           },
           label: {
@@ -206,19 +216,20 @@ export default class ProjectOverview extends Component {
           },
           lineStyle: {
             color: 'source',
-            curveness: 1,
+            curveness: 0.3,
           },
           force: {
             // initLayout:'circular',
-            repulsion: 1000,
+            repulsion: 600,
             gravity: 0.1,
-            edgeLength: 2000,
+            edgeLength: 300,
             layoutAnimation: false,
-            friction: 1,
+            friction: 0.3,
+            initLayout: 'none',
           },
           emphasis: {
             lineStyle: {
-              width: 2,
+              width: 5,
             },
           },
         },

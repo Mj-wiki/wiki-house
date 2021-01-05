@@ -4,7 +4,7 @@ import { message } from 'antd';
  * 配置request请求时的默认参数
  */
 const request = extend({
-  timeout: 10000,
+  // timeout: 10000,
   errorHandler,
 });
 
