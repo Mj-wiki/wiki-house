@@ -85,7 +85,7 @@ export default class componentName extends Component {
   }
   componentDidMount() {
     initEachartsData().then(res => {
-      if (res.result === 'success') {
+      if (res?.result === 'success') {
         const data = res.data;
         const Arrlist = [];
         const timeX = Object.values(res.data);
