@@ -44,6 +44,42 @@
           }
           .synonymCotent {
             width: 220px;
+            overflow: hidden;
+            color: rgba(51, 51, 51, 1);
+            &.unfold {
+              //max-height: 120px;
+              overflow: auto;
+            }
+          }
+          // 展开收起小箭头
+          .unfold_button {
+            height: 20px;
+            width: 40px;
+            position: relative;
+            cursor: pointer;
+            color: #59a4f9;
+            &::after {
+              content: '';
+              display: inline-block;
+              width: 6px;
+              height: 6px;
+              position: absolute;
+              right: 8px;
+              cursor: pointer;
+              transform: rotate(45deg);
+            }
+            &.packup::after {
+              border-right: 1px solid #59a4f9;
+              border-bottom: 1px solid #59a4f9;
+              bottom: 6px;
+              right: -16px;
+            }
+            &.unfold::after {
+              border-left: 1px solid #59a4f9;
+              border-top: 1px solid #59a4f9;
+              top: 10px;
+              right: -14px;
+            }
           }
         }
       }

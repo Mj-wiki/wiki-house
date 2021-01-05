@@ -23,6 +23,7 @@ const buttonMinusStyle = {
   fontSize: '25px',
   lineHeight: '20px',
 };
+const HEIGHT = 120;
 function CheckConceptDetail(props) {
   const { history, onInit } = props;
   const chartRef = useRef(null);
@@ -32,6 +33,23 @@ function CheckConceptDetail(props) {
     x: 0,
     y: 0,
   });
+  const domList = useRef(null);
+  const domListContent = useRef(null);
+  const [listHeight, setListHeight] = useState(0); // 同义词的真实高度
+  const [unfold, setUnfold] = useState(false);
+  useEffect(() => {
+    const resize = () => {
+      const listHeight = domListContent.current.offsetHeight;
+      setListHeight(listHeight);
+      console.log(listHeight);
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
   useEffect(() => {
     const myChart = echarts.init(chartRef.current);
     myChart.showLoading();
@@ -196,7 +214,11 @@ function CheckConceptDetail(props) {
       ],
     });
   };
-
+  //展开收起
+  const clickUnfold = () => {
+    domList.current.scrollTop = 0;
+    setUnfold(!unfold);
+  };
   return (
     <div className={styles.content}>
       <Breadcrumb style={{ marginTop: '40px' }}>
@@ -243,16 +265,42 @@ function CheckConceptDetail(props) {
             <div className={styles.lectureHospital}>
               <div style={{ display: 'flex' }}>
                 <div className={styles.synonym}>同义词 :</div>
-                <span
-                  className={styles.synonymCotent}
-                  title={graph[0].syn_vocab.join(', ')}
-                >
-                  {graph[0].syn_vocab.join(', ')
-                    ? graph[0].syn_vocab.join(', ').length > 100
-                      ? graph[0].syn_vocab.join(', ').slice(0, 100) + '...'
-                      : graph[0].syn_vocab.join(', ')
-                    : undefined}
-                </span>
+                <div>
+                  <div
+                    title={graph[0].syn_vocab.join(', ')}
+                    ref={domList}
+                    style={{
+                      height: unfold ? 'auto' : HEIGHT,
+                      lineHeight: `30px`,
+                    }}
+                    className={
+                      unfold
+                        ? `${styles.synonymCotent} ${styles.unfold}`
+                        : styles.synonymCotent
+                    }
+                  >
+                    <div ref={domListContent}>
+                      {/* {graph[0].syn_vocab.join(', ')
+                      ? graph[0].syn_vocab.join(', ').length > 100
+                        ? graph[0].syn_vocab.join(', ').slice(0, 100) + '...'
+                        : graph[0].syn_vocab.join(', ')
+                      : undefined} */}
+                      <span>{graph[0].syn_vocab.join(', ')}</span>
+                    </div>
+                  </div>
+                  {listHeight > HEIGHT ? (
+                    <span
+                      className={
+                        unfold
+                          ? `${styles.unfold_button} ${styles.unfold}`
+                          : `${styles.unfold_button} ${styles.packup}`
+                      }
+                      onClick={clickUnfold}
+                    >
+                      {unfold ? '收起' : '展开'}
+                    </span>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>

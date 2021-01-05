@@ -1,11 +1,4 @@
-import {
-  requestGetUserDelete,
-  requestGetUserList,
-  //requestGetUserStatus,
-  //requestGetLoginLogs,
-  //requestGetUserInfo,
-  Login,
-} from '../services';
+import { Login } from '../services';
 
 const initState = {
   dataSource: [],
@@ -15,21 +8,6 @@ const initState = {
   search: '',
   sort: '',
   sortValue: '',
-  uid: 1,
-  name: '',
-  email: '',
-  status: '1',
-  password: 123456,
-  login_count: 10,
-  expire_date: [],
-  date_type: 1,
-  dimension: 1,
-  industry: 1,
-  category: 1,
-  brand: [1, 2, 3],
-  tactics: {},
-  logObject: {},
-  userName: '',
 };
 
 export default {
@@ -39,17 +17,6 @@ export default {
     *onInit({ effectTypes }, { all, put, select }) {
       yield put({ type: 'userList' });
     },
-    // *userInfo({}, { select, call, put }) {
-    //   const data = yield call(requestGetUserInfo);
-    //   if (data.code === 0) {
-    //     yield put({
-    //       type: 'changeState',
-    //       payload: {
-    //         userName: data.data,
-    //       },
-    //     });
-    //   }
-    // },
 
     *changeList({ key, value }, { select, call, put }) {
       const v = yield put({ type: 'getSearchValues' });
@@ -106,20 +73,6 @@ export default {
         search,
         sort,
         sortValue,
-        uid,
-        name,
-        email,
-        password,
-        login_count,
-        expire_date,
-        date_type,
-        dimension,
-        industry,
-        category,
-        brand,
-        tactics,
-        status,
-        logObject,
       } = yield select(state => state.list);
 
       const length = pageSize;
@@ -133,43 +86,12 @@ export default {
         sortValue,
         start,
         length,
-        uid,
-        name,
-        email,
-        password,
-        login_count,
-        expire_date,
-        date_type,
-        dimension,
-        industry,
-        category,
-        brand,
-        tactics,
-        status,
-        logObject,
       };
     },
-    *userDelete({ values }, { select, put, call }) {
-      yield call(requestGetUserDelete, values);
-      yield put({ type: 'userList' });
-    },
+
     *login({ values }, { select, put, call }) {
       const data = yield call(Login, values);
     },
-    // *userLoginLogs({ values }, { select, put, call }) {
-    //   const data = yield call(requestGetLoginLogs, values);
-    //   if (data.code === 0) {
-    //     yield put({
-    //       type: 'changeState',
-    //       payload: {
-    //         logObject: data.data,
-    //       },
-    //     });
-    //   }
-    // },
-    // *userStaus({ values }, { select, put, call }) {
-    //   const data = yield call(requestGetUserStatus, values);
-    // },
   },
   reducers: {
     changeState: (state, { payload }) => ({
