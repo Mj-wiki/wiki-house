@@ -126,7 +126,7 @@ export default class ProjectMap extends Component {
     document.oncontextmenu = function() {
       return false;
     };
-
+    const { nodesData, relsData } = this.props;
     let solidda = SolidData.map(item => {
       if (item.labels == '标准词') {
         (item.attributes = { modularity_class: 0 }), (item.symbolSize = 50);
@@ -215,7 +215,6 @@ export default class ProjectMap extends Component {
     });
     // 右键元素
     myChart.on('contextmenu', function(params) {
-      console.log(params);
       if (typeof params === 'object') {
         that.setState(state => {
           return {
