@@ -7,28 +7,27 @@ import SearchNormalizeCard from '@/components/SearchNormalizeCard';
 import listData from './listData.js';
 const { Option } = Select;
 const { Search } = Input;
-//mock数据
-const itemData = [
-  { projectId: '0', projectName: '全部领域' },
-  { projectId: '1', projectName: '领域1' },
-  { projectId: '2', projectName: '领域2' },
-];
 
 function CheckAppDetail(props) {
-  const { history, onInit } = props;
+  const { history, onInit, fieldData, dataSource, total, searchList } = props;
   const cookieListData = localStorage.getItem('cookieList');
+  //下拉框领域的值
   const [items, setItems] = useState(undefined);
   const [searchNumber, setSearchNumber] = useState(0);
   const [searchModalStatus, setSearchModalStatus] = useState(false);
   const [emptyStatus, setEmptyStatus] = useState(0);
   const [transArr, setTransArr] = useState([]);
   const [cookieList, setCookieList] = useState([]);
+  //搜索关键字
   const [hotWord, setHotWord] = useState(null);
   const btnElement = useRef(null);
   const {
     query: { uid },
   } = history.location;
-
+  //页面初始化调取接口
+  useEffect(() => {
+    onInit();
+  }, []);
   useEffect(() => {
     if (cookieListData) {
       setTransArr(cookieListData.split(','));
@@ -50,6 +49,7 @@ function CheckAppDetail(props) {
     }
     setCookieList([...new Set(cookieList)]);
     setEmptyStatus(0);
+    searchList(items, hotWord);
     //setHotWord(null);
     localStorage.setItem('cookieList', [...new Set(cookieList)]);
   };
@@ -108,10 +108,10 @@ function CheckAppDetail(props) {
             style={{ width: '215px' }}
             onChange={changeItem}
           >
-            {itemData.map((v, k) => {
+            {fieldData.map((v, k) => {
               return (
-                <Option key={k} value={v.projectId}>
-                  {v.projectName}
+                <Option key={k} value={v.field_code}>
+                  {v.field_name}
                 </Option>
               );
             })}
@@ -168,7 +168,7 @@ function CheckAppDetail(props) {
         </div>
       </div>
       {searchNumber ? (
-        <div style={{ textAlign: 'left' }}>查询到10086条概念</div>
+        <div style={{ textAlign: 'left' }}>查询到 {total} 条概念</div>
       ) : null}
       {searchNumber ? (
         <ColumnLayout
@@ -181,13 +181,20 @@ function CheckAppDetail(props) {
     </div>
   );
 }
-const mapStateProps = ({ detail }) => {
-  return {};
+const mapStateProps = ({ checkAppDetail }) => {
+  return {
+    fieldData: checkAppDetail.fieldData,
+    dataSource: checkAppDetail.dataSource,
+    total: checkAppDetail.total,
+  };
 };
 const mapDispatchProps = dispatch => {
   return {
     onInit: () => {
-      dispatch({ type: 'detail/onInit' });
+      dispatch({ type: 'checkAppDetail/onInit' });
+    },
+    searchList: (code, name) => {
+      dispatch({ type: 'checkAppDetail/searchList', code, name });
     },
   };
 };

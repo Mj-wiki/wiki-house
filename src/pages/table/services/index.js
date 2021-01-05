@@ -9,20 +9,20 @@ export const Login = data => {
   });
 };
 
-//列表删除
-export function requestGetUserDelete(values) {
-  return request(`/api/knowledge-graph/user-delete${objToSearchUrl(values)}`);
+//领域下拉框列表
+export function requestGetFieldList(values) {
+  return request(`/api/project/fieldList/`);
 }
-//用户列表
-export function requestGetUserList(values) {
-  return request(`/api/knowledge-graph/user-list${objToSearchUrl(values)}`);
+//归一查询项目列表（初始化列表）
+export function requestGetList(values) {
+  return request(`/api/project/list/`);
 }
-//用户详情
-export function requestGetUserDetail(values) {
-  return request(`/api/knowledge-graph/user-detail${objToSearchUrl(values)}`);
+//归一查询关键字搜索列表
+export function requestGetCheckList(values) {
+  return request(`/api/project/list/${objToSearchUrl(values)}`);
 }
 
-//添加用户(category,brand选一个)
+//添加用户
 export function requestPostUserAdd(values) {
   console.log(values);
   return request(`/api/knowledge-graph/user-save`, {
