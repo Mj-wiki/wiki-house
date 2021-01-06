@@ -88,6 +88,24 @@
       width: 850px;
       padding: 20px;
       border: 1px solid @colorB;
+      .legend {
+        display: flex;
+        justify-content: flex-end;
+        .stand,
+        .origin {
+          display: inline-block;
+          background: orange;
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+          vertical-align: middle;
+        }
+        .origin {
+          background: lightBlue;
+          width: 15px;
+          height: 15px;
+        }
+      }
     }
   }
   .checkTitle {

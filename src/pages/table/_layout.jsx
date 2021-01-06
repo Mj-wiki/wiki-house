@@ -3,6 +3,7 @@ import styles from './_layout.less';
 import { Layout, Menu, Button, notification, Breadcrumb } from 'antd';
 import { UserOutlined, SettingOutlined } from '@ant-design/icons';
 import backIcon from '../../assets/layouticon/back.png';
+import uniLogo from '../../assets/chart/uniLogo.svg';
 import { connect } from 'umi';
 
 const { SubMenu } = Menu;
@@ -71,7 +72,11 @@ function BackStageLayout(props) {
       <Layout>
         <Header style={{ padding: 0 }}>
           <Menu theme="dark" mode="horizontal" selectable="false">
-            <Menu.Item key="0"></Menu.Item>
+            <Menu.Item key="0">
+              <div>
+                <img src={uniLogo} alt="" style={{ width: '40px' }} />
+              </div>
+            </Menu.Item>
             <Menu.Item
               key="1"
               style={{
