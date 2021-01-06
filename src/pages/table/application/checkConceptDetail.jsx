@@ -41,7 +41,6 @@ function CheckConceptDetail(props) {
     const resize = () => {
       const listHeight = domListContent.current.offsetHeight;
       setListHeight(listHeight);
-      console.log(listHeight);
     };
 
     resize();

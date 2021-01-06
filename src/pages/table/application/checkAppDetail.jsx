@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkAppDetail.less';
-import { Form, Input, Icon, Message, Select, Button } from 'antd';
+import { Form, Input, Icon, Message, Modal, Select, Button } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import SearchNormalizeCard from '@/components/SearchNormalizeCard';
 import listData from './listData.js';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { Search } = Input;
 
@@ -49,8 +50,22 @@ function CheckAppDetail(props) {
     }
     setCookieList([...new Set(cookieList)]);
     setEmptyStatus(0);
+    if (!hotWord) {
+      const config = {
+        title: '查询提示',
+        icon: <ExclamationCircleOutlined />,
+        content: (
+          <>
+            <div>关键词不能为空！</div>
+          </>
+        ),
+        okText: '确定',
+        cancelText: '取消',
+      };
+      Modal.confirm(config);
+      return;
+    }
     searchList(items, hotWord);
-    //setHotWord(null);
     localStorage.setItem('cookieList', [...new Set(cookieList)]);
   };
   const changeItem = value => {
@@ -86,13 +101,13 @@ function CheckAppDetail(props) {
     return (
       <div>
         <SearchNormalizeCard
-          imgUrl={record.coverUrl}
-          conceptName={record.conceptName}
-          projectName={record.projectName}
-          fieldType={record.fieldType}
-          standardWord={record.standardWord}
-          synonym={record.synonym}
-          onClick={skipDetailLecture.bind(this, record.itemId)}
+          imgUrl={listData[0].coverUrl}
+          conceptName={hotWord}
+          projectName={record.node_name}
+          fieldType={record.area}
+          standardWord={record.std_vocab}
+          synonym={record.syn_vocab}
+          onClick={skipDetailLecture.bind(this, record.node_id)}
         />
       </div>
     );
@@ -172,7 +187,7 @@ function CheckAppDetail(props) {
       ) : null}
       {searchNumber ? (
         <ColumnLayout
-          list={listData}
+          list={dataSource}
           renderItem={changeItemLecture}
           column={4}
           direction={'horizontal'}

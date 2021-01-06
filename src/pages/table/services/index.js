@@ -19,7 +19,7 @@ export function requestGetList(values) {
 }
 //归一查询关键字搜索列表
 export function requestGetCheckList(values) {
-  return request(`/api/project/list/${objToSearchUrl(values)}`);
+  return request(`/api/project/queryConcept/${objToSearchUrl(values)}`);
 }
 
 //添加用户

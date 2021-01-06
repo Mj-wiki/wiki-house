@@ -40,24 +40,36 @@ export default function SearchNormalizeCard({
         </div>
         <div className={style.bottomBox}>
           <div className={style.lectureHospital}>
-            <span className={style.projectName}>所属项目:</span>
-            <span title={projectName}>{projectName}</span>
+            <div className={style.cardRightContent}>
+              <span className={style.projectName}>所属项目 :</span>
+              <span title={projectName} className={style.synContent}>
+                {projectName}
+              </span>
+            </div>
           </div>
           <div className={style.lectureHospital}>
-            <span className={style.projectName}>领域类型:</span>
-            <span title={fieldType}>{fieldType}</span>
+            <div className={style.cardRightContent}>
+              <span className={style.projectName}>领域类型 :</span>
+              <span title={fieldType} className={style.synContent}>
+                {fieldType}
+              </span>
+            </div>
           </div>
           <div className={style.lectureHospital}>
-            <span className={style.projectName}>标准词:</span>
-            <span title={standardWord}>{standardWord}</span>
+            <div className={style.cardRightContent}>
+              <span className={style.synonym}>标准词 :</span>
+              <span title={standardWord} className={style.synContent}>
+                {standardWord}
+              </span>
+            </div>
           </div>
           <div className={style.lectureHospital}>
-            <div style={{ display: 'flex' }}>
-              <div className={style.synonym}>同义词:</div>
-              <span title={synonym.join('; ')}>
+            <div className={style.cardRightContent}>
+              <div className={style.synonym}>同义词 :</div>
+              <span title={synonym.join('; ')} className={style.synContent}>
                 {synonym.join('; ')
-                  ? synonym.join('; ').length > 20
-                    ? synonym.join('; ').slice(0, 30) + '...'
+                  ? synonym.join('; ').length > 25
+                    ? synonym.join('; ').slice(0, 25) + '...'
                     : synonym.join('; ')
                   : undefined}
               </span>
