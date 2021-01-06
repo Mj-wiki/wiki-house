@@ -40,6 +40,21 @@ function CheckAppDetail(props) {
   const [form] = Form.useForm();
   //查询
   const changeSearch = value => {
+    if (!hotWord) {
+      const config = {
+        title: '查询提示',
+        icon: <ExclamationCircleOutlined />,
+        content: (
+          <>
+            <div>需输入关键词！</div>
+          </>
+        ),
+        okText: '确定',
+        cancelText: '取消',
+      };
+      Modal.confirm(config);
+      return;
+    }
     setSearchNumber(1);
     if (value) {
       cookieList.unshift(value);
@@ -50,21 +65,6 @@ function CheckAppDetail(props) {
     }
     setCookieList([...new Set(cookieList)]);
     setEmptyStatus(0);
-    if (!hotWord) {
-      const config = {
-        title: '查询提示',
-        icon: <ExclamationCircleOutlined />,
-        content: (
-          <>
-            <div>关键词不能为空！</div>
-          </>
-        ),
-        okText: '确定',
-        cancelText: '取消',
-      };
-      Modal.confirm(config);
-      return;
-    }
     searchList(items, hotWord);
     localStorage.setItem('cookieList', [...new Set(cookieList)]);
   };
@@ -74,7 +74,7 @@ function CheckAppDetail(props) {
   const skipDetailLecture = itemId => {
     const appId = props.match.params.appId;
     if (!itemId) itemId = 1;
-    history.push(`/table/checkConceptDetail/${appId}/${itemId}`);
+    window.open(`#/table/checkConceptDetail/${appId}/${itemId}`);
   };
   const getFocus = e => {
     e.stopPropagation();

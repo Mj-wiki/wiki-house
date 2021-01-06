@@ -51,10 +51,10 @@ function BackStageLayout(props) {
     });
   };
   const checkPersonalMessage = () => {
-    console.log('点击查看个人信息');
+    console.log('点击查看系统设置');
   };
   const checkSystemState = () => {
-    console.log('点击查看系统设置');
+    console.log('点击查看个人信息');
   };
   const goHomePage = () => {
     history.push('/table/homePage');
@@ -84,7 +84,11 @@ function BackStageLayout(props) {
             </Menu.Item>
             <Menu.Item
               key="5"
-              style={{ ...titleMiddleStyle, marginLeft: '25%' }}
+              style={{
+                ...titleMiddleStyle,
+                marginLeft:
+                  document?.documentElement?.clientWidth > 1800 ? '30%' : '26%',
+              }}
             >
               <span onClick={goHomePage}>首页</span>
             </Menu.Item>
