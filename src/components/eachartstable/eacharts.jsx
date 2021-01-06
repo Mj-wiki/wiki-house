@@ -90,13 +90,14 @@ export default class componentName extends Component {
         const Arrlist = [];
         const timeX = Object.values(res.data);
         const NUmberBig = Math.max(...timeX); //左侧区域数
+        let NUmberBigs = Math.ceil(NUmberBig / 10) * 10;
         for (const key in data) {
           Arrlist.push(key);
         }
         this.setState({
           X: Arrlist,
           xState: timeX,
-          NUmberBig: 100,
+          NUmberBig: NUmberBigs,
         });
       } else {
         return;

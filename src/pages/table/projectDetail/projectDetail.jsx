@@ -13,7 +13,6 @@ class projectDetail extends Component {
   };
   render() {
     const { TapIndex } = this.state;
-    console.log(typeof TapIndex);
     return (
       <div className={Styles.projectBox}>
         <div className={Styles.Header}>

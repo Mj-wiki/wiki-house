@@ -103,23 +103,30 @@ export default class ProjectMap extends Component {
                 style={{ top: y + 80 + 'px', left: x + 'px' }}
               >
                 <p className={Style.editslide}>
-                  {' '}
-                  <CloseSquareOutlined />
+                  <CloseSquareOutlined className={Style.iconRight} />
                   聚焦
                 </p>
                 <p
                   className={Style.editslide}
                   onClick={() => this.BlundeventshowDialog()}
                 >
-                  {' '}
-                  <PlusOutlined /> 添加关系
+                  <PlusOutlined className={Style.iconRight} />
+                  添加关系
                 </p>
                 <p className={Style.editslide}>
-                  {' '}
-                  <DeleteOutlined />
+                  <DeleteOutlined className={Style.iconRight} />
                   删除概念
                 </p>
               </div>
+            ) : null}
+            {isEidet ? (
+              <Button
+                type="primary"
+                onClick={() => this.blundeventeidetstate(true)}
+                className={Style.BtnPreServaTion}
+              >
+                保存
+              </Button>
             ) : null}
           </div>
         </div>
@@ -228,7 +235,7 @@ export default class ProjectMap extends Component {
           data,
           links: arr,
           roam: true,
-          focusNodeAdjacency: true,
+          focusNodeAdjacency: false,
           draggable: true,
           itemStyle: {
             borderColor: '#fff',
