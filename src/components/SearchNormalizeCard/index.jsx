@@ -32,7 +32,11 @@ export default function SearchNormalizeCard({
         </div>
         <div className={style.lecturerLayout}>
           <div className={style.lecturerLeft}>
-            <span title={conceptName}>{conceptName}</span>
+            <span title={conceptName}>
+              {conceptName.length > 10
+                ? conceptName.slice(0, 10) + '...'
+                : conceptName}
+            </span>
           </div>
         </div>
         <div className={style.line}>

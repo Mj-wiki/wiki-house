@@ -326,7 +326,6 @@ function CheckConceptDetail(props) {
               />
             </div>
           </div>
-
           <div>
             <Button
               type="primary"

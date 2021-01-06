@@ -102,8 +102,8 @@ function CheckAppDetail(props) {
       <div>
         <SearchNormalizeCard
           imgUrl={listData[0].coverUrl}
-          conceptName={hotWord}
-          projectName={record.node_name}
+          conceptName={record.node_name}
+          projectName={record.prj_name}
           fieldType={record.area}
           standardWord={record.std_vocab}
           synonym={record.syn_vocab}
