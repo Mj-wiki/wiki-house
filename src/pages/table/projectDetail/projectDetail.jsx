@@ -28,10 +28,10 @@ class projectDetail extends Component {
             size={'default'}
             tabBarGutter={100}
           >
-            <TabPane tab="项目概览" key={1}>
+            <TabPane tab="项目概览" key="1">
               <ProjectOverview {...this.props} SetTapIndex={this.SetTapIndex} />
             </TabPane>
-            <TabPane tab="项目图谱" key={2}>
+            <TabPane tab="项目图谱" key="2">
               <ProjectMap {...this.props} />
               {/* <Graph/> */}
             </TabPane>
