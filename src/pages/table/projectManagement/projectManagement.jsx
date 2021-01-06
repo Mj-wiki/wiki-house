@@ -3,7 +3,16 @@ import '../../../assets/css/index.css';
 import Style from './projectManagement.less';
 import SearchFrom from '../../../components/SearchFrom/SearchFrom';
 import AddPorject from '../../../components/Addproject/Addproject';
-import { Button, Form, Input, Select, Upload, message } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  Select,
+  Upload,
+  message,
+  Empty,
+  Spin,
+} from 'antd';
 import { SwitcherTwoTone, DeleteTwoTone } from '@ant-design/icons';
 import {
   CreateProject,
@@ -96,226 +105,117 @@ export default class projectManagement extends Component {
             </Button>
           </div>
         </div>
-        <div className={Style.List}>
-          {ProjectData.map((item, index) => {
-            return (
-              <div className={Style.List_slide} key={index}>
-                <div className={Style.list_header}>
-                  <div></div>
-                  <div>
-                    <SwitcherTwoTone
-                      onClick={() => this.BlundeventCopyProject(item)}
-                    />
-                    <DeleteTwoTone
-                      style={{ marginLeft: '10px' }}
-                      onClick={() => this.blundeventremovelist(item)}
-                    />
-                  </div>
-                </div>
-                <div className={Style.eachartswrapper}>
-                  <img
-                    src={item.project_photo}
-                    alt=""
-                    className={Style.eachartsimage}
-                  />
-                </div>
-                <h1 className={Style.h1}>{item.project_name}</h1>
-                <p className={Style.xiangmuname}>
-                  所属组织：
-                  <span className={Style.marginLeft}>{item.project_code}</span>
-                </p>
-                <p className={Style.xiangmuname}>
-                  领域类型：
-                  <span className={Style.marginLeft}>
-                    {item.project_fieldname}
-                  </span>
-                </p>
-                <p className={Style.xiangmuname}>
-                  概念总数：
-                  <span className={Style.marginLeft}>
-                    {item.project_concepts}
-                  </span>
-                </p>
-                <p className={Style.xiangmuname}>
-                  三元数组：
-                  <span className={Style.marginLeft}>
-                    {item.project_triples}
-                  </span>
-                </p>
-                <p className={Style.xiangmuname}>
-                  项目描述：
-                  <span className={Style.marginLeft}>
-                    {item.project_introduction}
-                  </span>
-                </p>
-                <div className={Style.xiangmubuton}>
-                  <div className={Style.Setstatetext}>
-                    最新由{item.update_user || item.create_user}修改于
-                    {transformationTime(item.create_time)}
-                  </div>
-                  <Button
-                    type="primary"
-                    className={Style.antdbutton}
-                    onClick={() => this.blundeventToDetail(item)}
-                  >
-                    查看
-                  </Button>
-                </div>
-                {item.project_status == 1 ? (
-                  <div className={Style.listDialog}></div>
-                ) : null}
-                {item.project_status == 2 ? (
-                  <div className={Style.listDialog}>
-                    <div className={Style.listTextdalog}>
-                      <p>
-                        上传文件失败，请点击
-                        <span
-                          style={{ color: 'blue', cursor: 'pointer' }}
-                          onClick={() => this.blundeventReupload(item)}
-                        >
-                          此处
-                        </span>
-                        重新上传
-                      </p>
-                      <Button
-                        type="primary"
-                        className={Style.cancelbtn}
-                        onClick={() => this.blundEventcancelPrijects(item)}
-                      >
-                        取消
-                      </Button>
+        {ProjectData.length ? (
+          <div className={Style.List}>
+            {ProjectData.map((item, index) => {
+              return (
+                <div className={Style.List_slide} key={index}>
+                  <div className={Style.list_header}>
+                    <div></div>
+                    <div>
+                      <SwitcherTwoTone
+                        onClick={() => this.BlundeventCopyProject(item)}
+                      />
+                      <DeleteTwoTone
+                        style={{ marginLeft: '10px' }}
+                        onClick={() => this.blundeventremovelist(item)}
+                      />
                     </div>
                   </div>
-                ) : null}
-              </div>
-            );
-          })}
-          {/* <div className={Style.List_slide}>
-            <div className={Style.list_header}>
-              <div></div>
-              <div>
-                <SwitcherTwoTone />
-                <DeleteTwoTone style={{ marginLeft: '10px' }} />
-              </div>
-            </div>
-            <div className={Style.eachartswrapper}>
-              <img src={eachartsimg} alt="" className={Style.eachartsimage} />
-            </div>
-            <h1 className={Style.h1}>项目名称</h1>
-            <p className={Style.xiangmuname}>
-              所属组织：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              领域类型：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              概念总数：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              三元数组：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              项目描述：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <div className={Style.xiangmubuton}>
-              <div className={Style.Setstatetext}>
-                最新由张三修改于2020/11/23
-              </div>
-              <Button type="primary" className={Style.antdbutton}>
-                查看
-              </Button>
-            </div>
+                  <div className={Style.eachartswrapper}>
+                    <img
+                      src={item.project_photo}
+                      alt=""
+                      className={Style.eachartsimage}
+                    />
+                  </div>
+                  <h1 className={Style.h1}>{item.project_name}</h1>
+                  <p className={Style.xiangmuname}>
+                    所属组织：
+                    <span className={Style.marginLeft}>
+                      {item.project_code}
+                    </span>
+                  </p>
+                  <p className={Style.xiangmuname}>
+                    领域类型：
+                    <span className={Style.marginLeft}>
+                      {item.project_fieldname}
+                    </span>
+                  </p>
+                  <p className={Style.xiangmuname}>
+                    概念总数：
+                    <span className={Style.marginLeft}>
+                      {item.project_concepts}
+                    </span>
+                  </p>
+                  <p className={Style.xiangmuname}>
+                    三元数组：
+                    <span className={Style.marginLeft}>
+                      {item.project_triples}
+                    </span>
+                  </p>
+                  <p className={Style.xiangmuname}>
+                    项目描述：
+                    <span className={Style.marginLeft}>
+                      {item.project_introduction}
+                    </span>
+                  </p>
+                  <div className={Style.xiangmubuton}>
+                    <div className={Style.Setstatetext}>
+                      最新由{item.update_user || item.create_user}修改于
+                      {transformationTime(item.create_time)}
+                    </div>
+                    <Button
+                      type="primary"
+                      className={Style.antdbutton}
+                      onClick={() => this.blundeventToDetail(item)}
+                    >
+                      查看
+                    </Button>
+                  </div>
+                  {item.project_status == 1 ? (
+                    <div className={Style.listDialog}>
+                      <div className={Style.listDialogText}>
+                        <Spin />
+                        <p>正在上传中</p>
+                      </div>
+                    </div>
+                  ) : null}
+                  {item.project_status == 2 ? (
+                    <div className={Style.listDialog}>
+                      <div className={Style.listTextdalog}>
+                        <p>
+                          上传文件失败，请点击
+                          <span
+                            style={{ color: 'blue', cursor: 'pointer' }}
+                            onClick={() => this.blundeventReupload(item)}
+                          >
+                            此处
+                          </span>
+                          重新上传
+                        </p>
+                        <Button
+                          type="primary"
+                          className={Style.cancelbtn}
+                          onClick={() => this.blundEventcancelPrijects(item)}
+                        >
+                          取消
+                        </Button>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
-          <div className={Style.List_slide}>
-            <div className={Style.list_header}>
-              <div></div>
-              <div>
-                <SwitcherTwoTone />
-                <DeleteTwoTone style={{ marginLeft: '10px' }} />
-              </div>
-            </div>
-            <div className={Style.eachartswrapper}>
-              <img src={eachartsimg} alt="" className={Style.eachartsimage} />
-            </div>
-            <h1 className={Style.h1}>项目名称</h1>
-            <p className={Style.xiangmuname}>
-              所属组织：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              领域类型：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              概念总数：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              三元数组：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              项目描述：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <div className={Style.xiangmubuton}>
-              <div className={Style.Setstatetext}>
-                最新由张三修改于2020/11/23
-              </div>
-              <Button type="primary" className={Style.antdbutton}>
-                查看
-              </Button>
-            </div>
-            <div className={Style.listDialog}>
-              <div className={Style.listTextdalog}>
-                <p>
-                  上传文件失败，请点击
-                  <span
-                    style={{ color: 'blue', cursor: 'pointer' }}
-                    onClick={() => this.blundeventReupload()}
-                  >
-                    此处
-                  </span>
-                  重新上传
-                </p>
-                <Button type="primary" className={Style.cancelbtn}>
-                  取消
-                </Button>
-              </div>
-            </div>
-          </div> */}
-          {/* <div className={Style.List_slide}>
-            <div className={Style.list_header}>
-              <div></div>
-              <div>
-                <SwitcherTwoTone />
-                <DeleteTwoTone style={{ marginLeft: '10px' }} />
-              </div>
-            </div>
-            <div className={Style.eachartswrapper}>
-              <img src={eachartsimg} alt="" className={Style.eachartsimage} />
-            </div>
-            <h1 className={Style.h1}>项目名称</h1>
-            <p className={Style.xiangmuname}>
-              所属组织：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              领域类型：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              概念总数：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              三元数组：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <p className={Style.xiangmuname}>
-              项目描述：<span className={Style.marginLeft}>组织名称</span>
-            </p>
-            <div className={Style.xiangmubuton}>
-              <div className={Style.Setstatetext}>
-                最新由张三修改于2020/11/23
-              </div>
-              <Button type="primary" className={Style.antdbutton}>
-                查看
-              </Button>
-            </div>
-          </div> */}
-        </div>
+        ) : (
+          <div className={Style.EmptyNull}>
+            <Empty
+              description={'暂无数据'}
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
+          </div>
+        )}
         <AddPorject
           isModalVisible={isModalVisible}
           Blundeventcloseproject={() => this.Blundeventcancelproject()}

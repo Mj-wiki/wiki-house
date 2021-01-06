@@ -202,7 +202,7 @@ export default class ProjectOverview extends Component {
           data,
           links: Lindein,
           roam: true,
-          focusNodeAdjacency: true,
+          focusNodeAdjacency: false,
           draggable: true,
           itemStyle: {
             borderColor: '#fff',
