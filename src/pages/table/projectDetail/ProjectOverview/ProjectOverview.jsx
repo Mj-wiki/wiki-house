@@ -11,7 +11,8 @@ import Style from './index.less';
 import * as echarts from 'echarts';
 import { ProjectDetail } from '@/api/Project.jsx';
 import { transformationTime } from '@/utils/dateUtil.js';
-export default class ProjectOverview extends Component {
+import { connect } from 'umi';
+class ProjectOverview extends Component {
   state = {
     project_code: '',
     project_fieldcode: '',
@@ -99,15 +100,16 @@ export default class ProjectOverview extends Component {
     );
   }
   componentDidMount() {
-    if (this.props.location.state) {
-      const { id } = this.props.location.state;
-      this.initPrijectId(id);
+    if (this.props.match.params) {
+      const { ID } = this.props.match.params;
+      this.initPrijectId(ID);
       this.setState({
-        Id: id,
+        Id: ID,
       });
     }
   }
   initPrijectId = id => {
+    const { changeProjectState } = this.props;
     ProjectDetail(id).then(res => {
       if (res.result == 'success') {
         const {
@@ -122,6 +124,7 @@ export default class ProjectOverview extends Component {
           project_concepts,
           project_triples,
           trees,
+          project_id,
         } = res.data;
         this.setState({
           project_code: project_code,
@@ -134,13 +137,15 @@ export default class ProjectOverview extends Component {
           update_user: update_user,
           project_concepts,
           project_triples,
-          // nodesData: trees.nodes,
-          // relsData: trees.rels
+        });
+        changeProjectState('changeProjectState', {
+          project_fieldcode,
+          project_name,
+          project_id,
         });
         let nodesData = trees.nodes;
         let relsData = trees.rels;
         const myChart = echarts.init(this.refs.main);
-        myChart.showLoading();
         document.oncontextmenu = function() {
           return false;
         };
@@ -158,8 +163,10 @@ export default class ProjectOverview extends Component {
           item.lineStyle = { normal: { width: 3 } };
           return item;
         });
-
-        this.myEcharts(solidda, myChart, lintData);
+        if (myChart) {
+          myChart.showLoading();
+          this.myEcharts(solidda, myChart, lintData);
+        }
       } else {
         return;
       }
@@ -243,3 +250,15 @@ export default class ProjectOverview extends Component {
     }, 1500);
   };
 }
+
+const mapStateProps = ({ TapIndex }) => {
+  return {};
+};
+const mapDispatchProps = dispatch => {
+  return {
+    changeProjectState(params, val) {
+      dispatch({ type: 'TapIndex/changeProjectStates', params, val });
+    },
+  };
+};
+export default connect(mapStateProps, mapDispatchProps)(ProjectOverview);

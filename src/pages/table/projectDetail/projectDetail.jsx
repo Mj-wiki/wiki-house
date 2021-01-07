@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import ProjectMap from './ProjectMap/ProjectMap'; //项目图谱页面
-// import Graph from '@/components/eachartstable/graph';
-import ProjectOverview from './ProjectOverview/ProjectOverview'; //项目概览页面
 import { connect } from 'umi';
-import Styles from './index.less';
 import { Tabs } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+
+import ProjectMap from './ProjectMap/ProjectMap'; //项目图谱页面
+import ProjectOverview from './ProjectOverview/ProjectOverview'; //项目概览页面
+import Styles from './index.less';
 const { TabPane } = Tabs;
 class projectDetail extends Component {
   state = {
     TapIndex: '1',
+    Id: '',
   };
   render() {
     const { TapIndex } = this.state;
