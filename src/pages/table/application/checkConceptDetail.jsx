@@ -93,7 +93,7 @@ function CheckConceptDetail(props) {
       };
     }
     //setCacheData(data);
-    data.forEach(function(node, index) {
+    data?.forEach(function(node, index) {
       //node.itemStyle = null;
       node.value = node.symbolSize;
       //node.fixed = true;
