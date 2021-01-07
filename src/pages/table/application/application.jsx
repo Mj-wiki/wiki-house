@@ -122,11 +122,8 @@ function TableEdit(props) {
     </div>
   );
 }
-const mapStateProps = ({ detail, edit }) => {
-  return {
-    uid: edit.uid,
-    dim: edit.dim,
-  };
+const mapStateProps = ({}) => {
+  return {};
 };
 const mapDispatchProps = dispatch => {
   return {
