@@ -4,7 +4,7 @@ import { Form, Input, Icon, Message, Modal, Select, Button } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import SearchNormalizeCard from '@/components/SearchNormalizeCard';
-import listData from './listData.js';
+import coverUrl from '../../../assets/layouticon/KG_2.jpg';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { Search } = Input;
@@ -113,7 +113,7 @@ function CheckAppDetail(props) {
     return (
       <div>
         <SearchNormalizeCard
-          imgUrl={listData[0].coverUrl}
+          imgUrl={coverUrl}
           conceptName={record.node_name}
           projectName={record.prj_name}
           fieldType={record.area}

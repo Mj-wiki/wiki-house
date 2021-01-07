@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkConceptDetail.less';
 import { Form, Input, Breadcrumb, Icon, Button, Divider } from 'antd';
 import { connect } from 'umi';
-//import graph from './realData.js';
-import graph from './unificationData.js';
 import * as echarts from 'echarts';
 import Dialog from '@/components/DiaLog';
-import listData from './listData.js';
+
 const { Search } = Input;
 const buttonAddStyle = {
   color: '#fff',
