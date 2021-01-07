@@ -41,7 +41,6 @@ function CheckConceptDetail(props) {
     const resize = () => {
       const listHeight = domListContent.current.offsetHeight;
       setListHeight(listHeight);
-      console.log(listHeight);
     };
 
     resize();
@@ -306,16 +305,28 @@ function CheckConceptDetail(props) {
           </div>
         </div>
         <div className={styles.echartsBox}>
-          <div style={{ textAlign: 'right' }}>
-            <Search
-              placeholder="请输入关键词搜索"
-              prefix={
-                <Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />
-              }
-              style={{ width: 200, height: '100px !important' }}
-              maxLength={30}
-            />
+          <div className={styles.legend}>
+            <div style={{ display: 'flex', width: '400px' }}>
+              <div style={{ width: '80px' }}>图例说明 -</div>
+              <div style={{ width: '100px' }}>
+                标准词 : <span className={styles.stand}></span>
+              </div>
+              <div style={{ width: '100px' }}>
+                原始词 : <span className={styles.origin}></span>
+              </div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <Search
+                placeholder="请输入关键词搜索"
+                prefix={
+                  <Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />
+                }
+                style={{ width: 200, height: '100px !important' }}
+                maxLength={30}
+              />
+            </div>
           </div>
+
           <div>
             <Button
               type="primary"
@@ -331,6 +342,7 @@ function CheckConceptDetail(props) {
             >
               -
             </Button>
+
             <div
               id="main"
               ref={chartRef}

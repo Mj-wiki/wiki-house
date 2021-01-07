@@ -3,6 +3,7 @@ import styles from './_layout.less';
 import { Layout, Menu, Button, notification, Breadcrumb } from 'antd';
 import { UserOutlined, SettingOutlined } from '@ant-design/icons';
 import backIcon from '../../assets/layouticon/back.png';
+import uniLogo from '../../assets/chart/uniLogo.svg';
 import { connect } from 'umi';
 
 const { SubMenu } = Menu;
@@ -51,10 +52,10 @@ function BackStageLayout(props) {
     });
   };
   const checkPersonalMessage = () => {
-    console.log('点击查看个人信息');
+    console.log('点击查看系统设置');
   };
   const checkSystemState = () => {
-    console.log('点击查看系统设置');
+    console.log('点击查看个人信息');
   };
   const goHomePage = () => {
     history.push('/table/homePage');
@@ -71,7 +72,11 @@ function BackStageLayout(props) {
       <Layout>
         <Header style={{ padding: 0 }}>
           <Menu theme="dark" mode="horizontal" selectable="false">
-            <Menu.Item key="0"></Menu.Item>
+            <Menu.Item key="0">
+              <div>
+                <img src={uniLogo} alt="" style={{ width: '40px' }} />
+              </div>
+            </Menu.Item>
             <Menu.Item
               key="1"
               style={{
@@ -84,7 +89,11 @@ function BackStageLayout(props) {
             </Menu.Item>
             <Menu.Item
               key="5"
-              style={{ ...titleMiddleStyle, marginLeft: '25%' }}
+              style={{
+                ...titleMiddleStyle,
+                marginLeft:
+                  document?.documentElement?.clientWidth > 1800 ? '30%' : '26%',
+              }}
             >
               <span onClick={goHomePage}>首页</span>
             </Menu.Item>

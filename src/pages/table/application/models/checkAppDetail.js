@@ -1,6 +1,6 @@
 import {
   requestGetFieldList,
-  requestGetList,
+  //requestGetList,
   requestGetCheckList,
 } from '../../services';
 import { Message } from 'antd';
@@ -21,25 +21,14 @@ export default {
   effects: {
     *onInit({ effectTypes }, { all, put, call }) {
       try {
-        const list = yield call(requestGetList);
         const fieldList = yield call(requestGetFieldList);
         const fieldAll = { id: 0, field_code: '', field_name: '全部领域' };
-
         if (fieldList.result === 'success') {
           const fieldData = fieldList.data;
           yield put({
             type: 'changeState',
             payload: {
               fieldData: [fieldAll, ...fieldData],
-            },
-          });
-        }
-        if (list.result === 'success') {
-          yield put({
-            type: 'changeState',
-            payload: {
-              dataSource: list.data,
-              total: list.total,
             },
           });
         }
@@ -62,7 +51,7 @@ export default {
         const { project_fieldcode, project_name } = yield values;
         const searchObj = {
           project_fieldcode,
-          project_name,
+          concept_name: project_name,
           //search: encodeURIComponent(search),
         };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import style from './index.less';
-//import noData from '../../assets/img/noData.png'
+import noData from '../../assets/img/noData.png';
 
 export default function ColumnLayout({
   list,
@@ -40,11 +40,9 @@ export default function ColumnLayout({
       ))}
     </div>
   ) : (
-    <div style={{ color: '#f40', textAlign: 'center', marginTop: '50px' }}>
-      {/* <img src={noData} style={{height:'160px'}}></img> */}
-      <p style={{ color: 'rgba(0, 0, 0, 0.25)', textAlign: 'center' }}>
-        暂无数据
-      </p>
+    <div className={style.noData}>
+      <img src={noData}></img>
+      <p>暂无数据</p>
     </div>
   );
 }
