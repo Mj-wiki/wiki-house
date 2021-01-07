@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './checkConceptDetail.less';
 import { Form, Input, Breadcrumb, Icon, Button, Divider } from 'antd';
 import { connect } from 'umi';
-//import graph from './realData.js';
-import graph from './unificationData.js';
 import * as echarts from 'echarts';
 import Dialog from '@/components/DiaLog';
-import listData from './listData.js';
+
 const { Search } = Input;
 const buttonAddStyle = {
   color: '#fff',
@@ -25,7 +23,7 @@ const buttonMinusStyle = {
 };
 const HEIGHT = 120;
 function CheckConceptDetail(props) {
-  const { history, onInit } = props;
+  const { history, onInit, dataSource } = props;
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
     diglogHidden: false, //是否展示右键弹出层
@@ -38,6 +36,7 @@ function CheckConceptDetail(props) {
   const [listHeight, setListHeight] = useState(0); // 同义词的真实高度
   const [unfold, setUnfold] = useState(false);
   useEffect(() => {
+    onInit();
     const resize = () => {
       const listHeight = domListContent.current.offsetHeight;
       setListHeight(listHeight);
@@ -56,8 +55,8 @@ function CheckConceptDetail(props) {
     document.oncontextmenu = function() {
       return false;
     };
-    const unifcList = graph[0]?.graph['nodes'];
-    const unifcLinksData = graph[0]?.graph['rels'];
+    const unifcList = dataSource[0]?.graph['nodes'];
+    const unifcLinksData = dataSource[0]?.graph['rels'];
     if (Array.isArray(unifcList)) {
       unifcList.map((v, k) => {
         if (Array.isArray(v.labels) && v.labels[0] === '标准词') {
@@ -94,7 +93,7 @@ function CheckConceptDetail(props) {
       };
     }
     //setCacheData(data);
-    data.forEach(function(node, index) {
+    data?.forEach(function(node, index) {
       //node.itemStyle = null;
       node.value = node.symbolSize;
       //node.fixed = true;
@@ -239,34 +238,40 @@ function CheckConceptDetail(props) {
         <div className={styles.informationBox}>
           <div className={styles.lecturerLayout}>
             <div className={styles.lecturerLeft}>
-              <span title={listData[0].conceptName}>
-                {listData[0].conceptName}
+              <span title={dataSource[0]?.node_name}>
+                {dataSource[0]?.node_name}
               </span>
             </div>
           </div>
           <div className={styles.bottomBox}>
             <div className={styles.lectureHospital}>
               <span className={styles.projectName}>所属项目 :</span>
-              <span title={graph[0].node_name}>{graph[0].node_name}</span>
+              <span title={dataSource[0]?.prj_name}>
+                {dataSource[0]?.prj_name}
+              </span>
             </div>
             <div className={styles.lectureHospital}>
               <span className={styles.projectName}>项目描述 :</span>
-              <span title={graph[0].prj_name}>{graph[0].prj_name}</span>
+              <span title={dataSource[0]?.prj_name}>
+                {dataSource[0]?.prj_name}
+              </span>
             </div>
             <div className={styles.lectureHospital}>
               <span className={styles.projectName}>领域类型 :</span>
-              <span title={graph[0].area}>{graph[0].area}</span>
+              <span title={dataSource[0]?.area}>{dataSource[0]?.area}</span>
             </div>
             <div className={styles.lectureHospital}>
               <span className={styles.projectName}>标准词 :</span>
-              <span title={graph[0].std_vocab}>{graph[0].std_vocab}</span>
+              <span title={dataSource[0]?.std_vocab}>
+                {dataSource[0]?.std_vocab}
+              </span>
             </div>
             <div className={styles.lectureHospital}>
               <div style={{ display: 'flex' }}>
                 <div className={styles.synonym}>同义词 :</div>
                 <div>
                   <div
-                    title={graph[0].syn_vocab.join(', ')}
+                    title={dataSource[0]?.syn_vocab.join(', ')}
                     ref={domList}
                     style={{
                       height: unfold ? 'auto' : HEIGHT,
@@ -284,7 +289,7 @@ function CheckConceptDetail(props) {
                         ? graph[0].syn_vocab.join(', ').slice(0, 100) + '...'
                         : graph[0].syn_vocab.join(', ')
                       : undefined} */}
-                      <span>{graph[0].syn_vocab.join(', ')}</span>
+                      <span>{dataSource[0]?.syn_vocab.join(', ')}</span>
                     </div>
                   </div>
                   {listHeight > HEIGHT ? (
@@ -326,7 +331,6 @@ function CheckConceptDetail(props) {
               />
             </div>
           </div>
-
           <div>
             <Button
               type="primary"
@@ -366,13 +370,16 @@ function CheckConceptDetail(props) {
     </div>
   );
 }
-const mapStateProps = ({}) => {
-  return {};
+const mapStateProps = ({ checkConceptDetail }) => {
+  console.log(checkConceptDetail);
+  return {
+    dataSource: checkConceptDetail.dataSource,
+  };
 };
 const mapDispatchProps = dispatch => {
   return {
     onInit: () => {
-      dispatch({ type: 'detail/onInit' });
+      dispatch({ type: 'checkConceptDetail/onInit' });
     },
   };
 };

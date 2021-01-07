@@ -4,13 +4,21 @@ import { Form, Input, Icon, Message, Modal, Select, Button } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import SearchNormalizeCard from '@/components/SearchNormalizeCard';
-import listData from './listData.js';
+import coverUrl from '../../../assets/layouticon/KG_2.jpg';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { Search } = Input;
 
 function CheckAppDetail(props) {
-  const { history, onInit, fieldData, dataSource, total, searchList } = props;
+  const {
+    history,
+    onInit,
+    fieldData,
+    dataSource,
+    total,
+    searchList,
+    searchConceptInfo,
+  } = props;
   const cookieListData = localStorage.getItem('cookieList');
   //下拉框领域的值
   const [items, setItems] = useState(undefined);
@@ -71,10 +79,14 @@ function CheckAppDetail(props) {
   const changeItem = value => {
     setItems(value);
   };
-  const skipDetailLecture = itemId => {
+  const skipDetailLecture = (itemId, conceptName, projectId, code, name) => {
     const appId = props.match.params.appId;
     if (!itemId) itemId = 1;
-    window.open(`#/table/checkConceptDetail/${appId}/${itemId}`);
+
+    //window.open(`#/table/checkConceptDetail/${appId}/${itemId}`);
+    history.push(`/table/checkConceptDetail/${appId}/${itemId}`);
+    searchConceptInfo(conceptName, projectId, code, name);
+    console.log(conceptName, projectId, code, name);
   };
   const getFocus = e => {
     e.stopPropagation();
@@ -101,13 +113,20 @@ function CheckAppDetail(props) {
     return (
       <div>
         <SearchNormalizeCard
-          imgUrl={listData[0].coverUrl}
-          conceptName={hotWord}
-          projectName={record.node_name}
+          imgUrl={coverUrl}
+          conceptName={record.node_name}
+          projectName={record.prj_name}
           fieldType={record.area}
           standardWord={record.std_vocab}
           synonym={record.syn_vocab}
-          onClick={skipDetailLecture.bind(this, record.node_id)}
+          onClick={skipDetailLecture.bind(
+            this,
+            record.node_id,
+            record.node_name,
+            record.prj_id,
+            record.area,
+            record.prj_name,
+          )}
         />
       </div>
     );
@@ -210,6 +229,15 @@ const mapDispatchProps = dispatch => {
     },
     searchList: (code, name) => {
       dispatch({ type: 'checkAppDetail/searchList', code, name });
+    },
+    searchConceptInfo: (conceptName, projectId, code, name) => {
+      dispatch({
+        type: 'checkConceptDetail/searchConceptInfo',
+        conceptName,
+        projectId,
+        code,
+        name,
+      });
     },
   };
 };

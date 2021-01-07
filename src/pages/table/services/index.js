@@ -21,17 +21,11 @@ export function requestGetList(values) {
 export function requestGetCheckList(values) {
   return request(`/api/project/queryConcept/${objToSearchUrl(values)}`);
 }
-
-//添加用户
-export function requestPostUserAdd(values) {
-  console.log(values);
-  return request(`/api/knowledge-graph/user-save`, {
-    method: 'post',
-    data: {
-      ...values,
-    },
-  });
+//概念详情页信息接口
+export function requestGetConceptInfo(values) {
+  return request(`/api/project/queryConceptInfo/${objToSearchUrl(values)}`);
 }
+
 //编辑保存用户
 export function requestPostUserSave(values) {
   console.log(values);
