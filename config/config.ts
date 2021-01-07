@@ -51,7 +51,7 @@ export default defineConfig({
           title: '概念详情页',
         },
         {
-          path: '/table/projectDetail',
+          path: '/table/projectDetail/:ID',
           component: '@/pages/table/projectDetail/projectDetail',
           title: '概念详情页',
         },

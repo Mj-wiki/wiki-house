@@ -63,3 +63,11 @@ export const PrijectUpdate = data => {
     data: data,
   });
 };
+// /api/project/queryConceptInfo/
+
+export const queryConcept = data => {
+  return request(`/api/project/queryConceptInfo/`, {
+    method: 'get',
+    params: data,
+  });
+};

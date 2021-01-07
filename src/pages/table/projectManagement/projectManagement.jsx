@@ -555,8 +555,7 @@ export default class projectManagement extends Component {
   blundeventToDetail = item => {
     let id = item.id;
     this.props.history.push({
-      pathname: '/table/projectDetail',
-      state: { id: id },
+      pathname: `/table/projectDetail/${id}`,
     });
   };
   blundSelect = value => {
