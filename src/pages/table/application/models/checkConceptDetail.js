@@ -3,6 +3,7 @@ import { Message } from 'antd';
 const initState = {
   dataSource: [],
   total: 0,
+  node_id: '',
   concept_name: '',
   project_id: '',
   project_fieldcode: '',
@@ -31,6 +32,7 @@ export default {
     *getSearchValues(action, { select }) {
       const {
         dataSource,
+        node_id,
         concept_name,
         project_id,
         project_fieldcode,
@@ -39,6 +41,7 @@ export default {
 
       return {
         dataSource,
+        node_id,
         concept_name,
         project_id,
         project_fieldcode,
@@ -51,6 +54,7 @@ export default {
         yield put({
           type: 'changeState',
           payload: {
+            node_id: search.itemId,
             concept_name: search.conceptName,
             project_id: search.projectId,
             project_fieldcode: search.code,
@@ -59,6 +63,7 @@ export default {
         });
         const values = yield put({ type: 'getSearchValues' });
         const {
+          node_id,
           concept_name,
           project_id,
           project_fieldcode,
@@ -66,6 +71,7 @@ export default {
         } = yield values;
 
         const searchObj = {
+          node_id,
           concept_name,
           project_id,
           project_fieldcode,

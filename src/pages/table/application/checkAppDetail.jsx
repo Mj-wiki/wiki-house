@@ -85,8 +85,7 @@ function CheckAppDetail(props) {
 
     //window.open(`#/table/checkConceptDetail/${appId}/${itemId}`);
     history.push(`/table/checkConceptDetail/${appId}/${itemId}`);
-    searchConceptInfo(conceptName, projectId, code, name);
-    console.log(conceptName, projectId, code, name);
+    searchConceptInfo(itemId, conceptName, projectId, code, name);
   };
   const getFocus = e => {
     e.stopPropagation();
@@ -230,9 +229,10 @@ const mapDispatchProps = dispatch => {
     searchList: (code, name) => {
       dispatch({ type: 'checkAppDetail/searchList', code, name });
     },
-    searchConceptInfo: (conceptName, projectId, code, name) => {
+    searchConceptInfo: (itemId, conceptName, projectId, code, name) => {
       dispatch({
         type: 'checkConceptDetail/searchConceptInfo',
+        itemId,
         conceptName,
         projectId,
         code,

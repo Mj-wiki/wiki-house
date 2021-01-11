@@ -371,7 +371,6 @@ function CheckConceptDetail(props) {
   );
 }
 const mapStateProps = ({ checkConceptDetail }) => {
-  console.log(checkConceptDetail);
   return {
     dataSource: checkConceptDetail.dataSource,
   };
