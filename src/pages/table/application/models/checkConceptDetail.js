@@ -1,5 +1,5 @@
 import { requestGetConceptInfo } from '../../services';
-import { Message } from 'antd';
+
 const initState = {
   dataSource: [],
   total: 0,
@@ -14,20 +14,11 @@ export default {
   namespace: 'checkConceptDetail',
   state: initState,
   effects: {
-    *onInit({ effectTypes }, { all, put, call }) {
-      const values = yield put({ type: 'getSearchValues' });
-      const {
-        concept_name,
-        project_id,
-        project_fieldcode,
-        project_name,
-      } = yield values;
-      const searchObj = {
-        concept_name,
-        project_id,
-        project_fieldcode,
-        project_name,
-      };
+    *onInit(effectTypes, { all, put, call }) {
+      const { search } = effectTypes;
+      if (search) {
+        yield put({ type: 'searchConceptInfo', search });
+      }
     },
     *getSearchValues(action, { select }) {
       const {
@@ -49,7 +40,7 @@ export default {
       };
     },
     //归一查询搜索列表
-    *searchConceptInfo(search, { select, call, put }) {
+    *searchConceptInfo({ search }, { select, call, put }) {
       try {
         yield put({
           type: 'changeState',
@@ -80,7 +71,6 @@ export default {
         };
 
         const data = yield call(requestGetConceptInfo, searchObj);
-        console.log(data);
         if (data.result === 'success') {
           yield put({
             type: 'changeState',

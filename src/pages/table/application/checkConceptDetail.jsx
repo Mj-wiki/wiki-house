@@ -36,7 +36,8 @@ function CheckConceptDetail(props) {
   const [listHeight, setListHeight] = useState(0); // 同义词的真实高度
   const [unfold, setUnfold] = useState(false);
   useEffect(() => {
-    onInit();
+    const search = props.match.params;
+    onInit(search);
     const resize = () => {
       const listHeight = domListContent.current.offsetHeight;
       setListHeight(listHeight);
@@ -83,7 +84,7 @@ function CheckConceptDetail(props) {
     myEcharts(unifcList, myChart, unifcLinksData);
 
     //初始化方法
-  }, []);
+  }, [dataSource]);
 
   const myEcharts = (data, myChart, links) => {
     var categories = [];
@@ -92,43 +93,51 @@ function CheckConceptDetail(props) {
         name: '类目' + i,
       };
     }
-    //setCacheData(data);
+
     data?.forEach(function(node, index) {
-      //node.itemStyle = null;
+      node.dataIndex = index;
       node.value = node.symbolSize;
-      //node.fixed = true;
       node.symbolSize /= 1.5;
       node.label = {
         show: node.symbolSize > 1,
       };
       node.category = node.properties.code;
-      // node.dataIndex = index;
     });
 
     myChart.setOption({
-      tooltip: {},
+      tooltip: {
+        formatter: function(x) {
+          return x.name; //设置提示框的内容和格式 节点和边都显示name属性
+        },
+      },
+      toolbox: {},
+      grid: {
+        height: '100%',
+        width: '100%',
+      },
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',
       animation: false,
       series: [
         {
-          name: 'Les Miserables',
+          // center: [0, 0],
+          zoom: 0.5,
           type: 'graph',
           layout: 'force',
           data,
           links,
-          categories: categories,
           roam: true,
-          focusNodeAdjacency: true,
+          focusNodeAdjacency: false, //划过高亮
           draggable: true,
           itemStyle: {
             borderColor: '#fff',
-            borderWidth: 1,
+            borderWidth: 0,
             shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.3)',
           },
           label: {
-            position: 'right',
+            show: true,
+            position: 'top',
             formatter: '{b}',
           },
           lineStyle: {
@@ -136,22 +145,24 @@ function CheckConceptDetail(props) {
             curveness: 0.3,
           },
           force: {
+            // initLayout:'circular',
             repulsion: 1000,
+            gravity: 0.1,
+            edgeLength: 300,
             layoutAnimation: false,
+            friction: 0.3,
+            initLayout: 'none',
           },
-
           emphasis: {
             lineStyle: {
-              width: 2,
+              width: 5,
             },
           },
         },
       ],
     });
-
     // 右键元素
     myChart.on('contextmenu', function(params) {
-      console.log(params);
       if (typeof params === 'object') {
         setDiglogConfig({
           diglogHidden: true,
@@ -162,6 +173,13 @@ function CheckConceptDetail(props) {
       }
     });
     // 点击元素
+    // myChart.getZr().on('click', function(params) {
+    //   if (
+    //     myChart.getOption()?.series?.[0].data[params.target?.dataIndex] ==
+    //     undefined
+    //   )
+    //     return;
+    // });
     myChart.getZr().on('click', function(params) {
       setDiglogConfig({
         diglogHidden: false,
@@ -169,13 +187,22 @@ function CheckConceptDetail(props) {
         x: params.event.offsetX,
         y: params.event.offsetY,
       });
-      if (
-        myChart.getOption()?.series?.[0].data[params.target?.dataIndex] ==
-        undefined
-      )
+      if (!params.target) {
+        myChart.dispatchAction({
+          type: 'unfocusNodeAdjacency',
+        });
         return;
+      } else {
+        const { dataIndex } = params.target;
+        if (!params.target.__cachedNormalStl) return;
+        const { text } = params.target.__cachedNormalStl;
+        myChart.dispatchAction({
+          type: 'focusNodeAdjacency',
+          dataIndex: dataIndex + 1,
+        });
+        //  that.GetPrijectState(text)
+      }
     });
-
     // 拖动中
     myChart.on('mousemove', function(params) {});
     // 松开元素
@@ -377,8 +404,8 @@ const mapStateProps = ({ checkConceptDetail }) => {
 };
 const mapDispatchProps = dispatch => {
   return {
-    onInit: () => {
-      dispatch({ type: 'checkConceptDetail/onInit' });
+    onInit: search => {
+      dispatch({ type: 'checkConceptDetail/onInit', search });
     },
   };
 };
