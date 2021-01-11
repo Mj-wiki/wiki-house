@@ -86,7 +86,7 @@ class ProjectOverview extends Component {
               <UnlockTwoTone className={Style.icon} />
               <p className={Style.postionright}>隐私</p>
             </div>
-            <p className={Style.bordertop}>公开/私密</p>
+            <p className={Style.bordertop}>公开</p>
           </div>
           <div className={Style.linheight}>
             <div className={Style.zuzhi}>

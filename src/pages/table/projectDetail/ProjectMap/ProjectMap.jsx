@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Style from './index.less';
 import * as echarts from 'echarts';
-import { Input, Button, Empty } from 'antd';
+import { Input, Button, Empty, message } from 'antd';
 import {
   CloseSquareOutlined,
   PlusOutlined,
@@ -120,33 +120,24 @@ class ProjectMap extends Component {
                   onSearch={this.onSearch}
                   style={{ width: 300 }}
                 />
-                {eidetText ? (
+                {eidetText && SearchData.length ? (
                   <div className={Style.SelectList}>
-                    <div>
-                      {SearchData.length ? (
-                        SearchData.map(item => {
-                          return (
-                            <div
-                              className={Style.Selectborder}
-                              key={item.node_id}
-                              onClick={() => this.BlunndEventFocusing(item)}
-                            >
-                              <p className={Style.Selectslide}>
-                                {item.node_name}：阿斯顿 阿斯顿 奥迪
-                              </p>
-                              <p className={Style.Selectslide}>
-                                路径： 奥迪 阿斯顿 阿斯顿 阿斯顿
-                              </p>
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <Empty
-                          image={Empty.PRESENTED_IMAGE_SIMPLE}
-                          description={'暂无数据'}
-                        />
-                      )}
-                    </div>
+                    {SearchData.map(item => {
+                      return (
+                        <div
+                          className={Style.Selectborder}
+                          key={item.node_id}
+                          onClick={() => this.BlunndEventFocusing(item)}
+                        >
+                          <p className={Style.Selectslide}>
+                            {item.node_name}：阿斯顿 阿斯顿 奥迪
+                          </p>
+                          <p className={Style.Selectslide}>
+                            路径： 奥迪 阿斯顿 阿斯顿 阿斯顿
+                          </p>
+                        </div>
+                      );
+                    })}
                   </div>
                 ) : null}
               </div>
@@ -507,9 +498,13 @@ class ProjectMap extends Component {
     }).then(res => {
       if (res.result == 'success') {
         let data = res.data;
-        this.setState({
-          SearchData: data,
-        });
+        if (data.length) {
+          this.setState({
+            SearchData: data,
+          });
+        } else {
+          message.warning('未查询到相关概念！');
+        }
       } else {
         return;
       }
