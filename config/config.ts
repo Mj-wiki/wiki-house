@@ -46,7 +46,8 @@ export default defineConfig({
           title: '查询页',
         },
         {
-          path: '/table/checkConceptDetail/:appId/:itemId',
+          path:
+            '/table/checkConceptDetail/:appId/:itemId/:conceptName/:projectId/:code/:name',
           component: '@/pages/table/application/checkConceptDetail',
           title: '概念详情页',
         },

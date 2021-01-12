@@ -22,8 +22,9 @@ const buttonMinusStyle = {
   lineHeight: '20px',
 };
 const HEIGHT = 120;
+
 function CheckConceptDetail(props) {
-  const { history, onInit, dataSource } = props;
+  const { history, onInit, dataSource, onFocus } = props;
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
     diglogHidden: false, //是否展示右键弹出层
@@ -35,19 +36,22 @@ function CheckConceptDetail(props) {
   const domListContent = useRef(null);
   const [listHeight, setListHeight] = useState(0); // 同义词的真实高度
   const [unfold, setUnfold] = useState(false);
+  //存nodeId
+  const [nId, setNId] = useState('');
   useEffect(() => {
-    onInit();
+    const search = props.match.params;
+    onInit(search);
     const resize = () => {
       const listHeight = domListContent.current.offsetHeight;
       setListHeight(listHeight);
     };
-
     resize();
     window.addEventListener('resize', resize);
     return () => {
       window.removeEventListener('resize', resize);
     };
   }, []);
+
   useEffect(() => {
     const myChart = echarts.init(chartRef.current);
     myChart.showLoading();
@@ -55,6 +59,7 @@ function CheckConceptDetail(props) {
     document.oncontextmenu = function() {
       return false;
     };
+    console.log(dataSource);
     const unifcList = dataSource[0]?.graph['nodes'];
     const unifcLinksData = dataSource[0]?.graph['rels'];
     if (Array.isArray(unifcList)) {
@@ -83,7 +88,7 @@ function CheckConceptDetail(props) {
     myEcharts(unifcList, myChart, unifcLinksData);
 
     //初始化方法
-  }, []);
+  }, [dataSource, nId]);
 
   const myEcharts = (data, myChart, links) => {
     var categories = [];
@@ -92,43 +97,51 @@ function CheckConceptDetail(props) {
         name: '类目' + i,
       };
     }
-    //setCacheData(data);
+
     data?.forEach(function(node, index) {
-      //node.itemStyle = null;
+      node.dataIndex = index;
       node.value = node.symbolSize;
-      //node.fixed = true;
       node.symbolSize /= 1.5;
       node.label = {
         show: node.symbolSize > 1,
       };
       node.category = node.properties.code;
-      // node.dataIndex = index;
     });
 
     myChart.setOption({
-      tooltip: {},
+      tooltip: {
+        formatter: function(x) {
+          return x.name; //设置提示框的内容和格式 节点和边都显示name属性
+        },
+      },
+      toolbox: {},
+      grid: {
+        height: '100%',
+        width: '100%',
+      },
       animationDuration: 1500,
       animationEasingUpdate: 'quinticInOut',
       animation: false,
       series: [
         {
-          name: 'Les Miserables',
+          // center: [0, 0],
+          zoom: 0.5,
           type: 'graph',
           layout: 'force',
           data,
           links,
-          categories: categories,
           roam: true,
-          focusNodeAdjacency: true,
+          focusNodeAdjacency: false, //划过高亮
           draggable: true,
           itemStyle: {
             borderColor: '#fff',
-            borderWidth: 1,
+            borderWidth: 0,
             shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.3)',
           },
           label: {
-            position: 'right',
+            show: true,
+            position: 'top',
             formatter: '{b}',
           },
           lineStyle: {
@@ -136,32 +149,42 @@ function CheckConceptDetail(props) {
             curveness: 0.3,
           },
           force: {
+            // initLayout:'circular',
             repulsion: 1000,
+            gravity: 0.1,
+            edgeLength: 300,
             layoutAnimation: false,
+            friction: 0.3,
+            initLayout: 'none',
           },
-
           emphasis: {
             lineStyle: {
-              width: 2,
+              width: 5,
             },
           },
         },
       ],
     });
-
     // 右键元素
     myChart.on('contextmenu', function(params) {
-      console.log(params);
       if (typeof params === 'object') {
+        setNId(params.data.id);
         setDiglogConfig({
           diglogHidden: true,
           diglogItems: params,
-          x: params.event.offsetX + 400,
+          x: params.event.offsetX + 520,
           y: params.event.offsetY + 200,
         });
       }
     });
     // 点击元素
+    // myChart.getZr().on('click', function(params) {
+    //   if (
+    //     myChart.getOption()?.series?.[0].data[params.target?.dataIndex] ==
+    //     undefined
+    //   )
+    //     return;
+    // });
     myChart.getZr().on('click', function(params) {
       setDiglogConfig({
         diglogHidden: false,
@@ -169,13 +192,23 @@ function CheckConceptDetail(props) {
         x: params.event.offsetX,
         y: params.event.offsetY,
       });
-      if (
-        myChart.getOption()?.series?.[0].data[params.target?.dataIndex] ==
-        undefined
-      )
+      setNId('');
+      if (!params.target) {
+        myChart.dispatchAction({
+          type: 'unfocusNodeAdjacency',
+        });
         return;
+      } else {
+        const { dataIndex } = params.target;
+        if (!params.target.__cachedNormalStl) return;
+        const { text } = params.target.__cachedNormalStl;
+        myChart.dispatchAction({
+          type: 'focusNodeAdjacency',
+          dataIndex,
+        });
+        //  that.GetPrijectState(text)
+      }
     });
-
     // 拖动中
     myChart.on('mousemove', function(params) {});
     // 松开元素
@@ -195,6 +228,12 @@ function CheckConceptDetail(props) {
     setTimeout(() => {
       myChart.hideLoading();
     }, 1200);
+  };
+  //
+  const FocusOperation = id => {
+    console.log(id, '这是聚焦操作');
+    //聚焦操作
+    onFocus(id);
   };
   //点击按钮放大或缩小
   const zoomGraph = v => {
@@ -366,20 +405,23 @@ function CheckConceptDetail(props) {
         hidden={diglogConfig.diglogHidden}
         x={diglogConfig.x}
         y={diglogConfig.y}
+        onClick={FocusOperation.bind(this, nId)}
       ></Dialog>
     </div>
   );
 }
 const mapStateProps = ({ checkConceptDetail }) => {
-  console.log(checkConceptDetail);
   return {
     dataSource: checkConceptDetail.dataSource,
   };
 };
 const mapDispatchProps = dispatch => {
   return {
-    onInit: () => {
-      dispatch({ type: 'checkConceptDetail/onInit' });
+    onInit: search => {
+      dispatch({ type: 'checkConceptDetail/onInit', search });
+    },
+    onFocus: nodeId => {
+      dispatch({ type: 'checkConceptDetail/onFocus', nodeId });
     },
   };
 };

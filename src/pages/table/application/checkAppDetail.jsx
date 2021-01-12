@@ -84,9 +84,10 @@ function CheckAppDetail(props) {
     if (!itemId) itemId = 1;
 
     //window.open(`#/table/checkConceptDetail/${appId}/${itemId}`);
-    history.push(`/table/checkConceptDetail/${appId}/${itemId}`);
-    searchConceptInfo(conceptName, projectId, code, name);
-    console.log(conceptName, projectId, code, name);
+    history.push(
+      `/table/checkConceptDetail/${appId}/${itemId}/${conceptName}/${projectId}/${code}/${name}`,
+    );
+    searchConceptInfo({ itemId, conceptName, projectId, code, name });
   };
   const getFocus = e => {
     e.stopPropagation();
@@ -230,13 +231,10 @@ const mapDispatchProps = dispatch => {
     searchList: (code, name) => {
       dispatch({ type: 'checkAppDetail/searchList', code, name });
     },
-    searchConceptInfo: (conceptName, projectId, code, name) => {
+    searchConceptInfo: search => {
       dispatch({
         type: 'checkConceptDetail/searchConceptInfo',
-        conceptName,
-        projectId,
-        code,
-        name,
+        search,
       });
     },
   };
