@@ -39,6 +39,33 @@ export default {
         project_name,
       };
     },
+    *onFocus({ nodeId }, { put }) {
+      const values = yield put({ type: 'getSearchValues' });
+      const { dataSource } = yield values;
+      const focusNodesList = dataSource[0]?.graph?.nodes;
+      const focusRelsList = dataSource[0]?.graph?.rels;
+
+      const nodeData = focusNodesList.filter((v, k) => {
+        return v.id === nodeId || v.id === 3600129;
+      });
+      const relsData = focusRelsList.filter((v, k) => {
+        return nodeId === Number(v.source);
+      });
+      dataSource[0].graph.nodes = nodeData;
+      dataSource[0].graph.rels = relsData;
+      console.log(nodeId);
+      if (relsData?.length < 1) {
+        return;
+      }
+      if (relsData?.length > 0) {
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource: dataSource,
+          },
+        });
+      }
+    },
     //归一查询搜索列表
     *searchConceptInfo({ search }, { select, call, put }) {
       try {

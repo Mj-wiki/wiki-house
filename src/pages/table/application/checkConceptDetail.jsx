@@ -22,8 +22,9 @@ const buttonMinusStyle = {
   lineHeight: '20px',
 };
 const HEIGHT = 120;
+
 function CheckConceptDetail(props) {
-  const { history, onInit, dataSource } = props;
+  const { history, onInit, dataSource, onFocus } = props;
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
     diglogHidden: false, //是否展示右键弹出层
@@ -35,6 +36,8 @@ function CheckConceptDetail(props) {
   const domListContent = useRef(null);
   const [listHeight, setListHeight] = useState(0); // 同义词的真实高度
   const [unfold, setUnfold] = useState(false);
+  //存nodeId
+  const [nId, setNId] = useState('');
   useEffect(() => {
     const search = props.match.params;
     onInit(search);
@@ -56,6 +59,7 @@ function CheckConceptDetail(props) {
     document.oncontextmenu = function() {
       return false;
     };
+    console.log(dataSource);
     const unifcList = dataSource[0]?.graph['nodes'];
     const unifcLinksData = dataSource[0]?.graph['rels'];
     if (Array.isArray(unifcList)) {
@@ -84,7 +88,7 @@ function CheckConceptDetail(props) {
     myEcharts(unifcList, myChart, unifcLinksData);
 
     //初始化方法
-  }, [dataSource]);
+  }, [dataSource, nId]);
 
   const myEcharts = (data, myChart, links) => {
     var categories = [];
@@ -164,10 +168,11 @@ function CheckConceptDetail(props) {
     // 右键元素
     myChart.on('contextmenu', function(params) {
       if (typeof params === 'object') {
+        setNId(params.data.id);
         setDiglogConfig({
           diglogHidden: true,
           diglogItems: params,
-          x: params.event.offsetX + 400,
+          x: params.event.offsetX + 520,
           y: params.event.offsetY + 200,
         });
       }
@@ -187,6 +192,7 @@ function CheckConceptDetail(props) {
         x: params.event.offsetX,
         y: params.event.offsetY,
       });
+      setNId('');
       if (!params.target) {
         myChart.dispatchAction({
           type: 'unfocusNodeAdjacency',
@@ -198,7 +204,7 @@ function CheckConceptDetail(props) {
         const { text } = params.target.__cachedNormalStl;
         myChart.dispatchAction({
           type: 'focusNodeAdjacency',
-          dataIndex: dataIndex + 1,
+          dataIndex,
         });
         //  that.GetPrijectState(text)
       }
@@ -222,6 +228,12 @@ function CheckConceptDetail(props) {
     setTimeout(() => {
       myChart.hideLoading();
     }, 1200);
+  };
+  //
+  const FocusOperation = id => {
+    console.log(id, '这是聚焦操作');
+    //聚焦操作
+    onFocus(id);
   };
   //点击按钮放大或缩小
   const zoomGraph = v => {
@@ -393,6 +405,7 @@ function CheckConceptDetail(props) {
         hidden={diglogConfig.diglogHidden}
         x={diglogConfig.x}
         y={diglogConfig.y}
+        onClick={FocusOperation.bind(this, nId)}
       ></Dialog>
     </div>
   );
@@ -406,6 +419,9 @@ const mapDispatchProps = dispatch => {
   return {
     onInit: search => {
       dispatch({ type: 'checkConceptDetail/onInit', search });
+    },
+    onFocus: nodeId => {
+      dispatch({ type: 'checkConceptDetail/onFocus', nodeId });
     },
   };
 };

@@ -2,7 +2,11 @@ import React from 'react';
 import styles from './index.less';
 
 const DiaLog = props => {
-  const { x, y, hidden, item } = props;
+  const { x, y, hidden, item, onClick } = props;
+  // 点击聚焦
+  const clickFocus = () => {
+    onClick();
+  };
   return (
     <div className={styles.wrap}>
       <div
@@ -13,9 +17,11 @@ const DiaLog = props => {
           display: hidden ? 'block' : 'none',
         }}
       >
-        <div className={styles.items}>聚焦</div>
-        <div className={styles.items}>添加关系</div>
-        <div className={styles.items}>删除概念</div>
+        <div className={styles.items} onClick={clickFocus.bind(this)}>
+          聚焦
+        </div>
+        {/* <div className={styles.items}>添加关系</div>
+        <div className={styles.items}>删除概念</div> */}
       </div>
     </div>
   );
