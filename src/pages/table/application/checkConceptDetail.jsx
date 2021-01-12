@@ -42,13 +42,13 @@ function CheckConceptDetail(props) {
       const listHeight = domListContent.current.offsetHeight;
       setListHeight(listHeight);
     };
-
     resize();
     window.addEventListener('resize', resize);
     return () => {
       window.removeEventListener('resize', resize);
     };
   }, []);
+
   useEffect(() => {
     const myChart = echarts.init(chartRef.current);
     myChart.showLoading();
