@@ -64,10 +64,32 @@ export const PrijectUpdate = data => {
   });
 };
 // /api/project/queryConceptInfo/
-
+//http://127.0.0.1:8000/api/project/selectProjectConceptInfo/?project_id=PJ1dacfe724fc411ebb771fa163eac98f2&concept_name=某些传染病和寄生虫病9740
 export const queryConcept = data => {
-  return request(`/api/project/queryConceptInfo/`, {
+  return request(`/api/project/selectProjectConceptInfo/`, {
     method: 'get',
     params: data,
   });
 };
+export const queryProjectConceptInfo = data => {
+  return request(`/api/project/queryProjectConceptInfo/`, {
+    method: 'get',
+    params: data,
+  });
+};
+
+export const copyProjectId = data => {
+  return request(`/api/project/copy/`, {
+    method: 'get',
+    params: data,
+  });
+};
+
+export const focusProjectConceptInfo = data => {
+  return request(`/api/project/focusProjectConceptInfo/`, {
+    method: 'get',
+    params: data,
+  });
+};
+
+//http://127.0.0.1:8000/api/project/focusProjectConceptInfo/?project_id=PJ1dacfe724fc411ebb771fa163eac98f2&node_id=8540670

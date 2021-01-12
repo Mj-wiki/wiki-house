@@ -242,6 +242,8 @@ class ProjectOverview extends Component {
         },
       ],
     });
+    // let image = myChart.getDataURL()
+    // console.log(image)
     myChart.getZr().on('click', function(params) {
       SetTapIndex();
     });
@@ -249,6 +251,11 @@ class ProjectOverview extends Component {
       myChart.hideLoading();
     }, 1500);
   };
+  // bunldeventGetImage = () =>{
+  //   const myChart = echarts.init(this.refs.main);
+  //   let image = myChart.getDataURL()
+  //   console.log(image)
+  // }
 }
 
 const mapStateProps = ({ TapIndex }) => {

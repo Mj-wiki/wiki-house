@@ -44,7 +44,6 @@ class projectDetail extends Component {
     this.props.history.push('/table/projectManagement');
   };
   callback = val => {
-    console.log(val);
     this.setState({
       TapIndex: val,
     });
