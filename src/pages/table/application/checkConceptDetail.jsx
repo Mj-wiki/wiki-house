@@ -36,8 +36,10 @@ function CheckConceptDetail(props) {
   const domListContent = useRef(null);
   const [listHeight, setListHeight] = useState(0); // 同义词的真实高度
   const [unfold, setUnfold] = useState(false);
-  //存nodeId
+  //存nodeId 原始词
   const [nId, setNId] = useState('');
+  //存标准词Id
+  //const [standardId,setStandardId] = useState('');
   useEffect(() => {
     const search = props.match.params;
     onInit(search);
@@ -229,7 +231,7 @@ function CheckConceptDetail(props) {
       myChart.hideLoading();
     }, 1200);
   };
-  //
+  //右键聚焦
   const FocusOperation = id => {
     console.log(id, '这是聚焦操作');
     //聚焦操作
