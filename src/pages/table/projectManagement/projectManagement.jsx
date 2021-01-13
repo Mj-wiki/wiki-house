@@ -21,6 +21,7 @@ import {
   uploadFile,
   Getfield,
   PrijectUpdate,
+  copyProjectId,
 } from '@/api/Project.jsx';
 // import UpFile from './index'
 import { transformationTime } from '@/utils/dateUtil.js';
@@ -37,6 +38,7 @@ export default class projectManagement extends Component {
     GetfieldList: [],
     locationCount: '',
     locationshow: false,
+    oderProjectId: '',
   };
   formRef = React.createRef();
   //  form = Form.useForm();
@@ -71,11 +73,6 @@ export default class projectManagement extends Component {
       labelCol: { span: 6 },
       wrapperCol: { span: 16 },
     };
-    const areas = [
-      { label: '全部领域', value: '0' },
-      { label: '领域1', value: '1' },
-      { label: '领域2', value: '2' },
-    ];
     const normFile = e => {
       // console.log(e)
       if (e.fileList.length === 2) {
@@ -313,23 +310,26 @@ export default class projectManagement extends Component {
     );
   }
   BlundeventCopyProject = item => {
-    this.setState({
-      isModalVisible: true,
-      fileloadShow: false,
-      uploadkeys: 3,
-    });
     const {
       project_name,
       project_fieldcode,
       project_code,
       project_introduction,
+      project_id,
     } = item;
+    this.setState({
+      isModalVisible: true,
+      fileloadShow: false,
+      uploadkeys: 3,
+      oderProjectId: project_id,
+    });
     const form = this.formRef.current;
     // console.log(form)
     form.setFieldsValue({
       project_name,
       project_fieldcode,
       project_code,
+      project_id,
       project_introduction,
     });
   };
@@ -436,7 +436,7 @@ export default class projectManagement extends Component {
             });
             const form = this.formRef.current;
             form.resetFields();
-            // this.uplodaderfile(res.data);
+            this.CoypProject(res.data);
           } else {
             message.error(res.message);
             return;
@@ -446,6 +446,20 @@ export default class projectManagement extends Component {
     } catch (err) {
       // console.log(err)
     }
+  };
+  CoypProject = res => {
+    const { oderProjectId } = this.state;
+    let obj = {
+      new_project_id: res,
+      old_project_id: oderProjectId,
+    };
+    copyProjectId(obj).then(res => {
+      if (res.result == 'success') {
+        this.initProjectlist();
+      } else {
+        return;
+      }
+    });
   };
   uplodaderfile = data => {
     const { fileList } = this.state;

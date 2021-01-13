@@ -7,7 +7,12 @@ import {
   PlusOutlined,
   DeleteOutlined,
 } from '@ant-design/icons';
-import { ProjectDetail, queryConcept } from '@/api/Project.jsx';
+import {
+  ProjectDetail,
+  queryConcept,
+  queryProjectConceptInfo,
+  focusProjectConceptInfo,
+} from '@/api/Project.jsx';
 import { connect } from 'umi';
 import { SetSolidData, SetLineData } from '@/utils/Config.js';
 import InputDialog from '@/components/Addproject/Addproject';
@@ -15,18 +20,25 @@ const { Search } = Input;
 class ProjectMap extends Component {
   state = {
     diglogHidden: false, //是否展示右键弹出层
-    diglogItems: {}, //弹出层数据对象
+    node_ID: '', //弹出层数据对象
     x: 0,
     y: 0,
     eachartBigorSmall: 1,
     lintData: [],
     nodesData: [],
+    lintArray: [],
+    nodeArray: [],
     InputDialogShow: false,
     Addconcept: false,
     eidetText: false,
     isEidet: false,
     placeholderText: '使用搜索功能查看更多概念',
     SearchData: [],
+    ConceptName: '', //概念名
+    std_vocab: '', //标准词
+    syn_vocab: [], //同义词
+    OverFocus: false,
+    path: [],
   };
   render() {
     const {
@@ -39,6 +51,11 @@ class ProjectMap extends Component {
       Addconcept,
       SearchData,
       eidetText,
+      OverFocus,
+      ConceptName,
+      std_vocab,
+      syn_vocab,
+      path,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -46,14 +63,28 @@ class ProjectMap extends Component {
           <div className={Style.projecttext}>
             <div className={Style.Account}>占位</div>
             <div className={Style.detailtext}>
-              <p className={Style.gainian}>概念名：</p>
-              <p className={Style.gainian}>路径：</p>
-              <p className={Style.gainian}>标准词：</p>
-              <p className={Style.gainian}>同义词：</p>
+              <p className={Style.gainian}>概念名：{ConceptName}</p>
+              <p className={Style.gainian}>
+                路径：
+                {path.map((item, index) => {
+                  return (
+                    <span key={index} className={Style.routeMargin}>
+                      {item}
+                    </span>
+                  );
+                })}
+              </p>
+              <p className={Style.gainian}>标准词：{std_vocab}</p>
+              <p className={Style.gainian}>
+                同义词：
+                {syn_vocab.map(item => {
+                  return <span className={Style.routeMargin}>{item}</span>;
+                })}
+              </p>
             </div>
           </div>
           <div className={Style.promap}>
-            {isEidet ? (
+            {/* {isEidet ? (
               <Button
                 type="primary"
                 onClick={() => this.blundeventAddconcept()}
@@ -61,7 +92,7 @@ class ProjectMap extends Component {
               >
                 + 添加概念
               </Button>
-            ) : null}
+            ) : null} */}
             <div
               className={Style.promapAdd}
               onClick={() => this.blundmapbigadd(0)}
@@ -104,7 +135,7 @@ class ProjectMap extends Component {
                   编辑模式
                 </Button>
               )}
-              {isEidet ? (
+              {OverFocus ? (
                 <Button
                   type="primary"
                   onClick={() => this.blundeventFocuseRemove()}
@@ -122,18 +153,25 @@ class ProjectMap extends Component {
                 />
                 {eidetText && SearchData.length ? (
                   <div className={Style.SelectList}>
-                    {SearchData.map(item => {
+                    {SearchData.map((item, index) => {
                       return (
                         <div
                           className={Style.Selectborder}
-                          key={item.node_id}
+                          key={index}
                           onClick={() => this.BlunndEventFocusing(item)}
                         >
                           <p className={Style.Selectslide}>
-                            {item.node_name}：阿斯顿 阿斯顿 奥迪
+                            {item.node_name}：{item.properties.class}
                           </p>
                           <p className={Style.Selectslide}>
-                            路径： 奥迪 阿斯顿 阿斯顿 阿斯顿
+                            路径：{' '}
+                            {item.path.map((val, i) => {
+                              return (
+                                <span className={Style.routeMargin} key={i}>
+                                  {val}
+                                </span>
+                              );
+                            })}
                           </p>
                         </div>
                       );
@@ -160,17 +198,28 @@ class ProjectMap extends Component {
                   <CloseSquareOutlined className={Style.iconRight} />
                   聚焦
                 </p>
-                <p
-                  className={Style.editslide}
-                  onClick={() => this.BlundeventshowDialog()}
-                >
-                  <PlusOutlined className={Style.iconRight} />
-                  添加关系
-                </p>
-                <p className={Style.editslide}>
-                  <DeleteOutlined className={Style.iconRight} />
-                  删除概念
-                </p>
+                {isEidet ? (
+                  <div>
+                    <p
+                      className={Style.editslide}
+                      onClick={() => this.BlundeventshowDialog()}
+                    >
+                      <PlusOutlined className={Style.iconRight} />
+                      添加关系
+                    </p>
+                    <p className={Style.editslide}>
+                      <DeleteOutlined className={Style.iconRight} />
+                      添加概念
+                    </p>
+                    <p
+                      className={Style.editslide}
+                      onClick={() => this.blundeventRemoverelationship()}
+                    >
+                      <DeleteOutlined className={Style.iconRight} />
+                      删除概念
+                    </p>
+                  </div>
+                ) : null}
               </div>
             ) : null}
             {isEidet ? (
@@ -212,40 +261,60 @@ class ProjectMap extends Component {
     );
   }
   BlunndEventFocusing = item => {
-    let graph = item.graph;
-    const myChart = echarts.init(this.refs.main);
-    myChart.setOption({
-      series: [
-        {
-          links: SetLineData(graph.rels),
-          data: SetSolidData(graph.nodes),
-        },
-      ],
-    });
+    // let graph = item.graph;
+    console.log(item);
+    const { node_id } = item;
     this.setState({
+      OverFocus: true,
       eidetText: false,
     });
+    this.FocusDatas(node_id);
+    // const {
+    //   node_name,
+    //   std_vocab,
+    //   syn_vocab
+    // } = item;
+    // this.setState({
+    //   eidetText: false,
+    //   OverFocus: true,
+    //   ConceptName: node_name,
+    //   std_vocab,
+    //   syn_vocab
+    // });
+    // const myChart = echarts.init(this.refs.main);
+    // myChart.setOption({
+    //   series: [
+    //     {
+    //       links: SetLineData(graph.rels),
+    //       data: SetSolidData(graph.nodes),
+    //     },
+    //   ],
+    // });
   };
   BlundEventFocus = () => {
     //弹框聚焦
     this.setState({
       diglogHidden: false,
+      OverFocus: true,
     });
-    const { diglogItems } = this.state;
-    if (!diglogItems.data) return;
-    console.log(diglogItems.data);
-    this.FocusDatas(diglogItems.data.name);
+    const { node_ID } = this.state;
+    this.FocusDatas(node_ID);
   };
   FocusDatas = text => {
-    const { project_fieldcode, project_name, project_id } = this.props;
-    queryConcept({
-      project_fieldcode,
-      project_name,
+    const { project_id } = this.props;
+    focusProjectConceptInfo({
       project_id,
-      concept_name: text,
+      node_id: text,
     }).then(res => {
       if (res.result == 'success') {
-        let data = res.data[0].graph;
+        let data = res.data;
+        const { node_name, std_vocab, syn_vocab, path } = data;
+        this.setState({
+          ConceptName: node_name,
+          std_vocab,
+          syn_vocab,
+          path,
+        });
         const myChart = echarts.init(this.refs.main);
         myChart.setOption({
           series: [
@@ -280,6 +349,7 @@ class ProjectMap extends Component {
     //编辑模式
     this.setState({
       isEidet: true,
+      diglogHidden: false,
     });
   };
   blundeventFocuseRemove = () => {
@@ -292,6 +362,10 @@ class ProjectMap extends Component {
           data: SetLineData(nodesData),
         },
       ],
+    });
+    this.Setstateinnerhtml();
+    this.setState({
+      OverFocus: false,
     });
   };
   blundeventeidetRemove = () => {
@@ -335,6 +409,8 @@ class ProjectMap extends Component {
         this.setState({
           lintData: relsData,
           nodesData: nodesData,
+          lintArray: relsData,
+          nodeArray: nodesData,
         });
         const myChart = echarts.init(this.refs.main);
         if (myChart) {
@@ -356,8 +432,9 @@ class ProjectMap extends Component {
   };
   myEcharts = (data, myChart, arr) => {
     let that = this;
-    data.forEach(function(node, index) {
-      node.dataIndex = index;
+    data.forEach(function(node) {
+      node.id = node.id;
+      // node.dataIndex = node.id;
       node.value = node.symbolSize;
       node.symbolSize /= 1.5;
       node.label = {
@@ -396,7 +473,7 @@ class ProjectMap extends Component {
             borderColor: '#fff',
             borderWidth: 0,
             shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.3)',
+            shadowColor: 'rgba(0, 0, 0, 0.1)',
           },
           label: {
             show: true,
@@ -426,13 +503,14 @@ class ProjectMap extends Component {
     });
     // 右键元素
     myChart.on('contextmenu', function(params) {
-      const { isEidet } = that.state;
       if (typeof params === 'object') {
-        if (!isEidet) return;
+        // const { dataIndex } = params.target;
+        let id = params.data.id;
+        console.log(params);
         that.setState(state => {
           return {
             diglogHidden: true, //是否展示右键弹出层
-            diglogItems: params, //弹出层数据对象
+            node_ID: id, //弹出层数据对象
             x: params.event.offsetX,
             y: params.event.offsetY,
           };
@@ -441,20 +519,26 @@ class ProjectMap extends Component {
     });
     // 点击元素
     myChart.getZr().on('click', function(params) {
+      that.setState({
+        diglogHidden: false,
+      });
       if (!params.target) {
         myChart.dispatchAction({
           type: 'unfocusNodeAdjacency',
         });
+        that.Setstateinnerhtml();
         return;
       } else {
         const { dataIndex } = params.target;
         if (!params.target.__cachedNormalStl) return;
-        const { text } = params.target.__cachedNormalStl;
+
+        // const { text } = params.target.__cachedNormalStl;
         myChart.dispatchAction({
           type: 'focusNodeAdjacency',
           dataIndex: dataIndex,
         });
-        //  that.GetPrijectState(text)
+        let id = data[dataIndex].id;
+        that.GetPrijectStateDelete(id);
       }
     });
     // 拖动中
@@ -489,15 +573,14 @@ class ProjectMap extends Component {
     });
   };
   GetPrijectState = text => {
-    const { project_fieldcode, project_name, project_id } = this.props;
+    const { project_id } = this.props;
     queryConcept({
-      project_fieldcode,
-      project_name,
       project_id,
       concept_name: text,
     }).then(res => {
       if (res.result == 'success') {
         let data = res.data;
+        console.log(data);
         if (data.length) {
           this.setState({
             SearchData: data,
@@ -508,6 +591,83 @@ class ProjectMap extends Component {
       } else {
         return;
       }
+    });
+  };
+  GetPrijectStateDelete = text => {
+    const { project_id } = this.props;
+    queryProjectConceptInfo({
+      project_id,
+      node_id: text,
+    }).then(res => {
+      if (res.result == 'success') {
+        let data = res.data;
+        const { node_name, std_vocab, syn_vocab, path } = data;
+        this.setState({
+          ConceptName: node_name,
+          std_vocab,
+          syn_vocab,
+          path,
+        });
+      } else {
+        return;
+      }
+    });
+  };
+  Setstateinnerhtml = () => {
+    this.setState({
+      ConceptName: '',
+      std_vocab: '',
+      syn_vocab: [],
+      path: [],
+    });
+  };
+  blundeventRemoverelationship = () => {
+    // lintArray:relsData,
+    // nodeArray:nodesData,
+    this.setState({
+      diglogHidden: false,
+    });
+
+    const myChart = echarts.init(this.refs.main);
+    let linkss = myChart.getOption().series[0].links;
+    const { node_ID } = this.state;
+    this.setdadadad(node_ID);
+    linkss.forEach((item, index) => {
+      if (item.target == node_ID) {
+        this.setdadadad(item.source);
+        linkss.forEach(val => {
+          if (val.target == item.source) {
+            this.setdadadad(val.source);
+            return;
+          }
+        });
+        return;
+      }
+    });
+  };
+  setdadadad = node_ID => {
+    const myChart = echarts.init(this.refs.main);
+    let Datas = myChart.getOption().series[0].data;
+    // const {
+    //   nodeArray,
+    // } = this.state
+    let data = Datas;
+    Datas.forEach((val, index) => {
+      if (val.id == node_ID) {
+        data.splice(index, 1);
+        return;
+      }
+    });
+    this.setState({
+      nodeArray: data,
+    });
+    myChart.setOption({
+      series: [
+        {
+          data: SetSolidData(data),
+          // data:data,
+        },
+      ],
     });
   };
 }
