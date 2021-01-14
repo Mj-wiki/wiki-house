@@ -61,18 +61,17 @@ function CheckConceptDetail(props) {
   useEffect(() => {
     const search = props.match.params;
     onInit(search);
+  }, []);
+
+  useEffect(() => {
+    //展开收起监听
     const resize = () => {
       const listHeight = domListContent.current.offsetHeight;
       setListHeight(listHeight);
     };
     resize();
     window.addEventListener('resize', resize);
-    return () => {
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
 
-  useEffect(() => {
     const myChart = echarts.init(chartRef.current);
     myChart.showLoading();
     // 干掉浏览器默认右键事件
@@ -105,7 +104,9 @@ function CheckConceptDetail(props) {
       });
     }
     myEcharts(unifcList, myChart, unifcLinksData);
-
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
     //初始化方法
   }, [dataSource]);
 
