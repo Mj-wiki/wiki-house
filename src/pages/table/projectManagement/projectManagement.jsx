@@ -434,6 +434,7 @@ export default class projectManagement extends Component {
               isModalVisible: false,
               uploadkeys: 1,
             });
+            this.initProjectlist();
             const form = this.formRef.current;
             form.resetFields();
             this.CoypProject(res.data);

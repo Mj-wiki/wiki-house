@@ -202,7 +202,8 @@ class ProjectOverview extends Component {
       animation: false,
       series: [
         {
-          // center: [0, 0],
+          edgeSymbol: ['circle', 'arrow'],
+          edgeSymbolSize: [0, 10],
           zoom: 0.3,
           type: 'graph',
           layout: 'force',
