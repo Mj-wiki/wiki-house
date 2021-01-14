@@ -42,10 +42,9 @@ export default {
     *onFocus({ nodeId }, { put }) {
       const values = yield put({ type: 'getSearchValues' });
       const { dataSource } = yield values;
-      let handleData = JSON.parse(JSON.stringify(dataSource));
+      const handleData = JSON.parse(JSON.stringify(dataSource));
       const focusNodesList = handleData[0]?.graph?.nodes;
       const focusRelsList = handleData[0]?.graph?.rels;
-
       const nodeData = focusNodesList.filter((v, k) => {
         return v.id === nodeId || v.labels[0] === '标准词';
       });
@@ -54,20 +53,18 @@ export default {
       });
       handleData[0].graph.nodes = nodeData;
       handleData[0].graph.rels = relsData;
-
-      // if(nodeData?.length < 2){
-      //   return;
-      // }
-      // if (relsData?.length < 1) {
-      //   return;
-      // }
-      console.log(nodeData, relsData, dataSource);
       if (relsData.length > 0 && nodeData.length > 1) {
-        console.log('聚焦');
         yield put({
           type: 'changeState',
           payload: {
             dataSource: handleData,
+          },
+        });
+      } else {
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource: [...dataSource],
           },
         });
       }
@@ -75,12 +72,39 @@ export default {
     *searchKeyword({ keyword }, { put }) {
       const values = yield put({ type: 'getSearchValues' });
       const { dataSource } = yield values;
-      console.log(keyword, dataSource);
-      const focusNodesList = dataSource[0]?.graph?.nodes;
-      const focusRelsList = dataSource[0]?.graph?.rels;
+      const handleData = JSON.parse(JSON.stringify(dataSource));
+      const focusNodesList = handleData[0]?.graph?.nodes;
+      const focusRelsList = handleData[0]?.graph?.rels;
       const nodeData = focusNodesList.filter((v, k) => {
-        return v.id === nodeId || v.labels[0] === '标准词';
+        return v.name === keyword || v.labels[0] === '标准词';
       });
+      let itemId = '';
+      focusNodesList.map((v, k) => {
+        if (v.name === keyword) {
+          itemId = v.id;
+          return itemId;
+        }
+      });
+      const relsData = focusRelsList.filter((v, k) => {
+        return itemId === Number(v.source);
+      });
+      handleData[0].graph.nodes = nodeData;
+      handleData[0].graph.rels = relsData;
+      if (relsData.length > 0 && nodeData.length > 1) {
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource: handleData,
+          },
+        });
+      } else {
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource: [...dataSource],
+          },
+        });
+      }
     },
     //归一查询搜索列表
     *searchConceptInfo({ search }, { select, call, put }) {
