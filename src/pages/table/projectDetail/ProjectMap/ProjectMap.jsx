@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Style from './index.less';
 import * as echarts from 'echarts';
-import mock from '../../../../../mock/solide';
 import { Input, Button, Empty, message, Form, Select } from 'antd';
 import {
   CloseSquareOutlined,
@@ -563,8 +562,8 @@ class ProjectMap extends Component {
           lintArray: relsData,
           nodeArray: nodesData,
         });
-        if (this.refs.main) {
-          const myChart = echarts.init(this.refs.main);
+        const myChart = echarts.init(this.refs.main);
+        if (myChart) {
           myChart.showLoading();
           this.myEcharts(
             SetSolidData(nodesData),
