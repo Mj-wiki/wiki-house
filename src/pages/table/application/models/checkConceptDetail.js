@@ -1,5 +1,6 @@
 import { requestGetConceptInfo } from '../../services';
-
+import { Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 const initState = {
   dataSource: [],
   total: 0,
@@ -8,6 +9,7 @@ const initState = {
   project_id: '',
   project_fieldcode: '',
   project_name: '',
+  endFocusStatus: 0,
 };
 
 export default {
@@ -28,6 +30,7 @@ export default {
         project_id,
         project_fieldcode,
         project_name,
+        endFocusStatus,
       } = yield select(state => state.checkConceptDetail);
 
       return {
@@ -37,6 +40,7 @@ export default {
         project_id,
         project_fieldcode,
         project_name,
+        endFocusStatus,
       };
     },
     *onFocus({ nodeId }, { put }) {
@@ -58,6 +62,7 @@ export default {
           type: 'changeState',
           payload: {
             dataSource: handleData,
+            endFocusStatus: 1,
           },
         });
       } else {
@@ -65,6 +70,7 @@ export default {
           type: 'changeState',
           payload: {
             dataSource: [...dataSource],
+            endFocusStatus: 1,
           },
         });
       }
@@ -90,11 +96,34 @@ export default {
       });
       handleData[0].graph.nodes = nodeData;
       handleData[0].graph.rels = relsData;
+      if (relsData.length === 0) {
+        const config = {
+          title: '聚焦提示',
+          icon: <ExclamationCircleOutlined />,
+          content: (
+            <>
+              <div>未查询到相应聚焦图例！</div>
+            </>
+          ),
+          okText: '确定',
+          cancelText: '取消',
+        };
+        Modal.confirm(config);
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource,
+            endFocusStatus: 0,
+          },
+        });
+        return;
+      }
       if (relsData.length > 0 && nodeData.length > 1) {
         yield put({
           type: 'changeState',
           payload: {
             dataSource: handleData,
+            endFocusStatus: 1,
           },
         });
       } else {
@@ -102,6 +131,7 @@ export default {
           type: 'changeState',
           payload: {
             dataSource: [...dataSource],
+            endFocusStatus: 1,
           },
         });
       }
@@ -144,6 +174,7 @@ export default {
             payload: {
               dataSource: data.data,
               total: data.total,
+              endFocusStatus: 0,
             },
           });
         } else {
@@ -152,6 +183,7 @@ export default {
             payload: {
               dataSource: [],
               total: 0,
+              endFocusStatus: 0,
             },
           });
         }

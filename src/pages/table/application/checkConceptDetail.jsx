@@ -24,7 +24,14 @@ const buttonMinusStyle = {
 const HEIGHT = 120;
 
 function CheckConceptDetail(props) {
-  const { history, onInit, dataSource, onFocus, searchKeyword } = props;
+  const {
+    history,
+    onInit,
+    dataSource,
+    onFocus,
+    searchKeyword,
+    endFocusStatus,
+  } = props;
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
     diglogHidden: false, //是否展示右键弹出层
@@ -296,6 +303,11 @@ function CheckConceptDetail(props) {
   const setHistoryWord = v => {
     setHotWord(v);
   };
+  //结束聚焦
+  const finishFocus = () => {
+    const search = props.match.params;
+    onInit(search);
+  };
   return (
     <div className={styles.content}>
       <Breadcrumb style={{ marginTop: '40px' }}>
@@ -390,7 +402,7 @@ function CheckConceptDetail(props) {
         </div>
         <div className={styles.echartsBox}>
           <div className={styles.legend}>
-            <div>
+            <div className={styles.minus}>
               <Button
                 type="primary"
                 style={buttonAddStyle}
@@ -406,7 +418,10 @@ function CheckConceptDetail(props) {
                 -
               </Button>
             </div>
-            <div style={{ display: 'flex', width: '400px' }}>
+            {endFocusStatus ? (
+              <Button onClick={finishFocus}>结束聚焦</Button>
+            ) : null}
+            <div className={styles.explain} style={{}}>
               <div style={{ width: '80px' }}>图例说明 -</div>
               <div style={{ width: '100px' }}>
                 标准词 : <span className={styles.stand}></span>
@@ -481,6 +496,7 @@ function CheckConceptDetail(props) {
 const mapStateProps = ({ checkConceptDetail }) => {
   return {
     dataSource: checkConceptDetail.dataSource,
+    endFocusStatus: checkConceptDetail.endFocusStatus,
   };
 };
 const mapDispatchProps = dispatch => {
