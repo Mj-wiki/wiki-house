@@ -145,7 +145,7 @@ class ProjectOverview extends Component {
         });
         let nodesData = trees.nodes;
         let relsData = trees.rels;
-        const myChart = echarts.init(this.refs.main);
+        const myChart = this.refs.main ? echarts.init(this.refs.main) : null;
         document.oncontextmenu = function() {
           return false;
         };
