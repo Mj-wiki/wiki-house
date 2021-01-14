@@ -85,22 +85,22 @@ function CheckConceptDetail(props) {
       unifcList.map((v, k) => {
         if (Array.isArray(v.labels) && v.labels[0] === '标准词') {
           v.itemStyle = { normal: { color: 'orange' } };
-          v.symbolSize = 48.685715;
+          v.symbolSize = 88;
           if (v.properties.class === '分类;二级分类') {
             v.itemStyle = { normal: { color: 'rgb(236,81,72)' } };
-            v.symbolSize = 18.685715;
+            v.symbolSize = 48;
           }
           if (v.properties.class === '分类;一级分类') {
             v.itemStyle = { normal: { color: 'blue' } };
-            v.symbolSize = 28.685715;
+            v.symbolSize = 68;
           }
           if (v.properties.class === '顶级节点') {
             v.itemStyle = { normal: { color: 'orange' } };
-            v.symbolSize = 48.685715;
+            v.symbolSize = 88;
           }
         } else {
           v.itemStyle = { normal: { color: 'lightBlue' } };
-          v.symbolSize = 28.685715;
+          v.symbolSize = 58;
         }
       });
     }
@@ -152,6 +152,8 @@ function CheckConceptDetail(props) {
           roam: true,
           focusNodeAdjacency: false, //划过高亮
           draggable: true,
+          edgeSymbol: [null, 'arrow'],
+          edgeSymbolSize: [0, 10],
           itemStyle: {
             borderColor: '#fff',
             borderWidth: 0,
@@ -169,9 +171,9 @@ function CheckConceptDetail(props) {
           },
           force: {
             // initLayout:'circular',
-            repulsion: 1000,
+            repulsion: 900,
             gravity: 0.1,
-            edgeLength: 300,
+            edgeLength: 400,
             layoutAnimation: false,
             friction: 0.3,
             initLayout: 'none',
