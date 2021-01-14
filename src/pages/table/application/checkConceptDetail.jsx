@@ -24,7 +24,7 @@ const buttonMinusStyle = {
 const HEIGHT = 120;
 
 function CheckConceptDetail(props) {
-  const { history, onInit, dataSource, onFocus } = props;
+  const { history, onInit, dataSource, onFocus, searchKeyword } = props;
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
     diglogHidden: false, //是否展示右键弹出层
@@ -38,8 +38,7 @@ function CheckConceptDetail(props) {
   const [unfold, setUnfold] = useState(false);
   //存nodeId 原始词
   const [nId, setNId] = useState('');
-  //存标准词Id
-  //const [standardId,setStandardId] = useState('');
+  const [hotWord, setHotWord] = useState('');
   useEffect(() => {
     const search = props.match.params;
     onInit(search);
@@ -233,9 +232,13 @@ function CheckConceptDetail(props) {
   };
   //右键聚焦
   const FocusOperation = id => {
-    console.log(id, '这是聚焦操作');
-    //聚焦操作
     onFocus(id);
+    setDiglogConfig({
+      diglogHidden: false,
+      diglogItems: {},
+      x: 0,
+      y: 0,
+    });
   };
   //点击按钮放大或缩小
   const zoomGraph = v => {
@@ -258,6 +261,17 @@ function CheckConceptDetail(props) {
     domList.current.scrollTop = 0;
     setUnfold(!unfold);
   };
+  //搜索聚焦
+  const changeSearch = value => {
+    console.log(hotWord);
+    searchKeyword(hotWord);
+  };
+
+  const enterKeyword = e => {
+    console.log(e.target.value);
+    setHotWord(e.target.value);
+  };
+
   return (
     <div className={styles.content}>
       <Breadcrumb style={{ marginTop: '40px' }}>
@@ -369,6 +383,8 @@ function CheckConceptDetail(props) {
                 }
                 style={{ width: 200, height: '100px !important' }}
                 maxLength={30}
+                onSearch={changeSearch}
+                onChange={enterKeyword}
               />
             </div>
           </div>
@@ -424,6 +440,9 @@ const mapDispatchProps = dispatch => {
     },
     onFocus: nodeId => {
       dispatch({ type: 'checkConceptDetail/onFocus', nodeId });
+    },
+    searchKeyword: keyword => {
+      dispatch({ type: 'checkConceptDetail/searchKeyword', keyword });
     },
   };
 };
