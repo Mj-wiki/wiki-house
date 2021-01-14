@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Style from './index.less';
 import * as echarts from 'echarts';
+import mock from '../../../../../mock/solide';
 import { Input, Button, Empty, message, Form, Select } from 'antd';
 import {
   CloseSquareOutlined,
@@ -48,6 +49,8 @@ class ProjectMap extends Component {
     deleteProject: false,
     solidName: '',
     ClasName: '',
+    flageshow: true,
+    flageclose: false,
   };
   formRef = React.createRef();
   render() {
@@ -67,8 +70,9 @@ class ProjectMap extends Component {
       syn_vocab,
       path,
       deleteProject,
-      solidName,
-      ClasName,
+      // solidName,
+      // ClasName,
+      flageshow,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -90,14 +94,47 @@ class ProjectMap extends Component {
               <p className={Style.gainian}>标准词：{std_vocab}</p>
               <p className={Style.gainian}>
                 同义词：
-                {/* {
-                  syn_vocab.map(item => {
-                    return <span className={Style.routeMargin}>{item}</span>;
-                  })
-                } */}
-                {path.map((item, index) => {
+                {/* //syn_vocab */}
+                {/* <div>
+                  {
+                    this.state.flageclose ? <div>
+                      {
+                  flageshow ? <div className={Style.boxreative}>
+                    <div className={Style.textOver}>
+                    {
+                      syn_vocab.map((item, index) => {
+                        if(index<15){
+                          return(
+                          
+                            <span className={Style.routeMargin} key={index}>{item}</span>
+                          )
+                        }
+                      })
+                    }
+                     </div>
+                   <p className={Style.boxzhankai} onClick={()=>this.blundeventflageclose()}>展开</p>
+                  </div> :
+                    <div className={Style.overwidth}>
+                      {
+                        syn_vocab.map((item, index) => {
+                          return <span className={Style.routeMargin} key={index}>{item}</span>;
+                        })
+                      }
+                       <p className={Style.boxzhankai} onClick={()=>this.blundeventflageshow()}>展开</p>
+                    </div>
+                }
+                    </div> :  <div>
+                    {
+                        syn_vocab.map((item, index) => {
+                          return <span className={Style.routeMargin} key={index}>{item}</span>;
+                        })
+                      }
+                    </div>
+                  }
+                </div> */}
+                {syn_vocab.map((item, index) => {
                   return (
-                    <span key={index} className={Style.routeMargin}>
+                    <span className={Style.routeMargin} key={index}>
                       {item}
                     </span>
                   );
@@ -341,6 +378,16 @@ class ProjectMap extends Component {
       </div>
     );
   }
+  blundeventflageclose = () => {
+    this.setState({
+      flageshow: false,
+    });
+  };
+  blundeventflageshow = () => {
+    this.setState({
+      flageshow: true,
+    });
+  };
   blundSelect = val => {
     console.log(val);
   };
@@ -380,6 +427,15 @@ class ProjectMap extends Component {
       if (res.result == 'success') {
         let data = res.data;
         const { node_name, std_vocab, syn_vocab, path } = data;
+        if (syn_vocab.length > 15) {
+          this.setState({
+            flageclose: true,
+          });
+        } else {
+          this.setState({
+            flageclose: false,
+          });
+        }
         this.setState({
           ConceptName: node_name,
           std_vocab,
@@ -721,6 +777,15 @@ class ProjectMap extends Component {
       if (res.result == 'success') {
         let data = res.data;
         const { node_name, std_vocab, syn_vocab, path } = data;
+        if (syn_vocab.length > 15) {
+          this.setState({
+            flageclose: true,
+          });
+        } else {
+          this.setState({
+            flageclose: false,
+          });
+        }
         this.setState({
           ConceptName: node_name,
           std_vocab,
@@ -790,9 +855,6 @@ class ProjectMap extends Component {
       ],
     });
   };
-  componentWillUnmount() {
-    this.myEcharts.dispose();
-  }
 }
 // 135201711712016086
 const mapStateProps = ({ TapIndex }) => {
