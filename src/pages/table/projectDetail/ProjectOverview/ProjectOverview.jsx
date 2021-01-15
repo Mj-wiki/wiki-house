@@ -12,6 +12,7 @@ import * as echarts from 'echarts';
 import { ProjectDetail } from '@/api/Project.jsx';
 import { transformationTime } from '@/utils/dateUtil.js';
 import { connect } from 'umi';
+import { SetSolidData, SetLineData } from '@/utils/Config.js';
 class ProjectOverview extends Component {
   state = {
     project_code: '',
@@ -149,23 +150,13 @@ class ProjectOverview extends Component {
         document.oncontextmenu = function() {
           return false;
         };
-        let solidda = nodesData.map(item => {
-          if (item.labels == '标准词') {
-            (item.attributes = { modularity_class: 0 }), (item.symbolSize = 50);
-            item.itemStyle = { normal: { color: '#BD731A' } };
-          } else {
-            (item.attributes = { modularity_class: 1 }), (item.symbolSize = 30);
-            item.itemStyle = { normal: { color: '#508F97' } };
-          }
-          return item;
-        });
-        let lintData = relsData.map(item => {
-          item.lineStyle = { normal: { width: 3 } };
-          return item;
-        });
         if (myChart) {
           myChart.showLoading();
-          this.myEcharts(solidda, myChart, lintData);
+          this.myEcharts(
+            SetSolidData(nodesData),
+            myChart,
+            SetLineData(relsData),
+          );
         }
       } else {
         return;
@@ -173,6 +164,9 @@ class ProjectOverview extends Component {
     });
   };
   myEcharts = (data, myChart, Lindein) => {
+    if (!data && !Lindein) {
+      return;
+    }
     const { SetTapIndex } = this.props;
     data.forEach(function(node, index) {
       node.dataIndex = index;
@@ -182,7 +176,7 @@ class ProjectOverview extends Component {
         show: node.symbolSize > 1,
       };
       // node.category = node.attributes.modularity_class;
-      node.category = node.properties.code;
+      // node.category = node.properties.code;
     });
 
     myChart.setOption({
