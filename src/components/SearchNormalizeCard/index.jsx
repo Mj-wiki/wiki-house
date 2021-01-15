@@ -28,7 +28,7 @@ export default function SearchNormalizeCard({
     <div>
       <div className={style.totalBox}>
         <div className={style.appIntroduction_img}>
-          <img src={imgUrl} className={style.topBox}></img>
+          {/* <img src={imgUrl} className={style.topBox}></img> */}
         </div>
         <div className={style.lecturerLayout}>
           <div className={style.lecturerLeft}>

@@ -114,7 +114,7 @@ function CheckAppDetail(props) {
     return (
       <div>
         <SearchNormalizeCard
-          imgUrl={coverUrl}
+          //imgUrl={coverUrl}
           conceptName={record.node_name}
           projectName={record.prj_name}
           fieldType={record.area}

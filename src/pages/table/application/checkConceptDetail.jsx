@@ -98,7 +98,7 @@ function CheckConceptDetail(props) {
             v.symbolSize = 88;
           }
         } else {
-          v.itemStyle = { normal: { color: 'lightBlue' } };
+          v.itemStyle = { normal: { color: '#59a4f9' } };
           v.symbolSize = 58;
         }
       });
@@ -158,7 +158,7 @@ function CheckConceptDetail(props) {
           itemStyle: {
             borderColor: '#fff',
             borderWidth: 0,
-            shadowBlur: 10,
+            //shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.3)',
           },
           label: {
@@ -181,7 +181,7 @@ function CheckConceptDetail(props) {
           },
           emphasis: {
             lineStyle: {
-              width: 5,
+              width: 3,
             },
           },
         },
@@ -424,7 +424,7 @@ function CheckConceptDetail(props) {
             {endFocusStatus ? (
               <Button onClick={finishFocus}>结束聚焦</Button>
             ) : null}
-            <div className={styles.explain} style={{}}>
+            <div className={styles.explain}>
               <div style={{ width: '80px' }}>图例说明 -</div>
               <div style={{ width: '100px' }}>
                 标准词 : <span className={styles.stand}></span>

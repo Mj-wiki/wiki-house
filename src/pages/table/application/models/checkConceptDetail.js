@@ -1,6 +1,6 @@
 import { requestGetConceptInfo } from '../../services';
 import { Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+
 const initState = {
   dataSource: [],
   total: 0,
@@ -97,18 +97,11 @@ export default {
       handleData[0].graph.nodes = nodeData;
       handleData[0].graph.rels = relsData;
       if (relsData.length === 0) {
-        // const config = {
-        //   title: '聚焦提示',
-        //   icon: <ExclamationCircleOutlined />,
-        //   content: (
-        //     <>
-        //       <div>未查询到相应聚焦图例！</div>
-        //     </>
-        //   ),
-        //   okText: '确定',
-        //   cancelText: '取消',
-        // };
-        // Modal.confirm(config);
+        Modal.error({
+          title: '提示',
+          content: '未查询到相应聚焦图例！',
+          okText: '确定',
+        });
         yield put({
           type: 'changeState',
           payload: {
