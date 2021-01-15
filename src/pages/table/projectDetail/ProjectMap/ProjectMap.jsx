@@ -790,9 +790,9 @@ class ProjectMap extends Component {
       ],
     });
   };
-  componentWillUnmount() {
-    this.myEcharts.dispose();
-  }
+  // componentWillUnmount() {
+  //   this.myEcharts.dispose();
+  // }
 }
 // 135201711712016086
 const mapStateProps = ({ TapIndex }) => {
