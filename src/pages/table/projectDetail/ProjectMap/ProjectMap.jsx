@@ -90,17 +90,8 @@ class ProjectMap extends Component {
               <p className={Style.gainian}>标准词：{std_vocab}</p>
               <p className={Style.gainian}>
                 同义词：
-                {/* {
-                  syn_vocab.map(item => {
-                    return <span className={Style.routeMargin}>{item}</span>;
-                  })
-                } */}
-                {path.map((item, index) => {
-                  return (
-                    <span key={index} className={Style.routeMargin}>
-                      {item}
-                    </span>
-                  );
+                {syn_vocab.map(item => {
+                  return <span className={Style.routeMargin}>{item}</span>;
                 })}
               </p>
             </div>
@@ -644,7 +635,6 @@ class ProjectMap extends Component {
         return;
       } else {
         const { dataIndex } = params.target;
-        console.log(params);
         if (!params.target.__cachedNormalStl) return;
         myChart.dispatchAction({
           type: 'focusNodeAdjacency',
