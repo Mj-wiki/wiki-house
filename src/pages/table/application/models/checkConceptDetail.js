@@ -97,18 +97,18 @@ export default {
       handleData[0].graph.nodes = nodeData;
       handleData[0].graph.rels = relsData;
       if (relsData.length === 0) {
-        const config = {
-          title: '聚焦提示',
-          icon: <ExclamationCircleOutlined />,
-          content: (
-            <>
-              <div>未查询到相应聚焦图例！</div>
-            </>
-          ),
-          okText: '确定',
-          cancelText: '取消',
-        };
-        Modal.confirm(config);
+        // const config = {
+        //   title: '聚焦提示',
+        //   icon: <ExclamationCircleOutlined />,
+        //   content: (
+        //     <>
+        //       <div>未查询到相应聚焦图例！</div>
+        //     </>
+        //   ),
+        //   okText: '确定',
+        //   cancelText: '取消',
+        // };
+        // Modal.confirm(config);
         yield put({
           type: 'changeState',
           payload: {
