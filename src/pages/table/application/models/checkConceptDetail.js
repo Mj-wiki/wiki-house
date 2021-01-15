@@ -100,7 +100,7 @@ export default {
         Modal.error({
           title: '提示',
           content: '未查询到相应聚焦图例！',
-          okText: '确定',
+          okText: '知道了',
         });
         yield put({
           type: 'changeState',

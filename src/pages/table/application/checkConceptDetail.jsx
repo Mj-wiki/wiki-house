@@ -355,6 +355,10 @@ function CheckConceptDetail(props) {
               <span title={dataSource[0]?.area}>{dataSource[0]?.area}</span>
             </div>
             <div className={styles.lectureHospital}>
+              <span className={styles.projectName}>属性 :</span>
+              <span>{dataSource[0]?.properties.class}</span>
+            </div>
+            <div className={styles.lectureHospital}>
               <span className={styles.projectName}>标准词 :</span>
               <span title={dataSource[0]?.std_vocab}>
                 {dataSource[0]?.std_vocab}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styles from './application.less';
-import { Tabs, Form, Tag, Breadcrumb } from 'antd';
+import { Tabs, Form, Tag, Breadcrumb, Modal } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import ContentCard from '@/components/ContentCard';
-import appImg from '../../../assets/layouticon/detail_count_percent_1.png';
+import appImg from '../../../assets/layouticon/icon_search1.png';
 import moment from 'moment';
 const { CheckableTag } = Tag;
 const { TabPane } = Tabs;
@@ -17,58 +17,10 @@ const listData = [
     appId: 1,
   },
   {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
+    appName: '敬请期待~',
+    appIntroduction: '',
     coverUrl: appImg,
     appId: 2,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 3,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 4,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 5,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 6,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 7,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 8,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 9,
-  },
-  {
-    appName: '归一查询',
-    appIntroduction: '在公开的项目中查询归一词并查看图谱',
-    coverUrl: appImg,
-    appId: 10,
   },
 ];
 function TableEdit(props) {
@@ -83,8 +35,17 @@ function TableEdit(props) {
     onInit();
   }, [editData]);
   const skipDetailLecture = appId => {
+    if (appId === 2) {
+      Modal.info({
+        title: '提示',
+        content: '敬请期待后续的应用项目~',
+        okText: '知道了',
+      });
+      return;
+    }
     if (!appId) appId = 1;
-    history.push('/table/checkAppDetail/' + appId);
+    //history.push('/table/checkAppDetail/' + appId);
+    window.open('#/table/checkAppDetail/' + appId);
   };
   const changeItemLecture = (record, index) => {
     return (
