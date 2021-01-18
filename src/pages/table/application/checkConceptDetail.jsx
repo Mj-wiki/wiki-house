@@ -292,7 +292,9 @@ function CheckConceptDetail(props) {
       cookieList.pop();
     }
     setCookieList([...new Set(cookieList)]);
-    searchKeyword(hotWord);
+    //搜索首尾去空格
+    const wipeOutBlank = hotWord.replace(/^\s+|\s+$/g, '');
+    searchKeyword(wipeOutBlank);
     localStorage.setItem('itemList', [...new Set(cookieList)]);
   };
 

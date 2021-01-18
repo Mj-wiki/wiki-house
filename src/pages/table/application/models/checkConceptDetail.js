@@ -161,6 +161,14 @@ export default {
         };
 
         const data = yield call(requestGetConceptInfo, searchObj);
+
+        let emptyObject = {};
+        if (Array.isArray(data.data)) {
+          data.data[0]?.graph?.rels.map((v, k) => {
+            emptyObject = { name: v.name, source: v.target, target: v.target };
+          });
+          data.data[0]?.graph.rels.unshift(emptyObject);
+        }
         if (data.result === 'success') {
           yield put({
             type: 'changeState',
