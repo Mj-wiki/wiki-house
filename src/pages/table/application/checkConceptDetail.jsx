@@ -80,6 +80,7 @@ function CheckConceptDetail(props) {
     };
     const unifcList = dataSource[0]?.graph['nodes'];
     const unifcLinksData = dataSource[0]?.graph['rels'];
+    const search = props.match.params;
     if (Array.isArray(unifcList)) {
       unifcList.map((v, k) => {
         if (Array.isArray(v.labels) && v.labels[0] === '标准词') {
@@ -98,8 +99,13 @@ function CheckConceptDetail(props) {
             v.symbolSize = 88;
           }
         } else {
-          v.itemStyle = { normal: { color: '#59a4f9' } };
-          v.symbolSize = 58;
+          if (search.itemId == v.id) {
+            v.itemStyle = { normal: { color: '#f40' } };
+            v.symbolSize = 58;
+          } else {
+            v.itemStyle = { normal: { color: '#59a4f9' } };
+            v.symbolSize = 58;
+          }
         }
       });
     }
