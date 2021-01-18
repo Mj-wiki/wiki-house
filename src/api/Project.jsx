@@ -1,5 +1,7 @@
 import request from '@/utils/request';
 // import request from './request';
+import { url } from '../../env';
+
 //新增项目
 export const CreateProject = data => {
   return request('/api/project/create/', {
@@ -94,7 +96,7 @@ export const focusProjectConceptInfo = data => {
 ///base/util/UploadFile?contentTypeCode=36
 
 export const uploadImg = data => {
-  return request(`/apc/api/base/util/UploadFile`, {
+  return request(`${url}/api/base/util/UploadFile`, {
     method: 'post',
     data: data,
   });
