@@ -140,7 +140,7 @@ function CheckAppDetail(props) {
           <Select
             placeholder="领域"
             value={items}
-            style={{ width: '215px' }}
+            style={{ width: '240px' }}
             onChange={changeItem}
           >
             {fieldData.map((v, k) => {
@@ -180,8 +180,8 @@ function CheckAppDetail(props) {
               {!emptyStatus
                 ? cookieList.map((v, k) => {
                     let sliceV = v;
-                    if (v && v.length > 12) {
-                      sliceV = v.slice(0, 12) + '...';
+                    if (v && v.length > 20) {
+                      sliceV = v.slice(0, 20) + '...';
                     }
                     return (
                       <div
