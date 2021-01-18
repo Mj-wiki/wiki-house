@@ -419,12 +419,16 @@ function CheckConceptDetail(props) {
           <div className={styles.legend}>
             <div className={styles.EachartsState}>
               <p className={styles.borderslide}>
-                <span className={styles.borderblue}></span>
+                <span className={styles.borderOrange}></span>
                 标准词
               </p>
               <p className={styles.borderslide}>
-                <span className={styles.borderred}></span>
+                <span className={styles.borderBlue}></span>
                 原始词
+              </p>
+              <p className={styles.borderslide}>
+                <span className={styles.borderRed}></span>
+                查询词
               </p>
               <p className={styles.borderslide}>
                 <ArrowRightOutlined style={{ color: '#59a4f9' }} />{' '}
