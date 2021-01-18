@@ -1,4 +1,5 @@
 import { requestGetConceptInfo } from '../../services';
+import { Modal } from 'antd';
 
 const initState = {
   dataSource: [],
@@ -8,6 +9,7 @@ const initState = {
   project_id: '',
   project_fieldcode: '',
   project_name: '',
+  endFocusStatus: 0,
 };
 
 export default {
@@ -28,6 +30,7 @@ export default {
         project_id,
         project_fieldcode,
         project_name,
+        endFocusStatus,
       } = yield select(state => state.checkConceptDetail);
 
       return {
@@ -37,31 +40,91 @@ export default {
         project_id,
         project_fieldcode,
         project_name,
+        endFocusStatus,
       };
     },
     *onFocus({ nodeId }, { put }) {
       const values = yield put({ type: 'getSearchValues' });
       const { dataSource } = yield values;
-      const focusNodesList = dataSource[0]?.graph?.nodes;
-      const focusRelsList = dataSource[0]?.graph?.rels;
-
+      const handleData = JSON.parse(JSON.stringify(dataSource));
+      const focusNodesList = handleData[0]?.graph?.nodes;
+      const focusRelsList = handleData[0]?.graph?.rels;
       const nodeData = focusNodesList.filter((v, k) => {
-        return v.id === nodeId || v.id === 3600129;
+        return v.id === nodeId || v.labels[0] === '标准词';
       });
       const relsData = focusRelsList.filter((v, k) => {
         return nodeId === Number(v.source);
       });
-      dataSource[0].graph.nodes = nodeData;
-      dataSource[0].graph.rels = relsData;
-      console.log(nodeId);
-      if (relsData?.length < 1) {
-        return;
-      }
-      if (relsData?.length > 0) {
+      handleData[0].graph.nodes = nodeData;
+      handleData[0].graph.rels = relsData;
+      if (relsData.length > 0 && nodeData.length > 1) {
         yield put({
           type: 'changeState',
           payload: {
-            dataSource: dataSource,
+            dataSource: handleData,
+            endFocusStatus: 1,
+          },
+        });
+      } else {
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource: [...dataSource],
+            endFocusStatus: 1,
+          },
+        });
+      }
+    },
+    *searchKeyword({ keyword }, { put }) {
+      const values = yield put({ type: 'getSearchValues' });
+      const { dataSource } = yield values;
+      const handleData = JSON.parse(JSON.stringify(dataSource));
+      const focusNodesList = handleData[0]?.graph?.nodes;
+      const focusRelsList = handleData[0]?.graph?.rels;
+      const nodeData = focusNodesList.filter((v, k) => {
+        return v.name === keyword || v.labels[0] === '标准词';
+      });
+      let itemId = '';
+      focusNodesList.map((v, k) => {
+        if (v.name === keyword) {
+          itemId = v.id;
+          return itemId;
+        }
+      });
+      const relsData = focusRelsList.filter((v, k) => {
+        return itemId === Number(v.source);
+      });
+      handleData[0].graph.nodes = nodeData;
+      handleData[0].graph.rels = relsData;
+      if (relsData.length === 0) {
+        Modal.error({
+          title: '提示',
+          content: '未查询到相应聚焦图例！',
+          okText: '知道了',
+        });
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource,
+            endFocusStatus: 0,
+          },
+        });
+        return;
+      }
+      if (relsData.length > 0 && nodeData.length > 1) {
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource: handleData,
+            endFocusStatus: 1,
+          },
+        });
+      } else {
+        yield put({
+          type: 'changeState',
+          payload: {
+            dataSource: [...dataSource],
+            endFocusStatus: 1,
           },
         });
       }
@@ -98,12 +161,21 @@ export default {
         };
 
         const data = yield call(requestGetConceptInfo, searchObj);
+
+        let emptyObject = {};
+        if (Array.isArray(data.data)) {
+          data.data[0]?.graph?.rels.map((v, k) => {
+            emptyObject = { name: v.name, source: v.target, target: v.target };
+          });
+          data.data[0]?.graph.rels.unshift(emptyObject);
+        }
         if (data.result === 'success') {
           yield put({
             type: 'changeState',
             payload: {
               dataSource: data.data,
               total: data.total,
+              endFocusStatus: 0,
             },
           });
         } else {
@@ -112,6 +184,7 @@ export default {
             payload: {
               dataSource: [],
               total: 0,
+              endFocusStatus: 0,
             },
           });
         }

@@ -114,7 +114,7 @@ function CheckAppDetail(props) {
     return (
       <div>
         <SearchNormalizeCard
-          imgUrl={coverUrl}
+          //imgUrl={coverUrl}
           conceptName={record.node_name}
           projectName={record.prj_name}
           fieldType={record.area}
@@ -163,7 +163,7 @@ function CheckAppDetail(props) {
               prefix={
                 <Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />
               }
-              style={{ width: 380, height: '100px !important' }}
+              style={{ width: 480, height: '100px !important' }}
               onSearch={changeSearch}
               onFocus={getFocus}
               onChange={enterKeyword}
