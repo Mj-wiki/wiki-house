@@ -471,9 +471,9 @@ export default class projectManagement extends Component {
     uploadFile(formData).then(res => {
       this.initProjectlist();
       if (res.result == 'success') {
-        message.success('upload successfully.');
+        message.success('文件上传成功！');
       } else {
-        message.error('upload failed.');
+        message.error('文件上传失败！');
         return;
       }
     });

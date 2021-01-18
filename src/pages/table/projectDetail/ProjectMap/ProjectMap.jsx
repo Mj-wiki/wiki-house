@@ -199,7 +199,7 @@ class ProjectMap extends Component {
                 原始词
               </p>
               <p className={Style.borderslide}>
-                <ArrowRightOutlined style={{ color: '#F15D53' }} />{' '}
+                <ArrowRightOutlined style={{ color: '#5B5FFE' }} />{' '}
                 <span className={Style.marginrrr}>属于</span>
               </p>
               <p className={Style.borderslide}>

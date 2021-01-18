@@ -91,5 +91,19 @@ export const focusProjectConceptInfo = data => {
     params: data,
   });
 };
+///base/util/UploadFile?contentTypeCode=36
 
+export const uploadImg = data => {
+  return request(`/apc/api/base/util/UploadFile`, {
+    method: 'post',
+    data: data,
+  });
+};
+
+export const updatePrijectImg = data => {
+  return request(`/api/project/updatePhoto/`, {
+    method: 'post',
+    data: data,
+  });
+};
 //http://127.0.0.1:8000/api/project/focusProjectConceptInfo/?project_id=PJ1dacfe724fc411ebb771fa163eac98f2&node_id=8540670
