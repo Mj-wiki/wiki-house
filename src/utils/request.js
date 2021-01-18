@@ -1,6 +1,6 @@
 import { extend } from 'umi-request';
 import qs from 'qs';
-
+import { loadingPublisher } from '../components/Loading/Loading';
 /**
  * 配置request请求时的默认参数
  */
@@ -9,12 +9,22 @@ const request = extend({
 });
 
 request.interceptors.request.use((url, options) => {
+  if (url) {
+    loadingPublisher.add();
+  }
   return {
     url: `${url}`,
     options: {
       ...options,
     },
   };
+});
+
+request.interceptors.response.use(res => {
+  if (res && res.url) {
+    loadingPublisher.sub();
+  }
+  return res;
 });
 
 // request.use(async (ctx, next) => {

@@ -6,26 +6,30 @@ class Loading {
     this.loadingTag = 0;
     this.subscriptions = [];
   }
-
-  add() {
-    this.loadingTag++;
+  add(text) {
+    if (text) {
+      this.loadingTag = 0;
+    } else {
+      this.loadingTag++;
+    }
     this.subscriptions.forEach(f => f(this.loadingTag));
   }
-
-  sub() {
-    this.loadingTag--;
+  sub(text) {
+    if (text) {
+      this.loadingTag = 0;
+    } else {
+      this.loadingTag--;
+    }
     this.subscriptions.forEach(f => f(this.loadingTag));
   }
-
   get() {
     return this.loadingTag;
   }
-
   subscribe(f) {
     this.subscriptions.push(f);
   }
 }
-const loadingPublisher = new Loading();
+let loadingPublisher = new Loading();
 
 class YMLoading extends React.Component {
   constructor(props) {
@@ -34,8 +38,8 @@ class YMLoading extends React.Component {
       globalLoading: false,
     };
   }
-
   componentDidMount() {
+    // 增加订阅loading状态更新
     loadingPublisher.subscribe(loadingTag => {
       if (this.state.globalLoading !== !!loadingTag) {
         this.setState({ globalLoading: !!loadingTag });

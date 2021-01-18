@@ -5,6 +5,7 @@ import { UserOutlined, SettingOutlined } from '@ant-design/icons';
 import backIcon from '../../assets/layouticon/back.png';
 import uniLogo from '../../assets/chart/uniLogo.svg';
 import { connect } from 'umi';
+import { YMLoading } from '../../components/Loading/Loading'; //全局loading
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -93,6 +94,7 @@ function BackStageLayout(props) {
         </Header>
         <Layout>
           <Content className={styles.site}>{props.children}</Content>
+          <YMLoading />
         </Layout>
       </Layout>
     </div>
@@ -172,6 +174,7 @@ function BackStageLayout(props) {
         </Header>
         <Layout>
           <Content className={styles.site}>{props.children}</Content>
+          <YMLoading />
         </Layout>
       </Layout>
     </div>
