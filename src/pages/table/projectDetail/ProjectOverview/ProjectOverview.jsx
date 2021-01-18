@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import Style from './index.less';
 import * as echarts from 'echarts';
-import { ProjectDetail } from '@/api/Project.jsx';
+import { ProjectDetail, uploadImg, updatePrijectImg } from '@/api/Project.jsx';
 import { transformationTime } from '@/utils/dateUtil.js';
 import { connect } from 'umi';
 import { SetSolidData, SetLineData } from '@/utils/Config.js';
@@ -36,7 +36,7 @@ class ProjectOverview extends Component {
       project_triples,
     } = this.state;
     return (
-      <div className={Style.OverViewWrapper}>
+      <div className={Style.OverViewWrapper} ref="wrapper">
         <div className={Style.OverViewLeft}>
           <h1 className={Style.overviewtile}>{project_name}</h1>
           <p className={Style.overTime}>
@@ -48,7 +48,7 @@ class ProjectOverview extends Component {
             <FundTwoTone />
             <span className={Style.imagespan}>图谱</span>
           </div>
-          <div className={Style.eachartsbox}>
+          <div className={Style.eachartsbox} ref="box">
             <div style={{ width: '100%', height: '100%' }}>
               <div
                 id="main"
@@ -167,6 +167,7 @@ class ProjectOverview extends Component {
     if (!data && !Lindein) {
       return;
     }
+    let that = this;
     const { SetTapIndex } = this.props;
     data.forEach(function(node, index) {
       node.dataIndex = index;
@@ -240,24 +241,56 @@ class ProjectOverview extends Component {
         },
       ],
     });
-    // var img = new Image();
-    // let image = myChart.getDataURL()
-    // console.log(image)
-    //  let img = this.refs.main.find("canvas")[0];
-    setTimeout(() => {
-      console.log(document.getElementsByTagName('canvas')[0].toDataURL());
-    }, 5000);
+
     myChart.getZr().on('click', function(params) {
       SetTapIndex();
     });
     setTimeout(() => {
       myChart.hideLoading();
+    }, 1000);
+    setTimeout(() => {
+      let pageData = myChart.getConnectedDataURL({
+        pixelRatio: 2,
+        backgroundColor: '#fff',
+      });
+      that.bluneventimg(pageData);
     }, 1500);
   };
-  bluneventimg = () => {
-    const myChart = echarts.init(this.refs.main);
-    let image = myChart.getDataURL();
-    console.log(image);
+  bluneventimg = base64String => {
+    let bytes = window.atob(base64String.split(',')[1]);
+    let array = [];
+    for (let i = 0; i < bytes.length; i++) {
+      array.push(bytes.charCodeAt(i));
+    }
+    let blob = new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
+    // 生成FormData对象
+    let fd = new FormData();
+    // 注：此处 file 应和后台接收参数匹配
+    fd.append('file', blob, Date.now() + '.jpg');
+    fd.append('contentTypeCode', '36');
+    this.uploadImg(fd);
+  };
+  uploadImg = fd => {
+    const { Id } = this.state;
+    uploadImg(fd).then(res => {
+      if (res.code == 0) {
+        console.log(res);
+        const { fileUrl } = res.data;
+        let url = 'http://120.221.160.5:9002/' + fileUrl;
+        updatePrijectImg({
+          photo: url,
+          id: Id,
+        }).then(res => {
+          if (res.result == 'success') {
+            console.log(res.data);
+          } else {
+            return;
+          }
+        });
+      } else {
+        return;
+      }
+    });
   };
 }
 

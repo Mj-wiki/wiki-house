@@ -13,7 +13,7 @@ request.interceptors.request.use((url, options) => {
     loadingPublisher.add();
   }
   return {
-    url: `/api${url}`,
+    url: `${url}`,
     options: {
       ...options,
     },
