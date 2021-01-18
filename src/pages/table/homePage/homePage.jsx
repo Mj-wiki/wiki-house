@@ -39,7 +39,10 @@ function TableList(props) {
               </div>
               <div className={styles.eacharstext}>
                 <p>项目总数</p>
-                <p className={styles.eachrsp}>{projects}个</p>
+                <p className={styles.eachrsp}>
+                  {// {projects}个
+                  projects ? <span>{projects}个</span> : <span>加载中···</span>}
+                </p>
               </div>
             </div>
             <div className={styles.eacharslide}>
@@ -49,7 +52,11 @@ function TableList(props) {
               </div>
               <div className={styles.eacharstext}>
                 <p>三元组数</p>
-                <p className={styles.eachrsp}>{concepts}个</p>
+                <p className={styles.eachrsp}>
+                  {/* {concepts}个 */}
+                  {// {projects}个
+                  concepts ? <span>{concepts}个</span> : <span>加载中···</span>}
+                </p>
               </div>
             </div>
             <div className={styles.eacharslide}>
@@ -59,7 +66,13 @@ function TableList(props) {
               </div>
               <div className={styles.eacharstext}>
                 <p>概念总数</p>
-                <p className={styles.eachrsp}>{concepts}个</p>
+                <p className={styles.eachrsp}>
+                  {concepts ? (
+                    <span>{concepts}个</span>
+                  ) : (
+                    <span>加载中···</span>
+                  )}
+                </p>
               </div>
             </div>
           </div>

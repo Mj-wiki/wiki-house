@@ -3,12 +3,14 @@ export const SetSolidData = nodesData => {
     return;
   }
   let data = nodesData.map(item => {
-    console.log(item);
-    if (item.labels == '标准词') {
-      (item.attributes = { modularity_class: 0 }), (item.symbolSize = 50);
+    if (item.properties.class == '顶级节点') {
+      (item.attributes = { modularity_class: 0 }), (item.symbolSize = 90);
+      item.itemStyle = { normal: { color: '#F15D53' } };
+    } else if (item.properties.class == '分类;一级分类') {
+      (item.attributes = { modularity_class: 1 }), (item.symbolSize = 60);
       item.itemStyle = { normal: { color: '#43AC61' } };
-    } else {
-      (item.attributes = { modularity_class: 1 }), (item.symbolSize = 30);
+    } else if (item.properties.class == '分类;二级分类') {
+      (item.attributes = { modularity_class: 2 }), (item.symbolSize = 40);
       item.itemStyle = { normal: { color: '#5B5FFE' } };
     }
     return item;

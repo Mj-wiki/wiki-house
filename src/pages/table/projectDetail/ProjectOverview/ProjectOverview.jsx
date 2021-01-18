@@ -185,7 +185,10 @@ class ProjectOverview extends Component {
           return x.data.name; //设置提示框的内容和格式 节点和边都显示name属性
         },
       },
-      toolbox: {},
+      legend: {
+        height: '100%',
+        width: '100%',
+      },
       grid: {
         height: '100%',
         width: '100%',
@@ -237,6 +240,7 @@ class ProjectOverview extends Component {
         },
       ],
     });
+    // var img = new Image();
     // let image = myChart.getDataURL()
     // console.log(image)
     myChart.getZr().on('click', function(params) {
@@ -246,11 +250,11 @@ class ProjectOverview extends Component {
       myChart.hideLoading();
     }, 1500);
   };
-  // bunldeventGetImage = () =>{
-  //   const myChart = echarts.init(this.refs.main);
-  //   let image = myChart.getDataURL()
-  //   console.log(image)
-  // }
+  bluneventimg = () => {
+    const myChart = echarts.init(this.refs.main);
+    let image = myChart.getDataURL();
+    console.log(image);
+  };
 }
 
 const mapStateProps = ({ TapIndex }) => {

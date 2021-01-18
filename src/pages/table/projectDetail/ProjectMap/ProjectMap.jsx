@@ -13,6 +13,7 @@ import {
   queryProjectConceptInfo,
   focusProjectConceptInfo,
 } from '@/api/Project.jsx';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
 import { SetSolidData, SetLineData, randomString } from '@/utils/Config.js';
 import InputDialog from '@/components/Addproject/Addproject';
@@ -23,6 +24,7 @@ const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 16 },
 };
+
 class ProjectMap extends Component {
   state = {
     diglogHidden: false, //是否展示右键弹出层
@@ -48,6 +50,8 @@ class ProjectMap extends Component {
     deleteProject: false,
     solidName: '',
     ClasName: '',
+    properties: '',
+    listshow: true,
   };
   formRef = React.createRef();
   render() {
@@ -67,6 +71,7 @@ class ProjectMap extends Component {
       syn_vocab,
       path,
       deleteProject,
+      properties,
       solidName,
       ClasName,
     } = this.state;
@@ -74,26 +79,86 @@ class ProjectMap extends Component {
       <div className={Style.atlasWrapper}>
         <div className={Style.ProjectMap}>
           <div className={Style.projecttext}>
-            <div className={Style.Account}>占位</div>
+            <div className={Style.Account}></div>
             <div className={Style.detailtext}>
               <p className={Style.gainian}>概念名：{ConceptName}</p>
+              <p className={Style.gainian}>属性：{properties}</p>
               <p className={Style.gainian}>
                 路径：
                 {path.map((item, index) => {
-                  return (
-                    <span key={index} className={Style.routeMargin}>
-                      {item}
-                    </span>
-                  );
+                  if (index == path.length - 1) {
+                    return (
+                      <span key={index} className={Style.routeMargin}>
+                        {item}
+                      </span>
+                    );
+                  } else {
+                    return (
+                      <span key={index} className={Style.routeMargin}>
+                        {item}/
+                      </span>
+                    );
+                  }
                 })}
               </p>
               <p className={Style.gainian}>标准词：{std_vocab}</p>
-              <p className={Style.gainian}>
-                同义词：
-                {syn_vocab.map(item => {
-                  return <span className={Style.routeMargin}>{item}</span>;
-                })}
-              </p>
+              <div className={Style.gainian} style={{ display: 'flex' }}>
+                {/* syn_vocab */}
+                <span>同义词：</span>{' '}
+                <div className={Style.openwrapper}>
+                  {syn_vocab.length > 8 ? (
+                    <div>
+                      {this.state.listshow ? (
+                        <div className={Style.overhoddin}>
+                          {syn_vocab.map((item, i) => {
+                            if (i < 12) {
+                              return (
+                                <span key={i} className={Style.routeMargin}>
+                                  {item}
+                                </span>
+                              );
+                            } else {
+                              return;
+                            }
+                          })}
+                          <div
+                            onClick={() => this.bluneeventopen()}
+                            className={Style.postionhis}
+                          >
+                            展开
+                          </div>
+                        </div>
+                      ) : (
+                        <div className={Style.showbtn}>
+                          {syn_vocab.map((item, val) => {
+                            return (
+                              <span key={val} className={Style.routeMargin}>
+                                {item}
+                              </span>
+                            );
+                          })}
+                          <div
+                            onClick={() => this.bluneeventclose()}
+                            className={Style.postionhis}
+                          >
+                            收起
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div>
+                      {syn_vocab.map((item, box) => {
+                        return (
+                          <span key={box} className={Style.routeMargin}>
+                            {item}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
           <div className={Style.promap}>
@@ -126,6 +191,14 @@ class ProjectMap extends Component {
               <p className={Style.borderslide}>
                 <span className={Style.borderred}></span>
                 原始词
+              </p>
+              <p className={Style.borderslide}>
+                <ArrowRightOutlined style={{ color: '#bd731a' }} />{' '}
+                <span className={Style.marginrrr}>属于</span>
+              </p>
+              <p className={Style.borderslide}>
+                <ArrowRightOutlined style={{ color: '#508f9' }} />{' '}
+                <span className={Style.marginrrr}>标准化为</span>
               </p>
             </div>
             <div className={Style.atlasTop}>
@@ -173,17 +246,29 @@ class ProjectMap extends Component {
                           key={index}
                           onClick={() => this.BlunndEventFocusing(item)}
                         >
-                          <p className={Style.Selectslide}>
-                            {item.node_name}：{item.properties.class}
+                          {/* //肠道传染病9855 */}
+                          <p className={Style.Selectslidename}>
+                            {item.node_name}：
+                          </p>
+                          <p className={Style.Selectslideclass}>
+                            {item.properties.class}
                           </p>
                           <p className={Style.Selectslide}>
-                            路径：{' '}
+                            路径：
                             {item.path.map((val, i) => {
-                              return (
-                                <span className={Style.routeMargin} key={i}>
-                                  {val}
-                                </span>
-                              );
+                              if (i == item.path.length - 1) {
+                                return (
+                                  <span key={i} className={Style.routeMargin}>
+                                    {val}
+                                  </span>
+                                );
+                              } else {
+                                return (
+                                  <span key={i} className={Style.routeMargin}>
+                                    {val}/
+                                  </span>
+                                );
+                              }
                             })}
                           </p>
                         </div>
@@ -332,6 +417,17 @@ class ProjectMap extends Component {
       </div>
     );
   }
+  bluneeventopen = () => {
+    // alert(1)
+    this.setState({
+      listshow: false,
+    });
+  };
+  bluneeventclose = () => {
+    this.setState({
+      listshow: true,
+    });
+  };
   blundSelect = val => {
     console.log(val);
   };
@@ -370,12 +466,13 @@ class ProjectMap extends Component {
     }).then(res => {
       if (res.result == 'success') {
         let data = res.data;
-        const { node_name, std_vocab, syn_vocab, path } = data;
+        const { node_name, std_vocab, syn_vocab, path, properties } = data;
         this.setState({
           ConceptName: node_name,
           std_vocab,
           syn_vocab,
           path,
+          properties: properties.class,
         });
         const myChart = echarts.init(this.refs.main);
         myChart.setOption({
@@ -626,7 +723,6 @@ class ProjectMap extends Component {
         diglogHidden: false,
         deleteProject: false,
       });
-      console.log(params);
       if (!params.target) {
         myChart.dispatchAction({
           type: 'unfocusNodeAdjacency',
@@ -634,15 +730,13 @@ class ProjectMap extends Component {
         that.Setstateinnerhtml();
         return;
       } else {
+        console.log(params.target.dataType);
         const { dataIndex } = params.target;
         if (!params.target.__cachedNormalStl) return;
         myChart.dispatchAction({
           type: 'focusNodeAdjacency',
           dataIndex: dataIndex,
         });
-        //  let origidata= myChart.getOption.series ? myChart.getOption.series[0].data :null;
-        // let id = origidata[dataIndex].id;
-        // console.log()
         let seriesdata = myChart.getOption().series
           ? myChart.getOption().series[0].data
           : null;
@@ -710,12 +804,13 @@ class ProjectMap extends Component {
     }).then(res => {
       if (res.result == 'success') {
         let data = res.data;
-        const { node_name, std_vocab, syn_vocab, path } = data;
+        const { node_name, std_vocab, syn_vocab, path, properties } = data;
         this.setState({
           ConceptName: node_name,
           std_vocab,
           syn_vocab,
           path,
+          properties: properties.class,
         });
       } else {
         return;
@@ -728,6 +823,7 @@ class ProjectMap extends Component {
       std_vocab: '',
       syn_vocab: [],
       path: [],
+      properties: '',
     });
   };
   blundeventRemoverelationship = () => {
@@ -780,9 +876,6 @@ class ProjectMap extends Component {
       ],
     });
   };
-  // componentWillUnmount() {
-  //   this.myEcharts.dispose();
-  // }
 }
 // 135201711712016086
 const mapStateProps = ({ TapIndex }) => {

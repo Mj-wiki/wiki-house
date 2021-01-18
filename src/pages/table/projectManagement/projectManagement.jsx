@@ -614,6 +614,9 @@ export default class projectManagement extends Component {
           ProjectData: res.data,
           locationCount: res.total,
         });
+        if (res.data.length == 0) {
+          message.error('未查询到相关项目');
+        }
       } else {
         return;
       }
