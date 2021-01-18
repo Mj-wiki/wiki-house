@@ -243,6 +243,10 @@ class ProjectOverview extends Component {
     // var img = new Image();
     // let image = myChart.getDataURL()
     // console.log(image)
+    //  let img = this.refs.main.find("canvas")[0];
+    setTimeout(() => {
+      console.log(document.getElementsByTagName('canvas')[0].toDataURL());
+    }, 5000);
     myChart.getZr().on('click', function(params) {
       SetTapIndex();
     });

@@ -88,14 +88,14 @@ class ProjectMap extends Component {
                 {path.map((item, index) => {
                   if (index == path.length - 1) {
                     return (
-                      <span key={index} className={Style.routeMargin}>
-                        {item}
+                      <span key={index}>
+                        <span className={Style.routeMargin}>{item}</span>
                       </span>
                     );
                   } else {
                     return (
-                      <span key={index} className={Style.routeMargin}>
-                        {item}/
+                      <span key={index}>
+                        <span className={Style.routeMargin}> {item}</span> /
                       </span>
                     );
                   }
@@ -113,8 +113,11 @@ class ProjectMap extends Component {
                           {syn_vocab.map((item, i) => {
                             if (i < 12) {
                               return (
-                                <span key={i} className={Style.routeMargin}>
-                                  {item}
+                                <span key={i}>
+                                  <span className={Style.routeMargin}>
+                                    {item}
+                                  </span>{' '}
+                                  /
                                 </span>
                               );
                             } else {
@@ -132,8 +135,11 @@ class ProjectMap extends Component {
                         <div className={Style.showbtn}>
                           {syn_vocab.map((item, val) => {
                             return (
-                              <span key={val} className={Style.routeMargin}>
-                                {item}
+                              <span key={val}>
+                                <span className={Style.routeMargin}>
+                                  {item}
+                                </span>{' '}
+                                /
                               </span>
                             );
                           })}
@@ -150,8 +156,8 @@ class ProjectMap extends Component {
                     <div>
                       {syn_vocab.map((item, box) => {
                         return (
-                          <span key={box} className={Style.routeMargin}>
-                            {item}
+                          <span key={box}>
+                            <span className={Style.routeMargin}>{item}</span>/
                           </span>
                         );
                       })}
@@ -193,11 +199,11 @@ class ProjectMap extends Component {
                 原始词
               </p>
               <p className={Style.borderslide}>
-                <ArrowRightOutlined style={{ color: '#bd731a' }} />{' '}
+                <ArrowRightOutlined style={{ color: '#F15D53' }} />{' '}
                 <span className={Style.marginrrr}>属于</span>
               </p>
               <p className={Style.borderslide}>
-                <ArrowRightOutlined style={{ color: '#508f9' }} />{' '}
+                <ArrowRightOutlined style={{ color: '#43AC61' }} />{' '}
                 <span className={Style.marginrrr}>标准化为</span>
               </p>
             </div>
@@ -730,18 +736,32 @@ class ProjectMap extends Component {
         that.Setstateinnerhtml();
         return;
       } else {
-        console.log(params.target.dataType);
         const { dataIndex } = params.target;
         if (!params.target.__cachedNormalStl) return;
-        myChart.dispatchAction({
-          type: 'focusNodeAdjacency',
-          dataIndex: dataIndex,
-        });
-        let seriesdata = myChart.getOption().series
-          ? myChart.getOption().series[0].data
-          : null;
-        let id = seriesdata[dataIndex].id;
-        that.GetPrijectStateDelete(id);
+        if (!that.state.isEidet) {
+          if (params.target.dataType == 'edge') {
+            return;
+          }
+          myChart.dispatchAction({
+            type: 'focusNodeAdjacency',
+            dataIndex: dataIndex,
+          });
+          let seriesdata = myChart.getOption().series
+            ? myChart.getOption().series[0].data
+            : null;
+          let id = seriesdata[dataIndex].id;
+          that.GetPrijectStateDelete(id);
+        } else {
+          myChart.dispatchAction({
+            type: 'focusNodeAdjacency',
+            dataIndex: dataIndex,
+          });
+          let seriesdata = myChart.getOption().series
+            ? myChart.getOption().series[0].data
+            : null;
+          let id = seriesdata[dataIndex].id;
+          that.GetPrijectStateDelete(id);
+        }
       }
     });
     // 拖动中
