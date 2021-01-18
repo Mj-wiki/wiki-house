@@ -4,7 +4,7 @@ import { Form, Input, Breadcrumb, Icon, Button, Divider } from 'antd';
 import { connect } from 'umi';
 import * as echarts from 'echarts';
 import Dialog from '@/components/DiaLog';
-
+import { ArrowRightOutlined } from '@ant-design/icons';
 const { Search } = Input;
 const buttonAddStyle = {
   color: '#fff',
@@ -411,6 +411,20 @@ function CheckConceptDetail(props) {
         </div>
         <div className={styles.echartsBox}>
           <div className={styles.legend}>
+            <div className={styles.EachartsState}>
+              <p className={styles.borderslide}>
+                <span className={styles.borderblue}></span>
+                标准词
+              </p>
+              <p className={styles.borderslide}>
+                <span className={styles.borderred}></span>
+                原始词
+              </p>
+              <p className={styles.borderslide}>
+                <ArrowRightOutlined style={{ color: '#59a4f9' }} />{' '}
+                <span style={{ marginLeft: '10px' }}>属于</span>
+              </p>
+            </div>
             <div className={styles.minus}>
               <Button
                 type="primary"
@@ -426,18 +440,14 @@ function CheckConceptDetail(props) {
               >
                 -
               </Button>
-            </div>
-            {endFocusStatus ? (
-              <Button onClick={finishFocus}>结束聚焦</Button>
-            ) : null}
-            <div className={styles.explain}>
-              <div style={{ width: '80px' }}>图例说明 -</div>
-              <div style={{ width: '100px' }}>
-                标准词 : <span className={styles.stand}></span>
-              </div>
-              <div style={{ width: '100px' }}>
-                原始词 : <span className={styles.origin}></span>
-              </div>
+              {endFocusStatus ? (
+                <Button
+                  onClick={finishFocus}
+                  style={{ position: 'relative', top: '-5px' }}
+                >
+                  结束聚焦
+                </Button>
+              ) : null}
             </div>
             <div
               className={styles.hotWordSearch}
