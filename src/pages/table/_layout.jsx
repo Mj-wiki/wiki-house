@@ -53,6 +53,7 @@ function BackStageLayout(props) {
   };
   const checkPersonalMessage = () => {
     console.log('点击查看系统设置');
+    console.log(props);
   };
   const checkSystemState = () => {
     console.log('点击查看个人信息');
@@ -67,7 +68,8 @@ function BackStageLayout(props) {
     history.push('/table/application');
   };
 
-  return (
+  return props.location.pathname.indexOf('/table/checkAppDetail/') > -1 ||
+    props.location.pathname.indexOf('/table/checkConceptDetail/') > -1 ? (
     <div className={styles.normal}>
       <Layout>
         <Header style={{ padding: 0 }}>
@@ -87,6 +89,34 @@ function BackStageLayout(props) {
             >
               联仁归一工具
             </Menu.Item>
+          </Menu>
+        </Header>
+        <Layout>
+          <Content className={styles.site}>{props.children}</Content>
+        </Layout>
+      </Layout>
+    </div>
+  ) : (
+    <div className={styles.normal}>
+      <Layout>
+        <Header style={{ padding: 0 }}>
+          <Menu theme="dark" mode="horizontal" selectable="false">
+            <Menu.Item key="0">
+              <div>
+                <img src={uniLogo} alt="" style={{ width: '40px' }} />
+              </div>
+            </Menu.Item>
+            <Menu.Item
+              key="1"
+              style={{
+                background: 'none',
+                color: 'rgba(255, 255, 255, 0.65)',
+                fontSize: '18px',
+              }}
+            >
+              联仁归一工具
+            </Menu.Item>
+
             <Menu.Item
               key="5"
               style={{

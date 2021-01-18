@@ -24,7 +24,14 @@ const buttonMinusStyle = {
 const HEIGHT = 120;
 
 function CheckConceptDetail(props) {
-  const { history, onInit, dataSource, onFocus } = props;
+  const {
+    history,
+    onInit,
+    dataSource,
+    onFocus,
+    searchKeyword,
+    endFocusStatus,
+  } = props;
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
     diglogHidden: false, //是否展示右键弹出层
@@ -36,59 +43,72 @@ function CheckConceptDetail(props) {
   const domListContent = useRef(null);
   const [listHeight, setListHeight] = useState(0); // 同义词的真实高度
   const [unfold, setUnfold] = useState(false);
-  //存nodeId
+  //存nodeId 原始词
   const [nId, setNId] = useState('');
+  const [hotWord, setHotWord] = useState('');
+  const [transArr, setTransArr] = useState([]);
+  const [cookieList, setCookieList] = useState([]);
+  const [searchModalStatus, setSearchModalStatus] = useState(false);
+  const cookieListData = localStorage.getItem('itemList');
+  useEffect(() => {
+    if (cookieListData) {
+      setTransArr(cookieListData.split(','));
+    }
+  }, [cookieListData]);
+  useEffect(() => {
+    setCookieList(transArr);
+  }, [transArr]);
   useEffect(() => {
     const search = props.match.params;
     onInit(search);
+  }, []);
+
+  useEffect(() => {
+    //展开收起监听
     const resize = () => {
       const listHeight = domListContent.current.offsetHeight;
       setListHeight(listHeight);
     };
     resize();
     window.addEventListener('resize', resize);
-    return () => {
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
 
-  useEffect(() => {
     const myChart = echarts.init(chartRef.current);
     myChart.showLoading();
     // 干掉浏览器默认右键事件
     document.oncontextmenu = function() {
       return false;
     };
-    console.log(dataSource);
     const unifcList = dataSource[0]?.graph['nodes'];
     const unifcLinksData = dataSource[0]?.graph['rels'];
     if (Array.isArray(unifcList)) {
       unifcList.map((v, k) => {
         if (Array.isArray(v.labels) && v.labels[0] === '标准词') {
           v.itemStyle = { normal: { color: 'orange' } };
-          v.symbolSize = 48.685715;
+          v.symbolSize = 88;
           if (v.properties.class === '分类;二级分类') {
             v.itemStyle = { normal: { color: 'rgb(236,81,72)' } };
-            v.symbolSize = 18.685715;
+            v.symbolSize = 48;
           }
           if (v.properties.class === '分类;一级分类') {
             v.itemStyle = { normal: { color: 'blue' } };
-            v.symbolSize = 28.685715;
+            v.symbolSize = 68;
           }
           if (v.properties.class === '顶级节点') {
             v.itemStyle = { normal: { color: 'orange' } };
-            v.symbolSize = 48.685715;
+            v.symbolSize = 88;
           }
         } else {
-          v.itemStyle = { normal: { color: 'lightBlue' } };
-          v.symbolSize = 28.685715;
+          v.itemStyle = { normal: { color: '#59a4f9' } };
+          v.symbolSize = 58;
         }
       });
     }
     myEcharts(unifcList, myChart, unifcLinksData);
-
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
     //初始化方法
-  }, [dataSource, nId]);
+  }, [dataSource]);
 
   const myEcharts = (data, myChart, links) => {
     var categories = [];
@@ -133,10 +153,12 @@ function CheckConceptDetail(props) {
           roam: true,
           focusNodeAdjacency: false, //划过高亮
           draggable: true,
+          edgeSymbol: [null, 'arrow'],
+          edgeSymbolSize: [0, 10],
           itemStyle: {
             borderColor: '#fff',
             borderWidth: 0,
-            shadowBlur: 10,
+            //shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.3)',
           },
           label: {
@@ -150,16 +172,16 @@ function CheckConceptDetail(props) {
           },
           force: {
             // initLayout:'circular',
-            repulsion: 1000,
+            repulsion: 900,
             gravity: 0.1,
-            edgeLength: 300,
+            edgeLength: 400,
             layoutAnimation: false,
             friction: 0.3,
             initLayout: 'none',
           },
           emphasis: {
             lineStyle: {
-              width: 5,
+              width: 3,
             },
           },
         },
@@ -229,11 +251,15 @@ function CheckConceptDetail(props) {
       myChart.hideLoading();
     }, 1200);
   };
-  //
+  //右键聚焦
   const FocusOperation = id => {
-    console.log(id, '这是聚焦操作');
-    //聚焦操作
     onFocus(id);
+    setDiglogConfig({
+      diglogHidden: false,
+      diglogItems: {},
+      x: 0,
+      y: 0,
+    });
   };
   //点击按钮放大或缩小
   const zoomGraph = v => {
@@ -255,6 +281,37 @@ function CheckConceptDetail(props) {
   const clickUnfold = () => {
     domList.current.scrollTop = 0;
     setUnfold(!unfold);
+  };
+  //搜索聚焦
+  const changeSearch = value => {
+    if (value) {
+      cookieList.unshift(value);
+    }
+    value = null;
+    if (cookieList.length > 5) {
+      cookieList.pop();
+    }
+    setCookieList([...new Set(cookieList)]);
+    //搜索首尾去空格
+    const wipeOutBlank = hotWord.replace(/^\s+|\s+$/g, '');
+    searchKeyword(wipeOutBlank);
+    localStorage.setItem('itemList', [...new Set(cookieList)]);
+  };
+
+  const enterKeyword = e => {
+    setHotWord(e.target.value);
+  };
+  const getFocus = e => {
+    e.stopPropagation();
+    setSearchModalStatus(true);
+  };
+  const setHistoryWord = v => {
+    setHotWord(v);
+  };
+  //结束聚焦
+  const finishFocus = () => {
+    const search = props.match.params;
+    onInit(search);
   };
   return (
     <div className={styles.content}>
@@ -298,6 +355,10 @@ function CheckConceptDetail(props) {
             <div className={styles.lectureHospital}>
               <span className={styles.projectName}>领域类型 :</span>
               <span title={dataSource[0]?.area}>{dataSource[0]?.area}</span>
+            </div>
+            <div className={styles.lectureHospital}>
+              <span className={styles.projectName}>属性 :</span>
+              <span>{dataSource[0]?.properties.class}</span>
             </div>
             <div className={styles.lectureHospital}>
               <span className={styles.projectName}>标准词 :</span>
@@ -350,7 +411,26 @@ function CheckConceptDetail(props) {
         </div>
         <div className={styles.echartsBox}>
           <div className={styles.legend}>
-            <div style={{ display: 'flex', width: '400px' }}>
+            <div className={styles.minus}>
+              <Button
+                type="primary"
+                style={buttonAddStyle}
+                onClick={zoomGraph.bind(this, 0)}
+              >
+                +
+              </Button>
+              <Button
+                type="primary"
+                style={buttonMinusStyle}
+                onClick={zoomGraph.bind(this, 1)}
+              >
+                -
+              </Button>
+            </div>
+            {endFocusStatus ? (
+              <Button onClick={finishFocus}>结束聚焦</Button>
+            ) : null}
+            <div className={styles.explain}>
               <div style={{ width: '80px' }}>图例说明 -</div>
               <div style={{ width: '100px' }}>
                 标准词 : <span className={styles.stand}></span>
@@ -359,44 +439,56 @@ function CheckConceptDetail(props) {
                 原始词 : <span className={styles.origin}></span>
               </div>
             </div>
-            <div style={{ textAlign: 'right' }}>
+            <div
+              className={styles.hotWordSearch}
+              onMouseLeave={() => {
+                setSearchModalStatus(false);
+              }}
+            >
               <Search
                 placeholder="请输入关键词搜索"
                 prefix={
                   <Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />
                 }
                 style={{ width: 200, height: '100px !important' }}
-                maxLength={30}
+                onSearch={changeSearch}
+                onChange={enterKeyword}
+                onFocus={getFocus}
+                value={hotWord}
               />
+              <div
+                className={styles.line_hover}
+                style={{ display: searchModalStatus ? 'block' : 'none' }}
+              >
+                {cookieList.map((v, k) => {
+                  let sliceV = v;
+                  if (v && v.length > 12) {
+                    sliceV = v.slice(0, 12) + '...';
+                  }
+                  return (
+                    <div
+                      key={k}
+                      className={styles.cookieLine}
+                      onClick={setHistoryWord.bind(this, v)}
+                      title={v}
+                    >
+                      {sliceV}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
-          <div>
-            <Button
-              type="primary"
-              style={buttonAddStyle}
-              onClick={zoomGraph.bind(this, 0)}
-            >
-              +
-            </Button>
-            <Button
-              type="primary"
-              style={buttonMinusStyle}
-              onClick={zoomGraph.bind(this, 1)}
-            >
-              -
-            </Button>
-
-            <div
-              id="main"
-              ref={chartRef}
-              style={{
-                width: '100%',
-                minHeight: '500px',
-                height: '100%',
-                margin: '0 auto',
-              }}
-            ></div>
-          </div>
+          <div
+            id="main"
+            ref={chartRef}
+            style={{
+              width: '100%',
+              minHeight: '500px',
+              height: '100%',
+              margin: '0 auto',
+            }}
+          ></div>
         </div>
       </div>
 
@@ -413,6 +505,7 @@ function CheckConceptDetail(props) {
 const mapStateProps = ({ checkConceptDetail }) => {
   return {
     dataSource: checkConceptDetail.dataSource,
+    endFocusStatus: checkConceptDetail.endFocusStatus,
   };
 };
 const mapDispatchProps = dispatch => {
@@ -422,6 +515,9 @@ const mapDispatchProps = dispatch => {
     },
     onFocus: nodeId => {
       dispatch({ type: 'checkConceptDetail/onFocus', nodeId });
+    },
+    searchKeyword: keyword => {
+      dispatch({ type: 'checkConceptDetail/searchKeyword', keyword });
     },
   };
 };

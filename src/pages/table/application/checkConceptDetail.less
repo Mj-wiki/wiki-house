@@ -88,9 +88,61 @@
       width: 850px;
       padding: 20px;
       border: 1px solid @colorB;
+
       .legend {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        height: 50px;
+        .minus {
+          width: 200px;
+        }
+        .explain {
+          display: flex;
+          width: 400px;
+          margin-left: 40px;
+        }
+        .line_hover {
+          position: relative;
+          top: 1px;
+          width: 200px;
+          height: auto;
+          line-height: 24px;
+          padding: 10px;
+          border-top: 0px;
+          text-align: center;
+          background: rgba(255, 255, 255, 1);
+          box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.09);
+          border-radius: 4px;
+          z-index: 1000;
+
+          .cookieLine {
+            text-align: left;
+            cursor: pointer;
+            font-weight: 400;
+            color: #999999;
+            &:hover {
+              color: #4abf61;
+            }
+          }
+        }
+        .hotWordSearch {
+          display: inline-block;
+          text-align: right;
+          .emptyHistory {
+            width: 200px;
+            //height: 20px;
+            background: rgba(232, 232, 232, 0.3);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #666666;
+            border: 0px;
+          }
+          .hotSearch {
+            color: #333333;
+            text-align: left;
+          }
+        }
         .stand,
         .origin {
           display: inline-block;
@@ -101,7 +153,7 @@
           vertical-align: middle;
         }
         .origin {
-          background: lightBlue;
+          background: #59a4f9;
           width: 15px;
           height: 15px;
         }
