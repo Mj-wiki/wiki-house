@@ -94,9 +94,9 @@ function BackStageLayout(props) {
         </Header>
         <Layout>
           <Content className={styles.site}>{props.children}</Content>
-          <YMLoading />
         </Layout>
       </Layout>
+      <YMLoading />
     </div>
   ) : (
     <div className={styles.normal}>
@@ -174,9 +174,9 @@ function BackStageLayout(props) {
         </Header>
         <Layout>
           <Content className={styles.site}>{props.children}</Content>
-          <YMLoading />
         </Layout>
       </Layout>
+      <YMLoading />
     </div>
   );
 }
