@@ -5,6 +5,7 @@ import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import SearchNormalizeCard from '@/components/SearchNormalizeCard';
 import coverUrl from '../../../assets/layouticon/KG_2.jpg';
+import noData from '../../../assets/img/noData.png';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { Search } = Input;
@@ -35,6 +36,7 @@ function CheckAppDetail(props) {
   } = history.location;
   //页面初始化调取接口
   useEffect(() => {
+    console.log(dataSource);
     onInit();
   }, []);
   useEffect(() => {
@@ -206,12 +208,19 @@ function CheckAppDetail(props) {
         <div style={{ textAlign: 'left' }}>查询到 {total} 条概念</div>
       ) : null}
       {searchNumber ? (
-        <ColumnLayout
-          list={dataSource}
-          renderItem={changeItemLecture}
-          column={4}
-          direction={'horizontal'}
-        />
+        dataSource?.length > 0 ? (
+          <ColumnLayout
+            list={dataSource}
+            renderItem={changeItemLecture}
+            column={4}
+            direction={'horizontal'}
+          />
+        ) : (
+          <div className={styles.noData}>
+            <img src={noData}></img>
+            <p>暂无数据</p>
+          </div>
+        )
       ) : null}
     </div>
   );

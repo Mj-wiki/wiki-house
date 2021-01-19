@@ -21,6 +21,7 @@ export default function ColumnLayout({
   for (let i = 0; i < column; i++) {
     arr.push(new Array(row).fill(0));
   }
+
   return Array.isArray(list) && list.length > 0 ? (
     <div className={`${style.column_layout_container} ${className}`}>
       {arr.map((item, colIndex) => (
@@ -41,8 +42,8 @@ export default function ColumnLayout({
     </div>
   ) : (
     <div className={style.noData}>
-      <img src={noData}></img>
-      <p>暂无数据</p>
+      {/* <img src={noData}></img>
+      <p>暂无数据</p> */}
     </div>
   );
 }
