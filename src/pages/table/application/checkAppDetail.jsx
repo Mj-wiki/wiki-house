@@ -140,10 +140,11 @@ function CheckAppDetail(props) {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div className={styles.searchArea}>
           <Select
-            placeholder="领域"
+            placeholder="全部领域"
             value={items}
             style={{ width: '240px' }}
             onChange={changeItem}
+            defaultValue={''}
           >
             {fieldData.map((v, k) => {
               return (
@@ -161,7 +162,7 @@ function CheckAppDetail(props) {
             }}
           >
             <Search
-              placeholder="请输入关键词搜索"
+              placeholder="输入关键词查询"
               prefix={
                 <Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />
               }

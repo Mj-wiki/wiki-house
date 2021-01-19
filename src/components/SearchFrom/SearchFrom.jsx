@@ -15,25 +15,28 @@ export default class SearchFrom extends Component {
     return (
       <div className={Style.wrapper}>
         <span className={Style.wrappertitle}>项目管理</span>
-        <div className={Style.Fromdiv}>
-          <Select
-            defaultValue="全部领域"
-            style={{ width: 300 }}
-            onChange={this.handleChange}
-          >
-            {GetfieldList.map((item, index) => {
-              return (
-                <Option value={item.label} key={index}>
-                  {item.value}
-                </Option>
-              );
-            })}
-          </Select>
-          <Search
-            placeholder="输入关键词查询项目"
-            onSearch={this.onSearch}
-            enterButton
-          />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className={Style.searchArea}>
+            <Select
+              defaultValue="全部领域"
+              style={{ width: 150 }}
+              onChange={this.handleChange}
+            >
+              {GetfieldList.map((item, index) => {
+                return (
+                  <Option value={item.label} key={index}>
+                    {item.value}
+                  </Option>
+                );
+              })}
+            </Select>
+            <div className={Style.line}></div>
+            <Search
+              placeholder="输入关键词查询"
+              onSearch={this.onSearch}
+              enterButton
+            />
+          </div>
         </div>
       </div>
     );
