@@ -60,10 +60,10 @@ export default defineConfig({
     },
   ],
   proxy: {
-    '/api': {
-      target: 'http://120.221.160.1:8000/api',
+    '/apl': {
+      target: 'http://120.221.160.1:8000/apl',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      pathRewrite: { '^/apl': '' },
     },
     '/apc': {
       target: 'http://120.221.160.5:9002',

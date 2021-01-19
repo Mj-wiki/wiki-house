@@ -4,14 +4,14 @@ import { url } from '../../env';
 
 //新增项目
 export const CreateProject = data => {
-  return request('/api/project/create/', {
+  return request('/apl/project/create/', {
     method: 'post',
     data: data,
   });
 };
 //项目列表
 export const GetProjectList = data => {
-  return request(`/api/project/list/`, {
+  return request(`/apl/project/list/`, {
     method: 'get',
     params: data,
   });
@@ -21,7 +21,7 @@ export const GetProjectList = data => {
 export const deleteProject = data => {
   const { ProjectId, username } = data;
   return request(
-    `/api/project/delete/?id=${ProjectId}&update_user=${username}`,
+    `/apl/project/delete/?id=${ProjectId}&update_user=${username}`,
     {
       method: 'get',
     },
@@ -29,46 +29,46 @@ export const deleteProject = data => {
 };
 
 export const initHomeStatistics = data => {
-  return request(`/api/statistics/`, {
+  return request(`/apl/statistics/`, {
     method: 'get',
   });
 };
 
 export const initEachartsData = data => {
-  return request(`/api/chart/`, {
+  return request(`/apl/chart/`, {
     method: 'get',
   });
 };
 
 export const uploadFile = data => {
-  return request(`/api/project/upload/`, {
+  return request(`/apl/project/upload/`, {
     method: 'post',
     data: data,
   });
 };
 
 export const ProjectDetail = data => {
-  return request(`/api/project/detail/?id=${data}`, {
+  return request(`/apl/project/detail/?id=${data}`, {
     method: 'get',
   });
 };
 
 export const Getfield = data => {
-  return request(`/api/project/fieldList/`, {
+  return request(`/apl/project/fieldList/`, {
     method: 'get',
   });
 };
 
 export const PrijectUpdate = data => {
-  return request(`/api/project/update/`, {
+  return request(`/apl/project/update/`, {
     method: 'post',
     data: data,
   });
 };
-// /api/project/queryConceptInfo/
-//http://127.0.0.1:8000/api/project/selectProjectConceptInfo/?project_id=PJ1dacfe724fc411ebb771fa163eac98f2&concept_name=某些传染病和寄生虫病9740
+// /apl/project/queryConceptInfo/
+//http://127.0.0.1:8000/apl/project/selectProjectConceptInfo/?project_id=PJ1dacfe724fc411ebb771fa163eac98f2&concept_name=某些传染病和寄生虫病9740
 export const queryConcept = data => {
-  return request(`/api/project/selectProjectConceptInfo/`, {
+  return request(`/apl/project/selectProjectConceptInfo/`, {
     method: 'get',
     params: data,
   });
