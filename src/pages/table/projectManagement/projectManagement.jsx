@@ -25,6 +25,15 @@ import {
 } from '@/api/Project.jsx';
 // import UpFile from './index'
 import { transformationTime } from '@/utils/dateUtil.js';
+const radioStyle = {
+  width: '150px',
+  height: '30px',
+  border: '0px',
+  background: '#353d58',
+  borderRadius: '28px',
+  lineHeight: '20px',
+  color: '#fff',
+};
 export default class projectManagement extends Component {
   state = {
     isModalVisible: false,
@@ -164,7 +173,8 @@ export default class projectManagement extends Component {
                     </div>
                     <Button
                       type="primary"
-                      className={Style.antdbutton}
+                      //className={Style.antdbutton}
+                      style={radioStyle}
                       onClick={() => this.blundeventToDetail(item)}
                     >
                       查看
