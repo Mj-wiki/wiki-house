@@ -52,6 +52,7 @@ class ProjectMap extends Component {
     ClasName: '',
     properties: '',
     listshow: true,
+    balbelflage: true,
   };
   formRef = React.createRef();
   render() {
@@ -74,6 +75,7 @@ class ProjectMap extends Component {
       properties,
       solidName,
       ClasName,
+      balbelflage,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -167,7 +169,10 @@ class ProjectMap extends Component {
               </div>
             </div>
           </div>
-          <div className={Style.promap}>
+          <div
+            className={Style.promap}
+            style={{ border: isEidet ? '1px solid red' : '' }}
+          >
             {/* {isEidet ? (
               <Button
                 type="primary"
@@ -224,7 +229,7 @@ class ProjectMap extends Component {
                   style={{ width: '100px' }}
                   className={Style.Endediting}
                 >
-                  编辑模式
+                  开始编辑
                 </Button>
               )}
               {OverFocus ? (
@@ -304,20 +309,24 @@ class ProjectMap extends Component {
                 </p>
                 {isEidet ? (
                   <div>
-                    <p
-                      className={Style.editslide}
-                      onClick={() => this.BlundeventshowDialog()}
-                    >
-                      <PlusOutlined className={Style.iconRight} />
-                      添加关系
-                    </p>
-                    <p
-                      className={Style.editslide}
-                      onClick={() => this.blundeventAddconcept()}
-                    >
-                      <DeleteOutlined className={Style.iconRight} />
-                      添加概念
-                    </p>
+                    {balbelflage ? (
+                      <div>
+                        <p
+                          className={Style.editslide}
+                          onClick={() => this.BlundeventshowDialog()}
+                        >
+                          <PlusOutlined className={Style.iconRight} />
+                          添加关系
+                        </p>
+                        <p
+                          className={Style.editslide}
+                          onClick={() => this.blundeventAddconcept()}
+                        >
+                          <DeleteOutlined className={Style.iconRight} />
+                          添加概念
+                        </p>
+                      </div>
+                    ) : null}
                     <p
                       className={Style.editslide}
                       onClick={() => this.blundeventRemoverelationship()}
@@ -414,8 +423,8 @@ class ProjectMap extends Component {
               ]}
             >
               <Select onChange={this.blundSelect}>
-                <Option value="0">原始词</Option>
-                <Option value="1">标准词</Option>
+                <Option value="belong_to">标准化为</Option>
+                <Option value="is">属于</Option>
               </Select>
             </Form.Item>
           </Form>
@@ -503,15 +512,42 @@ class ProjectMap extends Component {
     //保存添加概念接口
     const { node_ID } = this.state;
     const random = randomString();
-    console.log(random, node_ID);
+    console.log(random);
     const form = this.formRef.current;
     try {
       let value = await form.validateFields(['conceptName', 'conceptType']);
       const { conceptName, conceptType } = value;
       console.log(conceptName, conceptType);
-      // this.setState({
-      //   Addconcept: false,
-      // });
+
+      const myChart = echarts.init(this.refs.main);
+      let option = myChart.getOption().series[0];
+      let node = option.data;
+      let links = option.links;
+
+      let nodedata = {
+        id: random,
+        labels: ['标准词'],
+        name: conceptName,
+        properties: { class: '' },
+      };
+      let linksdata = {
+        name: conceptType,
+        source: random,
+        target: String(node_ID),
+      };
+      links.push(linksdata);
+      node.push(nodedata);
+      myChart.setOption({
+        series: [
+          {
+            links: SetLineData(links),
+            data: SetSolidData(node),
+          },
+        ],
+      });
+      this.setState({
+        Addconcept: false,
+      });
     } catch (err) {}
   };
   blundeventAddconcept = () => {
@@ -601,7 +637,7 @@ class ProjectMap extends Component {
           lintArray: relsData,
           nodeArray: nodesData,
         });
-        const myChart = echarts.init(this.refs.main);
+        const myChart = this.refs.main ? echarts.init(this.refs.main) : null;
         if (myChart) {
           myChart.showLoading();
           this.myEcharts(
@@ -628,7 +664,7 @@ class ProjectMap extends Component {
         show: node.symbolSize > 1,
       };
       // node.category = node.attributes.modularity_class;
-      node.category = node.properties.code;
+      // node.category = node.properties.code;
     });
 
     myChart.setOption({
@@ -647,7 +683,7 @@ class ProjectMap extends Component {
       animation: false,
       series: [
         {
-          zoom: 0.5,
+          zoom: 0.2,
           type: 'graph',
           layout: 'force',
           data,
@@ -674,9 +710,9 @@ class ProjectMap extends Component {
           },
           force: {
             // initLayout:'circular',
-            repulsion: 400,
-            gravity: 0.1,
-            edgeLength: 300,
+            repulsion: 2000,
+            gravity: 0,
+            edgeLength: 600,
             layoutAnimation: false,
             friction: 0.3,
             initLayout: 'none',
@@ -693,9 +729,26 @@ class ProjectMap extends Component {
     myChart.on('contextmenu', function(params) {
       if (typeof params === 'object') {
         // const { dataIndex } = params.target;
-        let id = params.data.id;
+        let id = params.data.id; //时间戳
         let source = params.data.source;
         console.log(params);
+        //  let labels =params.data.labels[0];
+        if (params.data.labels) {
+          let labels = params.data.labels[0];
+          if (labels == '标准词') {
+            that.setState(state => {
+              return {
+                balbelflage: true,
+              };
+            });
+          } else {
+            that.setState(state => {
+              return {
+                balbelflage: false,
+              };
+            });
+          }
+        }
         let solidName = params.data.name;
         let ClasName = params.data.properties
           ? params.data.properties.class
@@ -775,7 +828,7 @@ class ProjectMap extends Component {
   };
   onSearch = val => {
     this.setState({
-      placeholderText: '输入概念名',
+      placeholderText: '请输入关键字',
       eidetText: true,
     });
     this.GetPrijectState(val);

@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { connect } from 'umi';
 import { initHomeStatistics } from '@/api/Project.jsx';
-
+import { transform } from '../../../utils/Config';
 function TableList(props) {
   const [projects, setprojects] = useState('');
   const [triples, settriples] = useState('');
@@ -78,7 +78,7 @@ function TableList(props) {
           </div>
           <div className={styles.eachartright}>
             <EachartsTable />
-            <p className={styles.textadd}>项目数增涨图</p>
+            <p className={styles.textadd}>项目数趋势图</p>
           </div>
         </div>
         <div className={styles.autobottom}>

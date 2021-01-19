@@ -205,7 +205,7 @@ class ProjectOverview extends Component {
         {
           edgeSymbol: ['circle', 'arrow'],
           edgeSymbolSize: [0, 10],
-          zoom: 0.3,
+          zoom: 0.2,
           type: 'graph',
           layout: 'force',
           data,

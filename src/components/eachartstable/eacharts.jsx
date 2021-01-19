@@ -40,28 +40,31 @@ export default class componentName extends Component {
         top: '5%',
         left: '8%',
       },
-      yAxis: {
-        type: 'value',
-        name: '项目数',
-        nameLocation: 'middle',
-        min: 0,
-        max: NUmberBig,
-        axisLabel: {
-          margin: 15,
-          color: '#465054',
+      yAxis: [
+        {
+          type: 'value',
+          name: '项目数',
+          nameLocation: 'middle',
+          min: 0,
+          max: NUmberBig,
+          axisLabel: {
+            margin: 15,
+            color: '#465054',
+          },
+          axisTick: {
+            show: false,
+          },
+          nameTextStyle: {
+            fontStyle: 'normal',
+            verticalAlign: 'bottom',
+            lineHeight: 100,
+            color: '#465054',
+            fontWeight: 'bolder',
+            fontSize: 14,
+          },
+          nameGap: 0,
         },
-        axisTick: {
-          show: false,
-        },
-        nameTextStyle: {
-          fontStyle: 'normal',
-          verticalAlign: 'bottom',
-          lineHeight: 100,
-          color: '#465054',
-          fontWeight: 'bolder',
-          fontSize: 14,
-        },
-      },
+      ],
       series: [
         {
           data: xState,
