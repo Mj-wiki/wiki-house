@@ -11,25 +11,25 @@ export const Login = data => {
 
 //领域下拉框列表
 export function requestGetFieldList(values) {
-  return request(`/api/project/fieldList/`);
+  return request(`/apl/project/fieldList/`);
 }
 //归一查询项目列表（初始化列表）
 export function requestGetList(values) {
-  return request(`/api/project/list/`);
+  return request(`/apl/project/list/`);
 }
 //归一查询关键字搜索列表
 export function requestGetCheckList(values) {
-  return request(`/api/project/queryConcept/${objToSearchUrl(values)}`);
+  return request(`/apl/project/queryConcept/${objToSearchUrl(values)}`);
 }
 //概念详情页信息接口
 export function requestGetConceptInfo(values) {
-  return request(`/api/project/queryConceptInfo/${objToSearchUrl(values)}`);
+  return request(`/apl/project/queryConceptInfo/${objToSearchUrl(values)}`);
 }
 
 //编辑保存用户
 export function requestPostUserSave(values) {
   console.log(values);
-  return request(`/api/knowledge-graph/user-save?uid=${values['uid']}`, {
+  return request(`/apl/knowledge-graph/user-save?uid=${values['uid']}`, {
     method: 'post',
     data: {
       ...values,
