@@ -17,6 +17,9 @@ request.interceptors.request.use((url, options) => {
     options: {
       ...options,
     },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
   };
 });
 
