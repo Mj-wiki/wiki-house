@@ -61,7 +61,7 @@ export default defineConfig({
   ],
   proxy: {
     '/apl': {
-      target: 'http://120.221.160.1:8000/apl',
+      target: 'http://120.221.160.106:8000/apl',
       changeOrigin: true,
       pathRewrite: { '^/apl': '' },
     },
