@@ -74,21 +74,21 @@ export const queryConcept = data => {
   });
 };
 export const queryProjectConceptInfo = data => {
-  return request(`/api/project/queryProjectConceptInfo/`, {
+  return request(`/apl/project/queryProjectConceptInfo/`, {
     method: 'get',
     params: data,
   });
 };
 
 export const copyProjectId = data => {
-  return request(`/api/project/copy/`, {
+  return request(`/apl/project/copy/`, {
     method: 'get',
     params: data,
   });
 };
 
 export const focusProjectConceptInfo = data => {
-  return request(`/api/project/focusProjectConceptInfo/`, {
+  return request(`/apl/project/focusProjectConceptInfo/`, {
     method: 'get',
     params: data,
   });
@@ -103,7 +103,7 @@ export const uploadImg = data => {
 };
 
 export const updatePrijectImg = data => {
-  return request(`/api/project/updatePhoto/`, {
+  return request(`/apl/project/updatePhoto/`, {
     method: 'post',
     data: data,
   });

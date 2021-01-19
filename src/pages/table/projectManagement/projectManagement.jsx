@@ -371,8 +371,7 @@ export default class projectManagement extends Component {
           project_code,
           project_introduction,
           project_status: 1,
-          project_photo:
-            'https://dev.lrhealth.com/api/base/util/DownloadFile/0800bfc6-e9f3-40ee-9d52-6c4ab10333d1.jpg',
+          project_photo: '',
           project_fieldname: project_fieldcode,
           update_user: username,
         };
@@ -397,8 +396,7 @@ export default class projectManagement extends Component {
           project_code,
           project_introduction,
           project_status: 1,
-          project_photo:
-            'https://dev.lrhealth.com/api/base/util/DownloadFile/0800bfc6-e9f3-40ee-9d52-6c4ab10333d1.jpg',
+          project_photo: '',
           project_fieldname: project_fieldcode,
           create_user: username,
         };
@@ -423,8 +421,7 @@ export default class projectManagement extends Component {
           project_code,
           project_introduction,
           project_status: 1,
-          project_photo:
-            'https://dev.lrhealth.com/api/base/util/DownloadFile/0800bfc6-e9f3-40ee-9d52-6c4ab10333d1.jpg',
+          project_photo: '',
           project_fieldname: project_fieldcode,
           create_user: username,
         };

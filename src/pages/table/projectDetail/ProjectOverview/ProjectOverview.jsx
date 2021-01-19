@@ -22,6 +22,7 @@ class ProjectOverview extends Component {
     project_name: '',
     create_user: '',
     update_user: '',
+    Image: '',
   };
   render() {
     const {
@@ -126,8 +127,10 @@ class ProjectOverview extends Component {
           project_triples,
           trees,
           project_id,
+          project_photo,
         } = res.data;
         this.setState({
+          Image: project_photo,
           project_code: project_code,
           project_fieldcode: project_fieldcode,
           project_fieldname: project_fieldname,
@@ -257,6 +260,8 @@ class ProjectOverview extends Component {
     }, 1500);
   };
   bluneventimg = base64String => {
+    const { Image } = this.state;
+    if (Image) return;
     let bytes = window.atob(base64String.split(',')[1]);
     let array = [];
     for (let i = 0; i < bytes.length; i++) {
@@ -268,15 +273,15 @@ class ProjectOverview extends Component {
     // 注：此处 file 应和后台接收参数匹配
     fd.append('file', blob, Date.now() + '.jpg');
     fd.append('contentTypeCode', '36');
+
     this.uploadImg(fd);
   };
   uploadImg = fd => {
     const { Id } = this.state;
     uploadImg(fd).then(res => {
       if (res.code == 0) {
-        console.log(res);
-        const { fileUrl } = res.data;
-        let url = 'http://120.221.160.5:9002/' + fileUrl;
+        const { fileUrl, envPath } = res.data;
+        let url = envPath + '/' + fileUrl;
         updatePrijectImg({
           photo: url,
           id: Id,
