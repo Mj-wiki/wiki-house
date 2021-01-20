@@ -182,18 +182,18 @@ class ProjectMap extends Component {
                 + 添加概念
               </Button>
             ) : null} */}
-            <div
+            <Button
               className={Style.promapAdd}
               onClick={() => this.blundmapbigadd(0)}
             >
               +
-            </div>
-            <div
+            </Button>
+            <Button
               className={Style.promapRemove}
               onClick={() => this.blundmapbigadd(1)}
             >
               -
-            </div>
+            </Button>
             <div className={Style.EachartsState}>
               <p className={Style.borderslide}>
                 <span className={Style.borderblue}></span>
