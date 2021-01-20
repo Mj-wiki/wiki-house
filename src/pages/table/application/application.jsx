@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './application.less';
-import { Tabs, Form, Tag, Breadcrumb, Modal } from 'antd';
+import { Tabs, Form, Tag, Breadcrumb, Modal, Message } from 'antd';
 import { connect } from 'umi';
 import ColumnLayout from '@/components/ColumnLayout';
 import ContentCard from '@/components/ContentCard';
@@ -36,11 +36,12 @@ function TableEdit(props) {
   }, [editData]);
   const skipDetailLecture = appId => {
     if (appId === 2) {
-      Modal.info({
-        title: '提示',
-        content: '敬请期待后续的应用项目~',
-        okText: '知道了',
-      });
+      // Modal.info({
+      //   title: '提示',
+      //   content: '敬请期待后续的应用项目~',
+      //   okText: '知道了',
+      // });
+      Message.info('敬请期待后续的应用项目~');
       return;
     }
     if (!appId) appId = 1;

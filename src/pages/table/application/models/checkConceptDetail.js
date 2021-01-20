@@ -1,5 +1,5 @@
 import { requestGetConceptInfo } from '../../services';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
 
 const initState = {
   dataSource: [],
@@ -97,16 +97,17 @@ export default {
       handleData[0].graph.nodes = nodeData;
       handleData[0].graph.rels = relsData;
       if (relsData.length === 0) {
-        Modal.error({
-          title: '提示',
-          content: '未查询到相应聚焦图例！',
-          okText: '知道了',
-        });
+        message.error('未查询到相应聚焦图例！');
+        // Modal.error({
+        //   title: '提示',
+        //   content: '未查询到相应聚焦图例！',
+        //   okText: '知道了',
+        // });
         yield put({
           type: 'changeState',
           payload: {
             dataSource,
-            endFocusStatus: 0,
+            endFocusStatus: 1,
           },
         });
         return;

@@ -51,18 +51,19 @@ function CheckAppDetail(props) {
   //查询
   const changeSearch = value => {
     if (!hotWord) {
-      const config = {
-        title: '查询提示',
-        icon: <ExclamationCircleOutlined />,
-        content: (
-          <>
-            <div>需输入关键词！</div>
-          </>
-        ),
-        okText: '确定',
-        cancelText: '取消',
-      };
-      Modal.confirm(config);
+      // const config = {
+      //   title: '查询提示',
+      //   icon: <ExclamationCircleOutlined />,
+      //   content: (
+      //     <>
+      //       <div>需输入关键词！</div>
+      //     </>
+      //   ),
+      //   okText: '确定',
+      //   cancelText: '取消',
+      // };
+      // Modal.confirm(config);
+      Message.error('需输入关键词！');
       return;
     }
     setSearchNumber(1);
