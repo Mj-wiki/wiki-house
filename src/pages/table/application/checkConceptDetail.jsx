@@ -27,6 +27,7 @@ function CheckConceptDetail(props) {
     onFocus,
     searchKeyword,
     endFocusStatus,
+    properties,
   } = props;
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
@@ -358,9 +359,13 @@ function CheckConceptDetail(props) {
               <span className={styles.projectName}>领域类型 :</span>
               <span title={dataSource[0]?.area}>{dataSource[0]?.area}</span>
             </div>
-            <div className={styles.lectureHospital}>
+            <div className={styles.properties}>
               <span className={styles.projectName}>属性 :</span>
-              <span>{dataSource[0]?.properties.class}</span>
+              <span>
+                {properties.map((v, k) => {
+                  return <div key={k}>{v}</div>;
+                })}
+              </span>
             </div>
             <div className={styles.lectureHospital}>
               <span className={styles.projectName}>标准词 :</span>
@@ -517,6 +522,7 @@ const mapStateProps = ({ checkConceptDetail }) => {
   return {
     dataSource: checkConceptDetail.dataSource,
     endFocusStatus: checkConceptDetail.endFocusStatus,
+    properties: checkConceptDetail.properties,
   };
 };
 const mapDispatchProps = dispatch => {
