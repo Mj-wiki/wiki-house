@@ -7,16 +7,12 @@ import Dialog from '@/components/DiaLog';
 import { ArrowRightOutlined } from '@ant-design/icons';
 const { Search } = Input;
 const buttonAddStyle = {
-  color: '#fff',
-  borderRadius: '5px',
   marginRight: '10px',
   fontSize: '25px',
   lineHeight: '20px',
   padding: '4px 12px',
 };
 const buttonMinusStyle = {
-  color: '#fff',
-  borderRadius: '5px',
   marginRight: '10px',
   fontSize: '25px',
   lineHeight: '20px',
@@ -31,6 +27,7 @@ function CheckConceptDetail(props) {
     onFocus,
     searchKeyword,
     endFocusStatus,
+    properties,
   } = props;
   const chartRef = useRef(null);
   const [diglogConfig, setDiglogConfig] = useState({
@@ -137,7 +134,7 @@ function CheckConceptDetail(props) {
     myChart.setOption({
       tooltip: {
         formatter: function(x) {
-          return x.name; //设置提示框的内容和格式 节点和边都显示name属性
+          return x.data.name; //设置提示框的内容和格式 节点和边都显示name属性
         },
       },
       toolbox: {},
@@ -200,8 +197,8 @@ function CheckConceptDetail(props) {
         setDiglogConfig({
           diglogHidden: true,
           diglogItems: params,
-          x: params.event.offsetX + 520,
-          y: params.event.offsetY + 200,
+          x: params.event.offsetX + 10,
+          y: params.event.offsetY,
         });
       }
     });
@@ -362,9 +359,13 @@ function CheckConceptDetail(props) {
               <span className={styles.projectName}>领域类型 :</span>
               <span title={dataSource[0]?.area}>{dataSource[0]?.area}</span>
             </div>
-            <div className={styles.lectureHospital}>
+            <div className={styles.properties}>
               <span className={styles.projectName}>属性 :</span>
-              <span>{dataSource[0]?.properties.class}</span>
+              <span>
+                {properties.map((v, k) => {
+                  return <div key={k}>{v}</div>;
+                })}
+              </span>
             </div>
             <div className={styles.lectureHospital}>
               <span className={styles.projectName}>标准词 :</span>
@@ -432,19 +433,14 @@ function CheckConceptDetail(props) {
               </p>
               <p className={styles.borderslide}>
                 <ArrowRightOutlined style={{ color: '#59a4f9' }} />{' '}
-                <span style={{ marginLeft: '10px' }}>属于</span>
+                <span style={{ marginLeft: '10px' }}>标准化为</span>
               </p>
             </div>
             <div className={styles.minus}>
-              <Button
-                type="primary"
-                style={buttonAddStyle}
-                onClick={zoomGraph.bind(this, 0)}
-              >
+              <Button style={buttonAddStyle} onClick={zoomGraph.bind(this, 0)}>
                 +
               </Button>
               <Button
-                type="primary"
                 style={buttonMinusStyle}
                 onClick={zoomGraph.bind(this, 1)}
               >
@@ -455,7 +451,7 @@ function CheckConceptDetail(props) {
                   onClick={finishFocus}
                   style={{ position: 'relative', top: '-5px' }}
                 >
-                  结束聚焦
+                  返回初始状态
                 </Button>
               ) : null}
             </div>
@@ -507,18 +503,18 @@ function CheckConceptDetail(props) {
               minHeight: '500px',
               height: '100%',
               margin: '0 auto',
+              positon: 'relative',
             }}
           ></div>
+          <Dialog
+            item={diglogConfig.diglogItems}
+            hidden={diglogConfig.diglogHidden}
+            x={diglogConfig.x}
+            y={diglogConfig.y}
+            onClick={FocusOperation.bind(this, nId)}
+          ></Dialog>
         </div>
       </div>
-
-      <Dialog
-        item={diglogConfig.diglogItems}
-        hidden={diglogConfig.diglogHidden}
-        x={diglogConfig.x}
-        y={diglogConfig.y}
-        onClick={FocusOperation.bind(this, nId)}
-      ></Dialog>
     </div>
   );
 }
@@ -526,6 +522,7 @@ const mapStateProps = ({ checkConceptDetail }) => {
   return {
     dataSource: checkConceptDetail.dataSource,
     endFocusStatus: checkConceptDetail.endFocusStatus,
+    properties: checkConceptDetail.properties,
   };
 };
 const mapDispatchProps = dispatch => {

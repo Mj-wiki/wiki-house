@@ -26,7 +26,7 @@ const Model = {
         yield put({
           type: 'save',
           payload: {
-            errorInfo: 'Username不能为空。',
+            errorInfo: '用户名不能为空。',
           },
         });
         return;
@@ -36,7 +36,7 @@ const Model = {
         yield put({
           type: 'save',
           payload: {
-            errorInfo: 'PassWord不能为空。',
+            errorInfo: '密码不能为空。',
           },
         });
         return;

@@ -51,18 +51,19 @@ function CheckAppDetail(props) {
   //查询
   const changeSearch = value => {
     if (!hotWord) {
-      const config = {
-        title: '查询提示',
-        icon: <ExclamationCircleOutlined />,
-        content: (
-          <>
-            <div>需输入关键词！</div>
-          </>
-        ),
-        okText: '确定',
-        cancelText: '取消',
-      };
-      Modal.confirm(config);
+      // const config = {
+      //   title: '查询提示',
+      //   icon: <ExclamationCircleOutlined />,
+      //   content: (
+      //     <>
+      //       <div>需输入关键词！</div>
+      //     </>
+      //   ),
+      //   okText: '确定',
+      //   cancelText: '取消',
+      // };
+      // Modal.confirm(config);
+      Message.error('需输入关键词！');
       return;
     }
     setSearchNumber(1);
@@ -140,10 +141,11 @@ function CheckAppDetail(props) {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div className={styles.searchArea}>
           <Select
-            placeholder="领域"
+            placeholder="全部领域"
             value={items}
             style={{ width: '240px' }}
             onChange={changeItem}
+            defaultValue={''}
           >
             {fieldData.map((v, k) => {
               return (
@@ -161,7 +163,7 @@ function CheckAppDetail(props) {
             }}
           >
             <Search
-              placeholder="请输入关键词搜索"
+              placeholder="输入关键词查询"
               prefix={
                 <Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />
               }

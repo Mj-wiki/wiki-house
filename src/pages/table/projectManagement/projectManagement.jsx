@@ -103,9 +103,9 @@ export default class projectManagement extends Component {
             {locationshow == true ? <p>查询到{locationCount}条结果</p> : null}
             <p></p>
             <Button
-              type="primary"
+              //type="primary"
               onClick={() => this.Blundeventshowproject()}
-              className={Style.addbtn}
+              //className={Style.addbtn}
             >
               + 创建项目
             </Button>

@@ -1,5 +1,5 @@
 import { requestGetConceptInfo } from '../../services';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
 
 const initState = {
   dataSource: [],
@@ -10,6 +10,7 @@ const initState = {
   project_fieldcode: '',
   project_name: '',
   endFocusStatus: 0,
+  properties: [],
 };
 
 export default {
@@ -97,16 +98,17 @@ export default {
       handleData[0].graph.nodes = nodeData;
       handleData[0].graph.rels = relsData;
       if (relsData.length === 0) {
-        Modal.error({
-          title: '提示',
-          content: '未查询到相应聚焦图例！',
-          okText: '知道了',
-        });
+        message.error('未查询到相应聚焦图例！');
+        // Modal.error({
+        //   title: '提示',
+        //   content: '未查询到相应聚焦图例！',
+        //   okText: '知道了',
+        // });
         yield put({
           type: 'changeState',
           payload: {
             dataSource,
-            endFocusStatus: 0,
+            endFocusStatus: 1,
           },
         });
         return;
@@ -162,12 +164,17 @@ export default {
 
         const data = yield call(requestGetConceptInfo, searchObj);
 
+        //属性对象和属性数组
+        let propertyObject = {};
+        let propertyList = [];
         let emptyObject = {};
         if (Array.isArray(data.data)) {
           data.data[0]?.graph?.rels.map((v, k) => {
             emptyObject = { name: v.name, source: v.target, target: v.target };
           });
           data.data[0]?.graph.rels.unshift(emptyObject);
+          propertyObject = data.data[0].properties;
+          propertyList = Object.values(propertyObject);
         }
         if (data.result === 'success') {
           yield put({
@@ -176,6 +183,7 @@ export default {
               dataSource: data.data,
               total: data.total,
               endFocusStatus: 0,
+              properties: propertyList,
             },
           });
         } else {
@@ -185,6 +193,7 @@ export default {
               dataSource: [],
               total: 0,
               endFocusStatus: 0,
+              properties: [],
             },
           });
         }
