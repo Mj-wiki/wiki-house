@@ -81,8 +81,15 @@ function CheckConceptDetail(props) {
     if (Array.isArray(unifcList)) {
       unifcList.map((v, k) => {
         if (Array.isArray(v.labels) && v.labels[0] === '标准词') {
-          v.itemStyle = { normal: { color: 'orange' } };
-          v.symbolSize = 88;
+          if (search.itemId == v.id) {
+            v.itemStyle = {
+              normal: { color: 'orange', borderColor: '#f40', borderWidth: 4 },
+            };
+            v.symbolSize = 88;
+          } else {
+            v.itemStyle = { normal: { color: 'orange' } };
+            v.symbolSize = 88;
+          }
           if (v.properties.class === '分类;二级分类') {
             v.itemStyle = { normal: { color: 'rgb(236,81,72)' } };
             v.symbolSize = 48;
@@ -97,7 +104,9 @@ function CheckConceptDetail(props) {
           }
         } else {
           if (search.itemId == v.id) {
-            v.itemStyle = { normal: { color: '#f40' } };
+            v.itemStyle = {
+              normal: { color: '#59a4f9', borderColor: '#f40', borderWidth: 4 },
+            };
             v.symbolSize = 58;
           } else {
             v.itemStyle = { normal: { color: '#59a4f9' } };
@@ -142,12 +151,12 @@ function CheckConceptDetail(props) {
         height: '100%',
         width: '100%',
       },
-      animationDuration: 1500,
-      animationEasingUpdate: 'quinticInOut',
+      animationDuration: 1500, //数据更新动画的时长
+      animationEasingUpdate: 'quinticInOut', //数据更新动画的缓动效果
       animation: false,
       series: [
         {
-          // center: [0, 0],
+          //center: [0, 0],
           zoom: 0.5,
           type: 'graph',
           layout: 'force',
@@ -155,12 +164,12 @@ function CheckConceptDetail(props) {
           links,
           roam: true,
           focusNodeAdjacency: false, //划过高亮
-          draggable: true,
+          draggable: false,
           edgeSymbol: [null, 'arrow'],
           edgeSymbolSize: [0, 10],
           itemStyle: {
             borderColor: '#fff',
-            borderWidth: 0,
+            borderWidth: 2,
             //shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.3)',
           },
@@ -175,8 +184,8 @@ function CheckConceptDetail(props) {
           },
           force: {
             // initLayout:'circular',
-            repulsion: 900,
-            gravity: 0.1,
+            repulsion: 1000,
+            gravity: 0,
             edgeLength: 400,
             layoutAnimation: false,
             friction: 0.3,
@@ -218,6 +227,7 @@ function CheckConceptDetail(props) {
         y: params.event.offsetY,
       });
       setNId('');
+
       if (!params.target) {
         myChart.dispatchAction({
           type: 'unfocusNodeAdjacency',
