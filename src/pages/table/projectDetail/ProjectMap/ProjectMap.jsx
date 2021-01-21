@@ -6,6 +6,7 @@ import {
   CloseSquareOutlined,
   PlusOutlined,
   DeleteOutlined,
+  ArrowRightOutlined,
 } from '@ant-design/icons';
 import {
   ProjectDetail,
@@ -13,7 +14,6 @@ import {
   queryProjectConceptInfo,
   focusProjectConceptInfo,
 } from '@/api/Project.jsx';
-import { ArrowRightOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
 import { SetSolidData, SetLineData, randomString } from '@/utils/Config.js';
 import InputDialog from '@/components/Addproject/Addproject';
@@ -28,7 +28,16 @@ const layout = {
 class ProjectMap extends Component {
   state = {
     diglogHidden: false, //是否展示右键弹出层
-    node_ID: '', //弹出层数据对象
+    AddRelationship: false,
+    InputDialogShow: false,
+    Addconcept: false,
+    eidetText: false,
+    isEidet: false,
+    OverFocus: false,
+    deleteProject: false,
+    listshow: true,
+    balbelflage: true,
+    nameflage: false,
     x: 0,
     y: 0,
     eachartBigorSmall: 1,
@@ -36,23 +45,27 @@ class ProjectMap extends Component {
     nodesData: [],
     lintArray: [],
     nodeArray: [],
-    InputDialogShow: false,
-    Addconcept: false,
-    eidetText: false,
-    isEidet: false,
     placeholderText: '使用搜索功能查看更多概念',
     SearchData: [],
-    ConceptName: '', //概念名
-    std_vocab: '', //标准词
     syn_vocab: [], //同义词
-    OverFocus: false,
     path: [],
-    deleteProject: false,
+    edit_list: [],
     solidName: '',
     ClasName: '',
     properties: '',
-    listshow: true,
-    balbelflage: true,
+    dataIndex: '',
+    sourename: '',
+    node_ID: '', //弹出层数据对象
+    ConceptName: '', //概念名
+    std_vocab: '', //标准词
+    SolidId: '', //概念ID
+    RightBtnId: '',
+    Id: '',
+    U_ID: '',
+    source: '',
+    target: '',
+    type: '',
+    Uid: '',
   };
   formRef = React.createRef();
   render() {
@@ -76,6 +89,8 @@ class ProjectMap extends Component {
       solidName,
       ClasName,
       balbelflage,
+      sourename,
+      nameflage,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -236,10 +251,10 @@ class ProjectMap extends Component {
                 <Button
                   type="primary"
                   onClick={() => this.blundeventFocuseRemove()}
-                  style={{ width: '100px' }}
+                  // style={{ width: '100px' }}
                   className={Style.EndFocus}
                 >
-                  结束聚焦
+                  返回初始状态
                 </Button>
               ) : null}
               <div className={Style.ipt_box}>
@@ -247,6 +262,7 @@ class ProjectMap extends Component {
                   placeholder={placeholderText}
                   onSearch={this.onSearch}
                   style={{ width: 300 }}
+                  // disabled={isEidet}
                 />
                 {eidetText && SearchData.length ? (
                   <div className={Style.SelectList}>
@@ -300,13 +316,15 @@ class ProjectMap extends Component {
                 className={Style.editEacharts}
                 style={{ top: y + 80 + 'px', left: x + 'px' }}
               >
-                <p
-                  className={Style.editslide}
-                  onClick={() => this.BlundEventFocus()}
-                >
-                  <CloseSquareOutlined className={Style.iconRight} />
-                  聚焦
-                </p>
+                {!isEidet ? (
+                  <p
+                    className={Style.editslide}
+                    onClick={() => this.BlundEventFocus()}
+                  >
+                    <CloseSquareOutlined className={Style.iconRight} />
+                    聚焦
+                  </p>
+                ) : null}
                 {isEidet ? (
                   <div>
                     {balbelflage ? (
@@ -345,7 +363,7 @@ class ProjectMap extends Component {
               >
                 <p
                   className={Style.editslide}
-                  onClick={() => this.blundeventRemoverelationship()}
+                  onClick={() => this.BlundeventDeleteRelationship()}
                 >
                   <DeleteOutlined className={Style.iconRight} />
                   删除关系
@@ -355,7 +373,7 @@ class ProjectMap extends Component {
             {isEidet ? (
               <Button
                 type="primary"
-                onClick={() => this.blundeventeidetstate(true)}
+                onClick={() => this.blundeventpreservationeidet()}
                 className={Style.BtnPreServaTion}
               >
                 保存
@@ -374,7 +392,22 @@ class ProjectMap extends Component {
           centered={true}
           width={620}
           forceRender={true}
-        ></InputDialog>
+        >
+          <div className={Style.InputWrapper}>
+            <div className={Style.InputSlide}>
+              <span className={Style.InputText}>源节点</span>
+              <span className={Style.InputTextname}>{sourename}</span>
+            </div>
+            <div className={Style.InputSlide}>
+              <span className={Style.InputText}>目标节点</span>
+              <span className={Style.InputTextname}>{solidName}</span>
+            </div>
+            <div className={Style.InputSlide}>
+              <span className={Style.InputText}>关系类型</span>
+              <span className={Style.InputTextname}>{ClasName}</span>
+            </div>
+          </div>
+        </InputDialog>
         <InputDialog
           isModalVisible={Addconcept}
           Blundeventcloseproject={() => this.AddconceptClose()}
@@ -409,7 +442,7 @@ class ProjectMap extends Component {
                 },
               ]}
             >
-              <Input />
+              <Input onBlur={() => this.blundBlur()} />
             </Form.Item>
 
             <Form.Item
@@ -422,9 +455,9 @@ class ProjectMap extends Component {
                 },
               ]}
             >
-              <Select onChange={this.blundSelect}>
-                <Option value="belong_to">标准化为</Option>
-                <Option value="is">属于</Option>
+              <Select onChange={this.blundSelect} disabled={nameflage}>
+                <Option value="is">标准化为</Option>
+                <Option value="belong_to">属于</Option>
               </Select>
             </Form.Item>
           </Form>
@@ -510,23 +543,26 @@ class ProjectMap extends Component {
   };
   AddconceptShow = async () => {
     //保存添加概念接口
-    const { node_ID } = this.state;
+    const { node_ID, edit_list, U_ID } = this.state;
     const random = randomString();
     console.log(random);
     const form = this.formRef.current;
     try {
       let value = await form.validateFields(['conceptName', 'conceptType']);
       const { conceptName, conceptType } = value;
-      console.log(conceptName, conceptType);
-
       const myChart = echarts.init(this.refs.main);
       let option = myChart.getOption().series[0];
       let node = option.data;
       let links = option.links;
-
+      let labeltype = '';
+      if (conceptType == 'belong_to') {
+        labeltype = '标准词';
+      } else {
+        labeltype = '原始词';
+      }
       let nodedata = {
         id: random,
-        labels: ['标准词'],
+        labels: [labeltype],
         name: conceptName,
         properties: { class: '' },
       };
@@ -545,8 +581,25 @@ class ProjectMap extends Component {
           },
         ],
       });
+      let obj = {
+        edit_type: 'add',
+        obj_type: 'node',
+        node: {
+          uid: random,
+          name: conceptName,
+          label: labeltype,
+        },
+        rel: {
+          name: conceptType,
+          source_uid: random,
+          target_uid: U_ID,
+        },
+      };
+      let arr = edit_list;
+      arr.push(obj);
       this.setState({
         Addconcept: false,
+        edit_list: arr,
       });
     } catch (err) {}
   };
@@ -565,8 +618,21 @@ class ProjectMap extends Component {
       deleteProject: false,
     });
   };
+  //保存
+  blundeventpreservationeidet = () => {
+    const { Id, edit_list } = this.state;
+    let obj = {
+      prj_id: Id,
+      edit_list: edit_list,
+    };
+    console.log(obj);
+  };
   blundeventFocuseRemove = () => {
-    const { lintData, nodesData } = this.state;
+    const { lintData, nodesData, isEidet } = this.state;
+    if (isEidet) {
+      message.warning('编辑模式下无法返回初始化页;');
+      return;
+    }
     const myChart = echarts.init(this.refs.main);
     myChart.setOption({
       series: [
@@ -601,19 +667,81 @@ class ProjectMap extends Component {
     });
   };
   BlundeventshowDialog = () => {
+    const { dataIndex } = this.state;
+    // console.log(dataIndex)
+    const myChart = echarts.init(this.refs.main);
+    myChart.dispatchAction({
+      type: 'highlight',
+      name: '疾病名称',
+      dataIndex: dataIndex,
+    });
     this.setState({
-      InputDialogShow: true,
+      // InputDialogShow: true,
       diglogHidden: false,
+      AddRelationship: true,
     });
   };
   BlundeventPreservation = () => {
     this.setState({
       InputDialogShow: false,
+      AddRelationship: false,
     });
   };
   BlundeventCancel = () => {
+    const {
+      SolidId, //概念ID
+      RightBtnId,
+      ClasName,
+      U_ID,
+      Uid,
+      edit_list,
+    } = this.state;
+    let type = '',
+      name = '';
+    if (ClasName == '标准词') {
+      type = 'belong_to';
+      name = '属于';
+    } else {
+      type = 'is';
+      name = '标准化为';
+    }
+    let obj = {
+      name: name,
+      source: String(SolidId),
+      target: String(RightBtnId),
+      type: type,
+    };
+    const myChart = echarts.init(this.refs.main);
+    let option = myChart.getOption().series[0];
+    let links = option.links;
+    links.push(obj);
+    myChart.setOption({
+      series: [
+        {
+          links: SetLineData(links),
+        },
+      ],
+    });
+    let project = {
+      edit_type: 'add',
+      obj_type: 'rel',
+      node: {
+        uid: '',
+        name: '',
+        label: '',
+      },
+      rel: {
+        name: type,
+        source_uid: String(Uid),
+        target_uid: String(U_ID),
+      },
+    };
+    let str = edit_list;
+    str.push(project);
     this.setState({
       InputDialogShow: false,
+      AddRelationship: false,
+      edit_list: str,
     });
   };
   componentDidMount() {
@@ -710,9 +838,9 @@ class ProjectMap extends Component {
           },
           force: {
             // initLayout:'circular',
-            repulsion: 2000,
+            repulsion: 1000,
             gravity: 0,
-            edgeLength: 600,
+            edgeLength: 400,
             layoutAnimation: false,
             friction: 0.3,
             initLayout: 'none',
@@ -728,49 +856,58 @@ class ProjectMap extends Component {
     // 右键元素 肠道传染病9811      3799272  3799273
     myChart.on('contextmenu', function(params) {
       if (typeof params === 'object') {
-        // const { dataIndex } = params.target;
-        let id = params.data.id; //时间戳
-        let source = params.data.source;
-        console.log(params);
-        //  let labels =params.data.labels[0];
+        const { dataIndex } = params;
+        let id = params.data.id; //id
+        let uid = params.data.properties ? params.data.properties.uid : '';
+        let source = params.data.source ? params.data.source : '';
+        let target = params.data.target ? params.data.target : '';
+        let type = params.data.type ? params.data.type : '';
         if (params.data.labels) {
           let labels = params.data.labels[0];
           if (labels == '标准词') {
             that.setState(state => {
               return {
                 balbelflage: true,
+                dataIndex: dataIndex,
+                RightBtnId: id,
               };
             });
           } else {
             that.setState(state => {
               return {
                 balbelflage: false,
+                dataIndex: dataIndex,
+                RightBtnId: id,
               };
             });
           }
         }
         let solidName = params.data.name;
-        let ClasName = params.data.properties
-          ? params.data.properties.class
-          : '';
+        let ClasName = params.data.labels ? params.data.labels[0] : '';
         if (id) {
           that.setState(state => {
             return {
               diglogHidden: true, //是否展示右键弹出层
               node_ID: id, //弹出层数据对象
+              U_ID: uid,
               x: params.event.offsetX,
               y: params.event.offsetY,
               ClasName: ClasName,
               solidName: solidName,
+              source: source,
+              target: target,
+              type: type,
             };
           });
         } else {
           that.setState(state => {
             return {
               deleteProject: true, //是否展示右键弹出层
-              node_ID: source, //弹出层数据对象
               x: params.event.offsetX,
               y: params.event.offsetY,
+              source: source,
+              target: target,
+              type: type,
             };
           });
         }
@@ -789,7 +926,25 @@ class ProjectMap extends Component {
         that.Setstateinnerhtml();
         return;
       } else {
+        console.log(params);
         const { dataIndex } = params.target;
+        let seriesdata = myChart.getOption().series
+          ? myChart.getOption().series[0].data
+          : null;
+        let id = seriesdata[dataIndex].id;
+        let Uid = seriesdata[dataIndex].properties.uid;
+        let sourename = seriesdata[dataIndex].name;
+        if (that.state.AddRelationship) {
+          that.setState(state => {
+            return {
+              InputDialogShow: true,
+              sourename: sourename,
+              SolidId: id,
+              Uid: Uid,
+            };
+          });
+          return;
+        }
         if (!params.target.__cachedNormalStl) return;
         if (!that.state.isEidet) {
           if (params.target.dataType == 'edge') {
@@ -799,20 +954,12 @@ class ProjectMap extends Component {
             type: 'focusNodeAdjacency',
             dataIndex: dataIndex,
           });
-          let seriesdata = myChart.getOption().series
-            ? myChart.getOption().series[0].data
-            : null;
-          let id = seriesdata[dataIndex].id;
           that.GetPrijectStateDelete(id);
         } else {
           myChart.dispatchAction({
             type: 'focusNodeAdjacency',
             dataIndex: dataIndex,
           });
-          let seriesdata = myChart.getOption().series
-            ? myChart.getOption().series[0].data
-            : null;
-          let id = seriesdata[dataIndex].id;
           that.GetPrijectStateDelete(id);
         }
       }
@@ -827,6 +974,11 @@ class ProjectMap extends Component {
     }, 1200);
   };
   onSearch = val => {
+    const { isEidet } = this.state;
+    if (isEidet) {
+      message.warning('编辑模式下无法搜索!');
+      return;
+    }
     this.setState({
       placeholderText: '请输入关键字',
       eidetText: true,
@@ -899,14 +1051,14 @@ class ProjectMap extends Component {
       properties: '',
     });
   };
-  blundeventRemoverelationship = () => {
-    // lintArray:relsData,
-    // nodeArray:nodesData,
+  BlundeventDeleteRelationship = () => {
+    //删除关系
+    const { source, target, type, edit_list } = this.state;
+    console.log(source, target, type);
     this.setState({
       diglogHidden: false,
       deleteProject: false,
     });
-
     const myChart = echarts.init(this.refs.main);
     let linkss = myChart.getOption().series[0].links;
     const { node_ID } = this.state;
@@ -922,6 +1074,69 @@ class ProjectMap extends Component {
         });
         return;
       }
+    });
+    let obj = {
+      edit_type: 'del',
+      obj_type: 'rel',
+      node: {
+        uid: '',
+        name: '',
+        label: '',
+      },
+      rel: {
+        name: type,
+        source_uid: source,
+        target_uid: target,
+      },
+    };
+    let arr = edit_list;
+    arr.push(obj);
+    this.setState({
+      edit_list: arr,
+    });
+  };
+  blundeventRemoverelationship = () => {
+    //删除概念
+    const { edit_list } = this.state;
+    this.setState({
+      diglogHidden: false,
+      deleteProject: false,
+    });
+
+    const myChart = echarts.init(this.refs.main);
+    let linkss = myChart.getOption().series[0].links;
+    const { node_ID, U_ID } = this.state;
+    this.setdadadad(node_ID);
+    linkss.forEach((item, index) => {
+      if (item.target == node_ID) {
+        this.setdadadad(item.source);
+        linkss.forEach(val => {
+          if (val.target == item.source) {
+            this.setdadadad(val.source);
+            return;
+          }
+        });
+        return;
+      }
+    });
+    let obj = {
+      edit_type: 'del',
+      obj_type: 'node',
+      node: {
+        uid: U_ID,
+        name: '',
+        label: '',
+      },
+      rel: {
+        name: '',
+        source_uid: '',
+        target_uid: '',
+      },
+    };
+    let arr = edit_list;
+    arr.push(obj);
+    this.setState({
+      edit_list: arr,
     });
   };
   setdadadad = node_ID => {
@@ -948,6 +1163,29 @@ class ProjectMap extends Component {
         },
       ],
     });
+  };
+  blundBlur = () => {
+    const form = this.formRef.current;
+    const myChart = echarts.init(this.refs.main);
+    let val = form.getFieldValue(['conceptName']);
+    let option = myChart.getOption().series[0];
+    let node = option.data;
+    let flage = node.some(item => {
+      console.log;
+      if (item.name == val) {
+        return true;
+      }
+    });
+    if (flage) {
+      message.info('概念名称已重复请重新填写！');
+      this.setState({
+        nameflage: true,
+      });
+    } else {
+      this.setState({
+        nameflage: false,
+      });
+    }
   };
 }
 // 135201711712016086

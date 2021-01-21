@@ -18,7 +18,7 @@ export const SetSolidData = nodesData => {
     //   return item;
     // });
     if (item.labels[0] === '标准词') {
-      (item.attributes = { modularity_class: 0 }), (item.symbolSize = 30);
+      (item.attributes = { modularity_class: 0 }), (item.symbolSize = 50);
       item.itemStyle = { normal: { color: '#5B5FFE' } };
     } else {
       (item.attributes = { modularity_class: 1 }), (item.symbolSize = 30);
