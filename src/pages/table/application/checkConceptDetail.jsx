@@ -164,7 +164,7 @@ function CheckConceptDetail(props) {
           links,
           roam: true,
           focusNodeAdjacency: false, //划过高亮
-          draggable: false,
+          draggable: true, //拖拽节点
           edgeSymbol: [null, 'arrow'],
           edgeSymbolSize: [0, 10],
           itemStyle: {

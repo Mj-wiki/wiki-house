@@ -9,6 +9,7 @@ import {
 import { connect } from 'umi';
 import { initHomeStatistics } from '@/api/Project.jsx';
 import { transform } from '../../../utils/Config';
+import { getNumAndUnit } from '@/utils/numberUtil';
 function TableList(props) {
   const [projects, setprojects] = useState('');
   const [triples, settriples] = useState('');
@@ -41,7 +42,17 @@ function TableList(props) {
                 <p>项目总数</p>
                 <p className={styles.eachrsp}>
                   {// {projects}个
-                  projects ? <span>{projects}个</span> : <span>加载中···</span>}
+                  projects ? (
+                    <span>{`${getNumAndUnit(projects, 0).num}${
+                      getNumAndUnit(projects, 0).unit
+                    }${getNumAndUnit(projects, 0).num1}${
+                      getNumAndUnit(projects, 0).unit1
+                    }${getNumAndUnit(projects, 0).num2}${
+                      getNumAndUnit(projects, 0).unit2
+                    }`}</span>
+                  ) : (
+                    <span>加载中···</span>
+                  )}
                 </p>
               </div>
             </div>
@@ -55,7 +66,17 @@ function TableList(props) {
                 <p className={styles.eachrsp}>
                   {/* {concepts}个 */}
                   {// {projects}个
-                  concepts ? <span>{concepts}个</span> : <span>加载中···</span>}
+                  triples ? (
+                    <span>{`${getNumAndUnit(triples, 0).num}${
+                      getNumAndUnit(triples, 0).unit
+                    }${getNumAndUnit(triples, 0).num1}${
+                      getNumAndUnit(triples, 0).unit1
+                    }${getNumAndUnit(triples, 0).num2}${
+                      getNumAndUnit(triples, 0).unit2
+                    }`}</span>
+                  ) : (
+                    <span>加载中···</span>
+                  )}
                 </p>
               </div>
             </div>
@@ -68,7 +89,13 @@ function TableList(props) {
                 <p>概念总数</p>
                 <p className={styles.eachrsp}>
                   {concepts ? (
-                    <span>{concepts}个</span>
+                    <span>{`${getNumAndUnit(concepts, 0).num}${
+                      getNumAndUnit(concepts, 0).unit
+                    }${getNumAndUnit(concepts, 0).num1}${
+                      getNumAndUnit(concepts, 0).unit1
+                    }${getNumAndUnit(concepts, 0).num2}${
+                      getNumAndUnit(concepts, 0).unit2
+                    }`}</span>
                   ) : (
                     <span>加载中···</span>
                   )}
