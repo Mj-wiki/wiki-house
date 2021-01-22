@@ -10,14 +10,38 @@ const getNumAndUnit = function(num, length = 2) {
   if (num < k) {
     return {
       num,
-      unit: '',
+      unit: '个',
+      num1: '',
+      unit1: '',
+      num2: '',
+      unit2: '',
     };
   }
   i = Math.floor(numDiv(Math.log(num), Math.log(k)));
-  return {
-    num: numDiv(num, Math.pow(k, i)),
-    unit: sizes[i],
-  };
+  if (num >= k && num < 100000000) {
+    return {
+      num: Math.floor(num / 10000),
+      unit: sizes[i],
+      num1: num % 10000,
+      unit1: '个',
+      num2: '',
+      unit2: '',
+    };
+  }
+  if (num >= 100000000) {
+    return {
+      num: Math.floor(num / 100000000),
+      unit: sizes[i],
+      num1: Math.floor((num % 100000000) / 10000),
+      unit1: '万',
+      num2: (num % 100000000) % 10000,
+      unit2: '个',
+    };
+  }
+  // return {
+  //   num: numDiv(num, Math.pow(k, i)),
+  //   unit: sizes[i],
+  // };
 };
 
 /**
