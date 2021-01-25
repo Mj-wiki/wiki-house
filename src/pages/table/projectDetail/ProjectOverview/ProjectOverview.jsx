@@ -13,6 +13,7 @@ import { ProjectDetail, uploadImg, updatePrijectImg } from '@/api/Project.jsx';
 import { transformationTime } from '@/utils/dateUtil.js';
 import { connect } from 'umi';
 import { SetSolidData, SetLineData } from '@/utils/Config.js';
+import { getNumAndUnit } from '@/utils/numberUtil';
 class ProjectOverview extends Component {
   state = {
     project_code: '',
@@ -66,14 +67,40 @@ class ProjectOverview extends Component {
                 <HddTwoTone className={Style.icon} />
                 <p>概念数</p>
               </div>
-              <p>{project_concepts}个</p>
+              {/* <p>{project_concepts}个</p> */}
+              <p>
+                {project_concepts ? (
+                  <span>{`${getNumAndUnit(project_concepts, 0).num}${
+                    getNumAndUnit(project_concepts, 0).unit
+                  }${getNumAndUnit(project_concepts, 0).num1}${
+                    getNumAndUnit(project_concepts, 0).unit1
+                  }${getNumAndUnit(project_concepts, 0).num2}${
+                    getNumAndUnit(project_concepts, 0).unit2
+                  }`}</span>
+                ) : (
+                  <span>加载中···</span>
+                )}
+              </p>
             </div>
             <div>
               <div className={Style.Concep}>
                 <ApiTwoTone className={Style.icon} />
                 <p>三元组数</p>
               </div>
-              <p>{project_triples}个</p>
+              {/* <p>{project_triples}个</p> */}
+              <p>
+                {project_triples ? (
+                  <span>{`${getNumAndUnit(project_triples, 0).num}${
+                    getNumAndUnit(project_triples, 0).unit
+                  }${getNumAndUnit(project_triples, 0).num1}${
+                    getNumAndUnit(project_triples, 0).unit1
+                  }${getNumAndUnit(project_triples, 0).num2}${
+                    getNumAndUnit(project_triples, 0).unit2
+                  }`}</span>
+                ) : (
+                  <span>加载中···</span>
+                )}
+              </p>
             </div>
           </div>
           <div className={Style.linheight}>
