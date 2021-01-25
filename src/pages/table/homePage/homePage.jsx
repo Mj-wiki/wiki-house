@@ -41,8 +41,7 @@ function TableList(props) {
               <div className={styles.eacharstext}>
                 <p>项目总数</p>
                 <p className={styles.eachrsp}>
-                  {// {projects}个
-                  projects ? (
+                  {projects ? (
                     <span>{`${getNumAndUnit(projects, 0).num}${
                       getNumAndUnit(projects, 0).unit
                     }${getNumAndUnit(projects, 0).num1}${
@@ -64,9 +63,7 @@ function TableList(props) {
               <div className={styles.eacharstext}>
                 <p>三元组数</p>
                 <p className={styles.eachrsp}>
-                  {/* {concepts}个 */}
-                  {// {projects}个
-                  triples ? (
+                  {triples ? (
                     <span>{`${getNumAndUnit(triples, 0).num}${
                       getNumAndUnit(triples, 0).unit
                     }${getNumAndUnit(triples, 0).num1}${

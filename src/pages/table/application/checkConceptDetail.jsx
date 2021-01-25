@@ -47,6 +47,9 @@ function CheckConceptDetail(props) {
   const [cookieList, setCookieList] = useState([]);
   const [searchModalStatus, setSearchModalStatus] = useState(false);
   const cookieListData = localStorage.getItem('itemList');
+  //处理后的节点列表 和 关系列表
+  // const [nodeList,setNodeList] = useState([]);
+  // const [linksList,setLinksList] = useState([]);
   useEffect(() => {
     if (cookieListData) {
       setTransArr(cookieListData.split(','));
@@ -68,7 +71,7 @@ function CheckConceptDetail(props) {
     };
     resize();
     window.addEventListener('resize', resize);
-
+    echarts.init(chartRef.current).dispose();
     const myChart = echarts.init(chartRef.current);
     myChart.showLoading();
     // 干掉浏览器默认右键事件
@@ -116,6 +119,8 @@ function CheckConceptDetail(props) {
       });
     }
     myEcharts(unifcList, myChart, unifcLinksData);
+    // setNodeList(unifcList);
+    // setLinksList(unifcLinksData);
     return () => {
       window.removeEventListener('resize', resize);
     };
@@ -226,7 +231,7 @@ function CheckConceptDetail(props) {
         x: params.event.offsetX,
         y: params.event.offsetY,
       });
-      setNId('');
+      //setNId('');
 
       if (!params.target) {
         myChart.dispatchAction({
@@ -237,7 +242,7 @@ function CheckConceptDetail(props) {
         const { dataIndex } = params.target;
         if (!params.target.__cachedNormalStl) return;
         const { text } = params.target.__cachedNormalStl;
-        myChart.dispatchAction({
+        myChart?.dispatchAction({
           type: 'focusNodeAdjacency',
           dataIndex,
         });
@@ -246,18 +251,19 @@ function CheckConceptDetail(props) {
     });
     // 拖动中
     myChart.on('mousemove', function(params) {});
+    myChart.on('mouseup', function(params) {});
     // 松开元素
-    myChart.on('mouseup', function(params) {
-      if (myChart.getOption()?.series?.[0].data[params.dataIndex] == undefined)
-        return;
-      var optionS = myChart.getOption();
-      if (myChart.getOption()) {
-        optionS.series[0].data[params.dataIndex].x = params.event.offsetX;
-        optionS.series[0].data[params.dataIndex].y = params.event.offsetY;
-        optionS.series[0].data[params.dataIndex].fixed = true;
-      }
-      myChart.setOption(optionS);
-    });
+    // myChart.on('mouseup', function(params) {
+    //   if (myChart.getOption()?.series?.[0].data[params.dataIndex] == undefined)
+    //     return;
+    //   var optionS = myChart.getOption();
+    //   if (myChart.getOption()) {
+    //     optionS.series[0].data[params.dataIndex].x = params.event.offsetX;
+    //     optionS.series[0].data[params.dataIndex].y = params.event.offsetY;
+    //     optionS.series[0].data[params.dataIndex].fixed = true;
+    //   }
+    //   myChart.setOption(optionS);
+    // });
 
     // 关闭loding
     setTimeout(() => {
@@ -267,6 +273,10 @@ function CheckConceptDetail(props) {
   //右键聚焦
   const FocusOperation = id => {
     onFocus(id);
+    // echarts.init(chartRef.current).dispose();
+    // const myChart = echarts.init(chartRef.current);
+    // myChart.showLoading();
+    // myEcharts(nodeList, myChart, linksList);
     setDiglogConfig({
       diglogHidden: false,
       diglogItems: {},
