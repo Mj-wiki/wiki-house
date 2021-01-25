@@ -68,6 +68,8 @@ class ProjectMap extends Component {
     type: '',
     Uid: '',
     ProjectId: '',
+    triples: '',
+    concepts: '',
   };
   formRef = React.createRef();
   render() {
@@ -93,6 +95,8 @@ class ProjectMap extends Component {
       balbelflage,
       sourename,
       nameflage,
+      triples,
+      concepts,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -190,27 +194,6 @@ class ProjectMap extends Component {
             className={Style.promap}
             style={{ border: isEidet ? '1px solid red' : '' }}
           >
-            {/* {isEidet ? (
-              <Button
-                type="primary"
-                onClick={() => this.blundeventAddconcept()}
-                className={Style.Addconcept}
-              >
-                + 添加概念
-              </Button>
-            ) : null} */}
-            <Button
-              className={Style.promapAdd}
-              onClick={() => this.blundmapbigadd(0)}
-            >
-              +
-            </Button>
-            <Button
-              className={Style.promapRemove}
-              onClick={() => this.blundmapbigadd(1)}
-            >
-              -
-            </Button>
             <div className={Style.EachartsState}>
               <p className={Style.borderslide}>
                 <span className={Style.borderblue}></span>
@@ -249,6 +232,29 @@ class ProjectMap extends Component {
                   开始编辑
                 </Button>
               )}
+              <Button
+                className={Style.promapAdd}
+                onClick={() => this.blundmapbigadd(0)}
+              >
+                +
+              </Button>
+              <Button
+                className={Style.promapRemove}
+                onClick={() => this.blundmapbigadd(1)}
+              >
+                -
+              </Button>
+              <div className={Style.ProjectTotal}>
+                <span className={Style.ProjectTotalTitle}>三元总数</span> ：
+                {triples}个{' '}
+                <span
+                  className={Style.ProjectTotalTitle}
+                  style={{ marginLeft: '10px' }}
+                >
+                  概念总数
+                </span>
+                ：{concepts} 个
+              </div>
               {OverFocus ? (
                 <Button
                   type="primary"
@@ -266,8 +272,8 @@ class ProjectMap extends Component {
                 <Search
                   placeholder={placeholderText}
                   onSearch={this.onSearch}
-                  style={{ width: 300 }}
-                  // disabled={isEidet}
+                  style={{ width: 230 }}
+                  onFocus={this.blundOnFocus}
                 />
                 {eidetText && SearchData.length ? (
                   <div className={Style.SelectList}>
@@ -481,9 +487,7 @@ class ProjectMap extends Component {
       listshow: true,
     });
   };
-  blundSelect = val => {
-    console.log(val);
-  };
+  blundSelect = val => {};
   validateServiceName = (rule, val, callback) => {
     //正则校验输入框首尾去空格
     var pattern = new RegExp(/^[\s　]|[ ]$/gi);
@@ -493,12 +497,11 @@ class ProjectMap extends Component {
     return Promise.resolve();
   };
   BlunndEventFocusing = item => {
-    // let graph = item.graph;
-    console.log(item);
     const { node_id } = item;
     this.setState({
       OverFocus: true,
       eidetText: false,
+      SearchData: [],
     });
     this.FocusDatas(node_id);
   };
@@ -554,7 +557,6 @@ class ProjectMap extends Component {
     //保存添加概念接口
     const { node_ID, edit_list, U_ID } = this.state;
     const random = randomString();
-    console.log(random);
     const form = this.formRef.current;
     try {
       let value = await form.validateFields(['conceptName', 'conceptType']);
@@ -576,7 +578,7 @@ class ProjectMap extends Component {
         properties: { class: '' },
       };
       let linksdata = {
-        name: conceptType,
+        type: conceptType,
         source: random,
         target: String(node_ID),
       };
@@ -636,7 +638,6 @@ class ProjectMap extends Component {
       edit_list: edit_list,
     };
     PreservationAtlas(obj).then(res => {
-      console.log(res);
       if (res.result == 'success') {
         this.setState({
           isEidet: false,
@@ -663,7 +664,6 @@ class ProjectMap extends Component {
   handleOk = () => {
     const { lintArray, nodeArray } = this.state;
     //结束编辑
-    console.log(lintArray, nodeArray);
     const myChart = echarts.init(this.refs.main);
     myChart.setOption({
       series: [
@@ -691,24 +691,10 @@ class ProjectMap extends Component {
         onOk: () => {
           this.handleOk(); //确认按钮的回调方法，在下面
         },
-        onCancel() {
-          console.log('Cancel');
-        },
+        onCancel() {},
       });
       return;
     }
-    // const myChart = echarts.init(this.refs.main);
-    // let option = myChart.getOption().series[0];
-    // let node = option.data;
-    // let links = option.links;
-    // myChart.setOption({
-    //   series: [
-    //     {
-    //       links: SetLineData(links),
-    //       data: SetSolidData(node),
-    //     },
-    //   ],
-    // });
     this.Setstateinnerhtml();
     // //结束编辑
     this.setState({
@@ -812,7 +798,13 @@ class ProjectMap extends Component {
   initEachartsID = ID => {
     ProjectDetail(ID).then(res => {
       if (res.result == 'success') {
-        const { trees, project_id } = res.data;
+        const {
+          trees,
+          project_id,
+          project_triples,
+          project_concepts,
+        } = res.data;
+        console.log(res.data);
         let nodesData = trees.nodes;
         let relsData = trees.rels;
         this.setState({
@@ -821,6 +813,8 @@ class ProjectMap extends Component {
           lintArray: relsData,
           nodeArray: nodesData,
           ProjectId: project_id,
+          triples: project_triples,
+          concepts: project_concepts,
         });
         const myChart = this.refs.main ? echarts.init(this.refs.main) : null;
         if (myChart) {
@@ -877,8 +871,6 @@ class ProjectMap extends Component {
       node.label = {
         show: node.symbolSize > 1,
       };
-      // node.category = node.attributes.modularity_class;
-      // node.category = node.properties.code;
     });
 
     myChart.setOption({
@@ -942,7 +934,6 @@ class ProjectMap extends Component {
     // 右键元素 肠道传染病9811      3799272  3799273
     myChart.on('contextmenu', function(params) {
       if (typeof params === 'object') {
-        console.log(params.data.source);
         const { dataIndex } = params;
         let id = params.data.id; //id
         let uid = params.data.properties ? params.data.properties.uid : '';
@@ -1022,7 +1013,6 @@ class ProjectMap extends Component {
         that.Setstateinnerhtml();
         return;
       } else {
-        console.log(params);
         const { dataIndex } = params.target;
         let seriesdata = myChart.getOption().series
           ? myChart.getOption().series[0].data
@@ -1038,13 +1028,13 @@ class ProjectMap extends Component {
               SolidId: id,
               Uid: Uid,
             };
-            myChart.setOption({
-              series: [
-                {
-                  focusNodeAdjacency: false,
-                },
-              ],
-            });
+          });
+          myChart.setOption({
+            series: [
+              {
+                focusNodeAdjacency: false,
+              },
+            ],
           });
           return;
         }
@@ -1056,17 +1046,7 @@ class ProjectMap extends Component {
           type: 'focusNodeAdjacency',
           dataIndex: dataIndex,
         });
-        that.GetPrijectStateDelete(id);
-        // if (!that.state.isEidet) {
-
-        // } else {
-        //   that.GetPrijectStateDelete(id);
-
-        //   myChart.dispatchAction({
-        //     type: 'focusNodeAdjacency',
-        //     dataIndex: dataIndex,
-        //   });
-        // }
+        that.GetPrijectStateDelete(id, sourename);
       }
     });
     // 拖动中
@@ -1077,6 +1057,13 @@ class ProjectMap extends Component {
     setTimeout(() => {
       myChart.hideLoading();
     }, 1200);
+  };
+  blundOnFocus = () => {
+    const { isEidet } = this.state;
+    if (isEidet) {
+      message.warning('编辑模式下无法搜索!');
+      return;
+    }
   };
   onSearch = val => {
     const { isEidet } = this.state;
@@ -1159,14 +1146,12 @@ class ProjectMap extends Component {
   BlundeventDeleteRelationship = () => {
     //删除关系
     const { source, target, type, edit_list, node_ID } = this.state;
-    console.log(source, target, type);
     this.setState({
       diglogHidden: false,
       deleteProject: false,
     });
     const myChart = echarts.init(this.refs.main);
     let linkss = myChart.getOption().series[0].links;
-    console.log(node_ID);
     this.setdadadad(node_ID);
     linkss.forEach((item, index) => {
       if (item.target == node_ID) {
@@ -1190,8 +1175,8 @@ class ProjectMap extends Component {
       },
       rel: {
         name: type,
-        source_uid: source,
-        target_uid: target,
+        source_uid: this.selectProjectId(source),
+        target_uid: this.selectProjectId(target),
       },
     };
     let arr = edit_list;
@@ -1199,6 +1184,20 @@ class ProjectMap extends Component {
     this.setState({
       edit_list: arr,
     });
+  };
+
+  selectProjectId = Id => {
+    // const myChart = echarts.init(this.refs.main);
+    // let data = myChart.getOption().series[0].data;
+    const { nodeArray } = this.state;
+    let count = '';
+    nodeArray.forEach(item => {
+      if (item.id == Id) {
+        count = item.properties.uid;
+        return;
+      }
+    });
+    return count;
   };
   blundeventRemoverelationship = () => {
     //删除概念
@@ -1257,9 +1256,9 @@ class ProjectMap extends Component {
         return;
       }
     });
-    this.setState({
-      nodeArray: data,
-    });
+    // this.setState({
+    //   nodeArray: data,
+    // });
     myChart.setOption({
       series: [
         {
@@ -1297,7 +1296,6 @@ class ProjectMap extends Component {
     }).then(res => {
       if (res.result == 'success') {
         let data = res.data;
-        console.log(data);
         if (data.length) {
           message.info('概念名称已重复请重新填写！');
           this.setState({
