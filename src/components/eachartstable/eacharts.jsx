@@ -1,16 +1,42 @@
 import React, { Component } from 'react';
 import Style from './eacharts.less';
-import ReactEcharts from 'echarts-for-react';
+import * as echarts from 'echarts';
+// import ReactEcharts from 'echarts-for-react';
 import { initEachartsData } from '@/api/Project.jsx';
 export default class componentName extends Component {
-  state = {
-    X: [],
-    xState: [],
-    NUmberBig: '',
-  };
   render() {
-    const { X, xState, NUmberBig } = this.state;
-    const option = {
+    return (
+      <div
+        className={Style.eachwrapper}
+        id="main"
+        ref="main"
+        style={{ width: '100%', height: '100%' }}
+      ></div>
+    );
+  }
+  componentDidMount() {
+    const myChart = this.refs.main ? echarts.init(this.refs.main) : null;
+    initEachartsData().then(res => {
+      if (res?.result === 'success') {
+        const data = res.data;
+        const Arrlist = [];
+        const timeX = Object.values(res.data);
+        const NUmberBig = Math.max(...timeX); //左侧区域数
+        let NUmberBigs = Math.ceil(NUmberBig / 10) * 10;
+        for (const key in data) {
+          Arrlist.push(key);
+        }
+        this.initEacharts(myChart, Arrlist, timeX, NUmberBigs);
+      } else {
+        return;
+      }
+    });
+    window.onresize = function() {
+      myChart.resize();
+    };
+  }
+  initEacharts = (myChart, X, xState, NUmberBig) => {
+    myChart.setOption({
       xAxis: {
         type: 'category',
         data: X,
@@ -28,7 +54,6 @@ export default class componentName extends Component {
           color: '#526572',
           fontWeight: 'bolder',
           fontSize: 14,
-          // lineHeight: -30
         },
         nameGap: 42.5,
       },
@@ -57,7 +82,7 @@ export default class componentName extends Component {
           nameTextStyle: {
             fontStyle: 'normal',
             verticalAlign: 'bottom',
-            lineHeight: 100,
+            lineHeight: 70,
             color: '#465054',
             fontWeight: 'bolder',
             fontSize: 14,
@@ -76,35 +101,6 @@ export default class componentName extends Component {
           },
         },
       ],
-    };
-    return (
-      <div className={Style.eachwrapper}>
-        <ReactEcharts
-          option={option}
-          style={{ width: '100%', height: '100%' }}
-        />
-      </div>
-    );
-  }
-  componentDidMount() {
-    initEachartsData().then(res => {
-      if (res?.result === 'success') {
-        const data = res.data;
-        const Arrlist = [];
-        const timeX = Object.values(res.data);
-        const NUmberBig = Math.max(...timeX); //左侧区域数
-        let NUmberBigs = Math.ceil(NUmberBig / 10) * 10;
-        for (const key in data) {
-          Arrlist.push(key);
-        }
-        this.setState({
-          X: Arrlist,
-          xState: timeX,
-          NUmberBig: NUmberBigs,
-        });
-      } else {
-        return;
-      }
     });
-  }
+  };
 }

@@ -108,4 +108,11 @@ export const updatePrijectImg = data => {
     data: data,
   });
 };
+export const PreservationAtlas = data => {
+  return request(`/apl/project/updateProjectConcepts/`, {
+    method: 'post',
+    data: data,
+  });
+};
+///apl/project/updateProjectConcepts/
 //http://127.0.0.1:8000/api/project/focusProjectConceptInfo/?project_id=PJ1dacfe724fc411ebb771fa163eac98f2&node_id=8540670

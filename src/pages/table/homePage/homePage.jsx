@@ -55,7 +55,7 @@ function TableList(props) {
                 <p className={styles.eachrsp}>
                   {/* {concepts}个 */}
                   {// {projects}个
-                  concepts ? <span>{concepts}个</span> : <span>加载中···</span>}
+                  concepts ? <span>{triples}个</span> : <span>加载中···</span>}
                 </p>
               </div>
             </div>
