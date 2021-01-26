@@ -77,4 +77,5 @@ export default defineConfig({
     services: path.resolve(__dirname, 'src/services'),
     utils: path.resolve(__dirname, 'src/utils'),
   },
+  links: [{ rel: 'icon', href: '../src/assets/chart/uniLogo.svg' }],
 });
