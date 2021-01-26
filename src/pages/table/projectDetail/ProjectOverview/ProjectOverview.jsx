@@ -239,6 +239,8 @@ class ProjectOverview extends Component {
           links: Lindein,
           roam: true,
           focusNodeAdjacency: false,
+          animation: true,
+          animationEasing: 'quinticInOut',
           draggable: true,
           itemStyle: {
             borderColor: '#fff',
@@ -314,7 +316,6 @@ class ProjectOverview extends Component {
           id: Id,
         }).then(res => {
           if (res.result == 'success') {
-            console.log(res.data);
           } else {
             return;
           }

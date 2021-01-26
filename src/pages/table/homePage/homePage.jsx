@@ -110,7 +110,7 @@ function TableList(props) {
             <div className={styles.slidetop}>归一项目</div>
             <div className={styles.xiangmu}>
               <div className={styles.xiangmuscroll}>
-                <div className={styles.xiangmuwrapper}>
+                {/* <div className={styles.xiangmuwrapper}>
                   <div>归一项目1</div>
                   <div>
                     <span className={styles.colorgreen}>1万2千</span> 个概念
@@ -139,7 +139,7 @@ function TableList(props) {
                   <div>
                     <span className={styles.colorgreen}>1万2千</span> 个概念
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

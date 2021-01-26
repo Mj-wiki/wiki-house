@@ -4,19 +4,6 @@ export const SetSolidData = nodesData => {
   }
   //由霍乱弧菌埃尔托型引起的霍乱9966
   let data = nodesData.map(item => {
-    //   if (item.labels[0] == "标准词") {
-    //      (item.attributes = { modularity_class: 0 }),
-    //     (item.symbolSize = 50);
-    //     item.itemStyle = { normal: { color: '#5B5FFE' } };
-    //   } else if (item.labels[0] == "原始词") {
-    //     (item.attributes = { modularity_class: 1 }),
-    //     (item.symbolSize = 50);
-    //     item.itemStyle = { normal: { color: '#43AC61' } };
-    //   } else if (item.properties.class == '顶级节点') {
-    //     (item.attributes = { modularity_class: 0 }), (item.symbolSize = 180);
-    //   }
-    //   return item;
-    // });
     if (item.labels[0] === '标准词') {
       (item.attributes = { modularity_class: 0 }), (item.symbolSize = 50);
       item.itemStyle = { normal: { color: '#5B5FFE' } };

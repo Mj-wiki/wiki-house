@@ -18,6 +18,7 @@ import {
 import { connect } from 'umi';
 import { SetSolidData, SetLineData, randomString } from '@/utils/Config.js';
 import InputDialog from '@/components/Addproject/Addproject';
+import { getNumAndUnit } from '@/utils/numberUtil';
 // import GetFromData from '../GetFrom/getFromData.jsx'
 const { Search } = Input;
 const { Option } = Select;
@@ -70,6 +71,7 @@ class ProjectMap extends Component {
     ProjectId: '',
     triples: '',
     concepts: '',
+    codeData: '',
   };
   formRef = React.createRef();
   render() {
@@ -97,6 +99,7 @@ class ProjectMap extends Component {
       nameflage,
       triples,
       concepts,
+      codeData,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -105,7 +108,17 @@ class ProjectMap extends Component {
             <div className={Style.Account}></div>
             <div className={Style.detailtext}>
               <p className={Style.gainian}>概念名：{ConceptName}</p>
-              <p className={Style.gainian}>属性：{properties}</p>
+              <p className={Style.gainian}>
+                属性：
+                {codeData ? <span>code：{codeData}</span> : ''}
+                {properties ? (
+                  <span style={{ margin: '0px 0px 0px 5px' }}>
+                    class：{properties}
+                  </span>
+                ) : (
+                  ''
+                )}
+              </p>
               <p className={Style.gainian}>
                 路径：
                 {path.map((item, index) => {
@@ -195,6 +208,18 @@ class ProjectMap extends Component {
             style={{ border: isEidet ? '1px solid red' : '' }}
           >
             <div className={Style.EachartsState}>
+              {/* <p className={Style.borderslide}>三元总数：
+                {`${getNumAndUnit(triples, 0).num}${getNumAndUnit(triples, 0).unit
+                  }${getNumAndUnit(triples, 0).num1}${getNumAndUnit(triples, 0).unit1
+                  }${getNumAndUnit(triples, 0).num2}${getNumAndUnit(triples, 0).unit2
+                  }`}</p>
+              <p>
+                概念总数：
+                    {`${getNumAndUnit(concepts, 0).num}${getNumAndUnit(concepts, 0).unit
+                  }${getNumAndUnit(concepts, 0).num1}${getNumAndUnit(concepts, 0).unit1
+                  }${getNumAndUnit(concepts, 0).num2}${getNumAndUnit(concepts, 0).unit2
+                  }`}
+              </p> */}
               <p className={Style.borderslide}>
                 <span className={Style.borderblue}></span>
                 标准词
@@ -246,14 +271,27 @@ class ProjectMap extends Component {
               </Button>
               <div className={Style.ProjectTotal}>
                 <span className={Style.ProjectTotalTitle}>三元总数</span> ：
-                {triples}个{' '}
+                {`${getNumAndUnit(triples, 0).num}${
+                  getNumAndUnit(triples, 0).unit
+                }${getNumAndUnit(triples, 0).num1}${
+                  getNumAndUnit(triples, 0).unit1
+                }${getNumAndUnit(triples, 0).num2}${
+                  getNumAndUnit(triples, 0).unit2
+                }`}{' '}
                 <span
                   className={Style.ProjectTotalTitle}
                   style={{ marginLeft: '10px' }}
                 >
                   概念总数
                 </span>
-                ：{concepts} 个
+                ：
+                {`${getNumAndUnit(concepts, 0).num}${
+                  getNumAndUnit(concepts, 0).unit
+                }${getNumAndUnit(concepts, 0).num1}${
+                  getNumAndUnit(concepts, 0).unit1
+                }${getNumAndUnit(concepts, 0).num2}${
+                  getNumAndUnit(concepts, 0).unit2
+                }`}
               </div>
               {OverFocus ? (
                 <Button
@@ -529,6 +567,7 @@ class ProjectMap extends Component {
           syn_vocab,
           path,
           properties: properties.class,
+          codeData: properties.code,
           lintArray: data.rels,
           nodeArray: data.nodes,
         });
@@ -705,19 +744,15 @@ class ProjectMap extends Component {
     });
   };
   BlundeventshowDialog = () => {
+    const { dataIndex } = this.state;
     const myChart = echarts.init(this.refs.main);
-    myChart.setOption({
-      series: [
-        {
-          focusNodeAdjacency: true,
-        },
-      ],
+    myChart.dispatchAction({
+      type: 'unfocusNodeAdjacency',
     });
-    // myChart.dispatchAction({
-    //   type: 'highlight',
-    //   name: '疾病名称',
-    //   dataIndex: dataIndex,
-    // });
+    myChart.dispatchAction({
+      type: 'highlight',
+      dataIndex: dataIndex,
+    });
     this.setState({
       diglogHidden: false,
       AddRelationship: true,
@@ -804,7 +839,6 @@ class ProjectMap extends Component {
           project_triples,
           project_concepts,
         } = res.data;
-        console.log(res.data);
         let nodesData = trees.nodes;
         let relsData = trees.rels;
         this.setState({
@@ -842,12 +876,19 @@ class ProjectMap extends Component {
     const myChart = echarts.init(this.refs.main);
     ProjectDetail(Id).then(res => {
       if (res.result == 'success') {
-        const { trees } = res.data;
+        const {
+          trees,
+          project_id,
+          project_triples,
+          project_concepts,
+        } = res.data;
         let nodesData = trees.nodes;
         let relsData = trees.rels;
         this.setState({
           lintArray: relsData,
           nodeArray: nodesData,
+          triples: project_triples,
+          concepts: project_concepts,
         });
         myChart.setOption({
           series: [
@@ -892,13 +933,17 @@ class ProjectMap extends Component {
           zoom: 0.2,
           type: 'graph',
           layout: 'force',
-          data,
+          data: data,
           links: arr,
           roam: true,
-          focusNodeAdjacency: false, //划过高亮
           draggable: true,
+          //  animation: true,
+          //animationEasing: 'quinticInOut',
           edgeSymbol: [null, 'arrow'],
           edgeSymbolSize: [0, 10],
+          labelLayout: {
+            hideOverlap: true,
+          },
           itemStyle: {
             borderColor: '#fff',
             borderWidth: 0,
@@ -909,13 +954,13 @@ class ProjectMap extends Component {
             show: true,
             position: 'top',
             formatter: '{b}',
+            fontStyle: 'oblique',
           },
           lineStyle: {
             color: 'source',
             curveness: 0.3,
           },
           force: {
-            // initLayout:'circular',
             repulsion: 1000,
             gravity: 0,
             edgeLength: 400,
@@ -924,6 +969,11 @@ class ProjectMap extends Component {
             initLayout: 'none',
           },
           emphasis: {
+            itemStyle: {
+              borderColor: '#F96E41',
+              color: '#F96E41',
+              borderWidth: 5,
+            },
             lineStyle: {
               width: 5,
             },
@@ -995,6 +1045,7 @@ class ProjectMap extends Component {
     });
     // 点击元素
     myChart.getZr().on('click', function(params) {
+      const { RightBtnId, dataIndex } = that.state;
       that.setState({
         diglogHidden: false,
         deleteProject: false,
@@ -1013,14 +1064,22 @@ class ProjectMap extends Component {
         that.Setstateinnerhtml();
         return;
       } else {
-        const { dataIndex } = params.target;
+        const dataInd = params.target.dataIndex;
         let seriesdata = myChart.getOption().series
           ? myChart.getOption().series[0].data
           : null;
-        let id = seriesdata[dataIndex].id;
-        let Uid = seriesdata[dataIndex].properties.uid;
-        let sourename = seriesdata[dataIndex].name;
+        let id = seriesdata[dataInd] ? seriesdata[dataInd].id : '';
+        let Uid = seriesdata[dataInd] ? seriesdata[dataInd].properties.uid : '';
+        let sourename = seriesdata[dataInd].name;
         if (that.state.AddRelationship) {
+          if (RightBtnId == id) {
+            message.warning('不能与自己添加关系请重新选择');
+            return;
+          }
+          myChart.dispatchAction({
+            type: 'downplay',
+            dataIndex: dataIndex,
+          });
           that.setState(state => {
             return {
               InputDialogShow: true,
@@ -1044,7 +1103,7 @@ class ProjectMap extends Component {
         }
         myChart.dispatchAction({
           type: 'focusNodeAdjacency',
-          dataIndex: dataIndex,
+          dataIndex: dataInd,
         });
         that.GetPrijectStateDelete(id, sourename);
       }
@@ -1052,11 +1111,10 @@ class ProjectMap extends Component {
     // 拖动中
     myChart.on('mousemove', function(params) {});
     myChart.on('mouseup', function(params) {});
-
     // 关闭loding
     setTimeout(() => {
       myChart.hideLoading();
-    }, 1200);
+    }, 500);
   };
   blundOnFocus = () => {
     const { isEidet } = this.state;
@@ -1127,6 +1185,7 @@ class ProjectMap extends Component {
           syn_vocab,
           path,
           properties: properties.class,
+          codeData: properties.code,
         });
       } else {
         return;
