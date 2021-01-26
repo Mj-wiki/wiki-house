@@ -251,19 +251,18 @@ function CheckConceptDetail(props) {
     });
     // 拖动中
     myChart.on('mousemove', function(params) {});
-    myChart.on('mouseup', function(params) {});
-    // 松开元素
-    // myChart.on('mouseup', function(params) {
-    //   if (myChart.getOption()?.series?.[0].data[params.dataIndex] == undefined)
-    //     return;
-    //   var optionS = myChart.getOption();
-    //   if (myChart.getOption()) {
-    //     optionS.series[0].data[params.dataIndex].x = params.event.offsetX;
-    //     optionS.series[0].data[params.dataIndex].y = params.event.offsetY;
-    //     optionS.series[0].data[params.dataIndex].fixed = true;
-    //   }
-    //   myChart.setOption(optionS);
-    // });
+    //松开元素
+    myChart.on('mouseup', function(params) {
+      if (myChart.getOption()?.series?.[0].data[params.dataIndex] == undefined)
+        return;
+      var optionS = myChart.getOption();
+      if (myChart.getOption()) {
+        // optionS.series[0].data[params.dataIndex].x = params.event.offsetX;
+        // optionS.series[0].data[params.dataIndex].y = params.event.offsetY;
+        optionS.series[0].data[params.dataIndex].fixed = true;
+      }
+      myChart.setOption(optionS);
+    });
 
     // 关闭loding
     setTimeout(() => {
