@@ -673,6 +673,10 @@ class ProjectMap extends Component {
   //保存
   blundeventpreservationeidet = () => {
     const { ProjectId, edit_list } = this.state;
+    if (!edit_list.length) {
+      message.warning('请编辑后在保存数据！');
+      return;
+    }
     let obj = {
       prj_id: ProjectId,
       edit_list: edit_list,
@@ -680,6 +684,9 @@ class ProjectMap extends Component {
     PreservationAtlas(obj).then(res => {
       if (res.result == 'success') {
         const myChart = echarts.init(this.refs.main);
+        myChart.dispatchAction({
+          type: 'unfocusNodeAdjacency',
+        });
         let option = myChart.getOption().series[0];
         let node = option.data;
         let links = option.links;
@@ -1017,7 +1024,18 @@ class ProjectMap extends Component {
         }
         let solidName = params.data.name;
         let ClasName = params.data.labels ? params.data.labels[0] : '';
+        let Typelabel = '';
+        if (ClasName == '标准词') {
+          Typelabel = '属于';
+        } else {
+          Typelabel = '标准化为';
+        }
         if (id) {
+          if (ClasName == '标准词') {
+            Typelabel = '属于';
+          } else {
+            Typelabel = '标准化为';
+          }
           that.setState(state => {
             return {
               diglogHidden: true, //是否展示右键弹出层
@@ -1025,7 +1043,7 @@ class ProjectMap extends Component {
               U_ID: uid,
               x: params.event.offsetX,
               y: params.event.offsetY,
-              ClasName: ClasName,
+              ClasName: Typelabel,
               solidName: solidName,
               source: source,
               target: target,

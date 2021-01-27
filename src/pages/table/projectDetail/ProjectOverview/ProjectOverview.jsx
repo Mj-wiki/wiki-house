@@ -69,7 +69,7 @@ class ProjectOverview extends Component {
                 <p>概念数</p>
               </div>
               {/* <p>{project_concepts}个</p> */}
-              <p>
+              <div className={Style.textLeft}>
                 {project_concepts ? (
                   <span>{`${getNumAndUnit(project_concepts, 0).num}${
                     getNumAndUnit(project_concepts, 0).unit
@@ -80,12 +80,12 @@ class ProjectOverview extends Component {
                   }`}</span>
                 ) : (
                   // <span>加载中···</span>
-                  <p className={Style.homeLoading}>
+                  <div className={Style.homeLoading}>
                     {' '}
                     <span>加载中</span> <HomeLoading />
-                  </p>
+                  </div>
                 )}
-              </p>
+              </div>
             </div>
             <div>
               <div className={Style.Concep}>
@@ -93,7 +93,7 @@ class ProjectOverview extends Component {
                 <p>三元组数</p>
               </div>
               {/* <p>{project_triples}个</p> */}
-              <p>
+              <div className={Style.textLeft}>
                 {project_triples ? (
                   <span>{`${getNumAndUnit(project_triples, 0).num}${
                     getNumAndUnit(project_triples, 0).unit
@@ -103,12 +103,12 @@ class ProjectOverview extends Component {
                     getNumAndUnit(project_triples, 0).unit2
                   }`}</span>
                 ) : (
-                  <p className={Style.homeLoading}>
+                  <div className={Style.homeLoading}>
                     {' '}
                     <span>加载中</span> <HomeLoading />
-                  </p>
+                  </div>
                 )}
-              </p>
+              </div>
             </div>
           </div>
           <div className={Style.linheight}>
