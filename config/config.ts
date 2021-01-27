@@ -49,7 +49,7 @@ export default defineConfig({
           path:
             '/table/checkConceptDetail/:appId/:itemId/:conceptName/:projectId/:code/:name',
           component: '@/pages/table/application/checkConceptDetail',
-          title: '概念详情页',
+          title: '应用概念详情页',
         },
         {
           path: '/table/projectDetail/:ID',
@@ -86,4 +86,5 @@ export default defineConfig({
     logLevel: 'info',
     defaultSizes: 'gzip',
   },
+  links: [{ rel: 'icon', href: 'img/favicon.ico' }],
 });
