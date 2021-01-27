@@ -36,7 +36,6 @@ function CheckAppDetail(props) {
   } = history.location;
   //页面初始化调取接口
   useEffect(() => {
-    console.log(dataSource);
     onInit();
   }, []);
   useEffect(() => {
@@ -210,7 +209,7 @@ function CheckAppDetail(props) {
         <div style={{ textAlign: 'left' }}>查询到 {total} 条概念</div>
       ) : null}
       {searchNumber ? (
-        dataSource?.length > 0 ? (
+        dataSource !== -1 ? (
           <ColumnLayout
             list={dataSource}
             renderItem={changeItemLecture}
@@ -220,7 +219,7 @@ function CheckAppDetail(props) {
         ) : (
           <div className={styles.noData}>
             <img src={noData}></img>
-            <p>暂无数据</p>
+            <p>数据加载中,请稍后...</p>
           </div>
         )
       ) : null}
