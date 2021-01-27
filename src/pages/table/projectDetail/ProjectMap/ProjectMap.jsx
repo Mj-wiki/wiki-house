@@ -269,30 +269,34 @@ class ProjectMap extends Component {
               >
                 -
               </Button>
-              <div className={Style.ProjectTotal}>
-                <span className={Style.ProjectTotalTitle}>三元总数</span> ：
-                {`${getNumAndUnit(triples, 0).num}${
-                  getNumAndUnit(triples, 0).unit
-                }${getNumAndUnit(triples, 0).num1}${
-                  getNumAndUnit(triples, 0).unit1
-                }${getNumAndUnit(triples, 0).num2}${
-                  getNumAndUnit(triples, 0).unit2
-                }`}{' '}
-                <span
-                  className={Style.ProjectTotalTitle}
-                  style={{ marginLeft: '10px' }}
-                >
-                  概念总数
-                </span>
-                ：
-                {`${getNumAndUnit(concepts, 0).num}${
-                  getNumAndUnit(concepts, 0).unit
-                }${getNumAndUnit(concepts, 0).num1}${
-                  getNumAndUnit(concepts, 0).unit1
-                }${getNumAndUnit(concepts, 0).num2}${
-                  getNumAndUnit(concepts, 0).unit2
-                }`}
-              </div>
+              {concepts && triples ? (
+                <div className={Style.ProjectTotal}>
+                  <span className={Style.ProjectTotalTitle}>三元总数</span> ：
+                  {`${getNumAndUnit(triples, 0).num}${
+                    getNumAndUnit(triples, 0).unit
+                  }${getNumAndUnit(triples, 0).num1}${
+                    getNumAndUnit(triples, 0).unit1
+                  }${getNumAndUnit(triples, 0).num2}${
+                    getNumAndUnit(triples, 0).unit2
+                  }`}{' '}
+                  <span
+                    className={Style.ProjectTotalTitle}
+                    style={{ marginLeft: '10px' }}
+                  >
+                    概念总数
+                  </span>
+                  ：
+                  {`${getNumAndUnit(concepts, 0).num}${
+                    getNumAndUnit(concepts, 0).unit
+                  }${getNumAndUnit(concepts, 0).num1}${
+                    getNumAndUnit(concepts, 0).unit1
+                  }${getNumAndUnit(concepts, 0).num2}${
+                    getNumAndUnit(concepts, 0).unit2
+                  }`}
+                </div>
+              ) : (
+                ''
+              )}
               {OverFocus ? (
                 <Button
                   type="primary"
@@ -969,6 +973,8 @@ class ProjectMap extends Component {
             initLayout: 'none',
           },
           emphasis: {
+            // scale:true,
+            // focus:'adjacency',
             itemStyle: {
               borderColor: '#F96E41',
               color: '#F96E41',
@@ -1199,6 +1205,7 @@ class ProjectMap extends Component {
       syn_vocab: [],
       path: [],
       properties: '',
+      codeData: '',
       AddRelationship: false,
     });
   };

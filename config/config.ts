@@ -1,6 +1,5 @@
 import { defineConfig } from 'umi';
 import path from 'path';
-
 export default defineConfig({
   hash: true,
   history: {
@@ -77,5 +76,13 @@ export default defineConfig({
     services: path.resolve(__dirname, 'src/services'),
     utils: path.resolve(__dirname, 'src/utils'),
   },
-  links: [{ rel: 'icon', href: '../src/assets/chart/uniLogo.svg' }],
+  analyze: {
+    analyzerMode: 'server',
+    analyzerPort: 8888,
+    openAnalyzer: true,
+    generateStatsFile: false,
+    statsFilename: 'stats.json',
+    logLevel: 'info',
+    defaultSizes: 'gzip',
+  },
 });
