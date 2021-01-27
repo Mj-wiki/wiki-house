@@ -1,5 +1,6 @@
 import { defineConfig } from 'umi';
 import path from 'path';
+// import Router from './router';
 export default defineConfig({
   hash: true,
   history: {
