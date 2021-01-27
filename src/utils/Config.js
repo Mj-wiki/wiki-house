@@ -9,11 +9,11 @@ export const SetSolidData = nodesData => {
       item.itemStyle = { normal: { color: '#5B5FFE' } };
     } else {
       (item.attributes = { modularity_class: 1 }), (item.symbolSize = 30);
-      item.itemStyle = { normal: { color: '#43AC61' } };
+      item.itemStyle = { normal: { color: '#81C462' } };
     }
     if (item.properties.class == '顶级节点') {
       (item.attributes = { modularity_class: 0 }), (item.symbolSize = 60);
-      item.itemStyle = { normal: { color: '#F15D53' } };
+      item.itemStyle = { normal: { color: '#DD4C50' } };
     }
     return item;
   });

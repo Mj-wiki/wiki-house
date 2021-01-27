@@ -14,6 +14,7 @@ import { transformationTime } from '@/utils/dateUtil.js';
 import { connect } from 'umi';
 import { SetSolidData, SetLineData } from '@/utils/Config.js';
 import { getNumAndUnit } from '@/utils/numberUtil';
+import HomeLoading from '../../../../components/homeLoading/homeLoading';
 class ProjectOverview extends Component {
   state = {
     project_code: '',
@@ -78,7 +79,11 @@ class ProjectOverview extends Component {
                     getNumAndUnit(project_concepts, 0).unit2
                   }`}</span>
                 ) : (
-                  <span>加载中···</span>
+                  // <span>加载中···</span>
+                  <p className={Style.homeLoading}>
+                    {' '}
+                    <span>加载中</span> <HomeLoading />
+                  </p>
                 )}
               </p>
             </div>
@@ -98,7 +103,10 @@ class ProjectOverview extends Component {
                     getNumAndUnit(project_triples, 0).unit2
                   }`}</span>
                 ) : (
-                  <span>加载中···</span>
+                  <p className={Style.homeLoading}>
+                    {' '}
+                    <span>加载中</span> <HomeLoading />
+                  </p>
                 )}
               </p>
             </div>

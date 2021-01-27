@@ -94,10 +94,15 @@ export default class componentName extends Component {
         {
           data: xState,
           type: 'line',
+          symbol: 'circle',
+          symbolSize: 8,
           itemStyle: {
             color: '#4469BC',
             borderWidth: 5,
             borderType: 'solid',
+          },
+          label: {
+            // show: true
           },
         },
       ],

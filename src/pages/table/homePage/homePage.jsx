@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import EachartsTable from '../../../components/eachartstable/eacharts';
 import styles from './homePage.less';
-import {
-  ProfileOutlined,
-  HourglassOutlined,
-  FormatPainterOutlined,
-} from '@ant-design/icons';
+import { ApiTwoTone, SwitcherTwoTone, ProfileTwoTone } from '@ant-design/icons';
 import { connect } from 'umi';
 import { initHomeStatistics } from '@/api/Project.jsx';
 import { transform } from '../../../utils/Config';
 import { getNumAndUnit } from '@/utils/numberUtil';
+import HomeLoading from '../../../components/homeLoading/homeLoading';
 function TableList(props) {
   const [projects, setprojects] = useState('');
   const [triples, settriples] = useState('');
@@ -36,11 +33,12 @@ function TableList(props) {
           <div className={styles.eachartleft}>
             <div className={styles.eacharslide}>
               <div className={styles.eachartsimg}>
-                <FormatPainterOutlined />
+                {/* <FormatPainterOutlined /> */}
+                <SwitcherTwoTone />
               </div>
               <div className={styles.eacharstext}>
                 <p>项目总数</p>
-                <p className={styles.eachrsp}>
+                <div className={styles.eachrsp}>
                   {projects ? (
                     <span>{`${getNumAndUnit(projects, 0).num}${
                       getNumAndUnit(projects, 0).unit
@@ -50,19 +48,21 @@ function TableList(props) {
                       getNumAndUnit(projects, 0).unit2
                     }`}</span>
                   ) : (
-                    <span>加载中···</span>
+                    <div className={styles.HomeLoadings}>
+                      加载中 <HomeLoading />
+                    </div>
                   )}
-                </p>
+                </div>
               </div>
             </div>
             <div className={styles.eacharslide}>
               {' '}
               <div className={styles.eachartsimg}>
-                <HourglassOutlined />
+                <ApiTwoTone />
               </div>
               <div className={styles.eacharstext}>
                 <p>三元组数</p>
-                <p className={styles.eachrsp}>
+                <div className={styles.eachrsp}>
                   {triples ? (
                     <span>{`${getNumAndUnit(triples, 0).num}${
                       getNumAndUnit(triples, 0).unit
@@ -72,19 +72,21 @@ function TableList(props) {
                       getNumAndUnit(triples, 0).unit2
                     }`}</span>
                   ) : (
-                    <span>加载中···</span>
+                    <div className={styles.HomeLoadings}>
+                      加载中 <HomeLoading />
+                    </div>
                   )}
-                </p>
+                </div>
               </div>
             </div>
             <div className={styles.eacharslide}>
               {' '}
               <div className={styles.eachartsimg}>
-                <ProfileOutlined />
+                <ProfileTwoTone />
               </div>
               <div className={styles.eacharstext}>
                 <p>概念总数</p>
-                <p className={styles.eachrsp}>
+                <div className={styles.eachrsp}>
                   {concepts ? (
                     <span>{`${getNumAndUnit(concepts, 0).num}${
                       getNumAndUnit(concepts, 0).unit
@@ -94,9 +96,11 @@ function TableList(props) {
                       getNumAndUnit(concepts, 0).unit2
                     }`}</span>
                   ) : (
-                    <span>加载中···</span>
+                    <div className={styles.HomeLoadings}>
+                      加载中 <HomeLoading />
+                    </div>
                   )}
-                </p>
+                </div>
               </div>
             </div>
           </div>

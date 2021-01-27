@@ -161,10 +161,10 @@ export default class projectManagement extends Component {
                     </span>
                   </p>
                   <p className={Style.xiangmuname}>
-                    项目描述：
-                    <span className={Style.marginLeft}>
+                    <span style={{ width: '130px' }}> 项目描述：</span>
+                    <b className={Style.ProjectText}>
                       {item.project_introduction}
-                    </span>
+                    </b>
                   </p>
                   <div className={Style.xiangmubuton}>
                     <div className={Style.Setstatetext}>

@@ -112,9 +112,9 @@ class ProjectMap extends Component {
                 属性：
                 {codeData ? <span>code：{codeData}</span> : ''}
                 {properties ? (
-                  <span style={{ margin: '0px 0px 0px 5px' }}>
+                  <p style={{ margin: '0px 0px 0px 35px' }}>
                     class：{properties}
-                  </span>
+                  </p>
                 ) : (
                   ''
                 )}
@@ -208,18 +208,10 @@ class ProjectMap extends Component {
             style={{ border: isEidet ? '1px solid red' : '' }}
           >
             <div className={Style.EachartsState}>
-              {/* <p className={Style.borderslide}>三元总数：
-                {`${getNumAndUnit(triples, 0).num}${getNumAndUnit(triples, 0).unit
-                  }${getNumAndUnit(triples, 0).num1}${getNumAndUnit(triples, 0).unit1
-                  }${getNumAndUnit(triples, 0).num2}${getNumAndUnit(triples, 0).unit2
-                  }`}</p>
-              <p>
-                概念总数：
-                    {`${getNumAndUnit(concepts, 0).num}${getNumAndUnit(concepts, 0).unit
-                  }${getNumAndUnit(concepts, 0).num1}${getNumAndUnit(concepts, 0).unit1
-                  }${getNumAndUnit(concepts, 0).num2}${getNumAndUnit(concepts, 0).unit2
-                  }`}
-              </p> */}
+              <p className={Style.borderslide}>
+                <span className={Style.borderredtop}></span>
+                顶级节点
+              </p>
               <p className={Style.borderslide}>
                 <span className={Style.borderblue}></span>
                 标准词
@@ -271,7 +263,7 @@ class ProjectMap extends Component {
               </Button>
               {concepts && triples ? (
                 <div className={Style.ProjectTotal}>
-                  <span className={Style.ProjectTotalTitle}>三元总数</span> ：
+                  <span className={Style.ProjectTotalTitle}>三元组数</span> ：
                   {`${getNumAndUnit(triples, 0).num}${
                     getNumAndUnit(triples, 0).unit
                   }${getNumAndUnit(triples, 0).num1}${
@@ -574,8 +566,13 @@ class ProjectMap extends Component {
           codeData: properties.code,
           lintArray: data.rels,
           nodeArray: data.nodes,
+          triples: data.rels.length,
+          concepts: data.nodes.length,
         });
         const myChart = echarts.init(this.refs.main);
+        myChart.dispatchAction({
+          type: 'unfocusNodeAdjacency',
+        });
         myChart.setOption({
           series: [
             {
@@ -682,10 +679,15 @@ class ProjectMap extends Component {
     };
     PreservationAtlas(obj).then(res => {
       if (res.result == 'success') {
+        const myChart = echarts.init(this.refs.main);
+        let option = myChart.getOption().series[0];
+        let node = option.data;
+        let links = option.links;
         this.setState({
           isEidet: false,
-          // OverFocus: false,
           edit_list: [],
+          triples: links.length,
+          concepts: node.length,
         });
       } else {
         return;
@@ -722,6 +724,8 @@ class ProjectMap extends Component {
       diglogHidden: false,
       deleteProject: false,
       edit_list: [],
+      triples: lintArray.length,
+      concepts: nodeArray.length,
     });
   };
   blundeventeidetRemove = () => {
@@ -837,22 +841,19 @@ class ProjectMap extends Component {
   initEachartsID = ID => {
     ProjectDetail(ID).then(res => {
       if (res.result == 'success') {
-        const {
-          trees,
-          project_id,
-          project_triples,
-          project_concepts,
-        } = res.data;
+        const { trees, project_id, project_triples } = res.data;
         let nodesData = trees.nodes;
         let relsData = trees.rels;
+        let count = nodesData.length;
+        let relsDataCount = relsData.length;
         this.setState({
           lintData: relsData,
           nodesData: nodesData,
           lintArray: relsData,
           nodeArray: nodesData,
           ProjectId: project_id,
-          triples: project_triples,
-          concepts: project_concepts,
+          triples: relsDataCount,
+          concepts: count,
         });
         const myChart = this.refs.main ? echarts.init(this.refs.main) : null;
         if (myChart) {
@@ -880,19 +881,16 @@ class ProjectMap extends Component {
     const myChart = echarts.init(this.refs.main);
     ProjectDetail(Id).then(res => {
       if (res.result == 'success') {
-        const {
-          trees,
-          project_id,
-          project_triples,
-          project_concepts,
-        } = res.data;
+        const { trees, project_triples, project_concepts } = res.data;
         let nodesData = trees.nodes;
         let relsData = trees.rels;
+        let count = nodesData.length;
+        let relsDataCount = relsData.length;
         this.setState({
           lintArray: relsData,
           nodeArray: nodesData,
-          triples: project_triples,
-          concepts: project_concepts,
+          triples: relsDataCount,
+          concepts: count,
         });
         myChart.setOption({
           series: [
@@ -976,8 +974,8 @@ class ProjectMap extends Component {
             // scale:true,
             // focus:'adjacency',
             itemStyle: {
-              borderColor: '#F96E41',
-              color: '#F96E41',
+              borderColor: '#E261C1',
+              color: '#E261C1',
               borderWidth: 5,
             },
             lineStyle: {

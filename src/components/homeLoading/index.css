@@ -1,0 +1,45 @@
+.homeLoading {
+    width: 25px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left:5px;
+    /* display: inline-block; */
+}
+
+.homeSpan,
+.homeSpan2,
+.homeSpan3 {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: black;
+    opacity: 0.6;
+    animation: bounce 3.0s infinite ease-in-out;
+}
+
+.homeSpan{
+    animation-delay: -3.0s;
+   
+}
+.homeSpan2 {
+    animation-delay: -2.0s;
+}
+.homeSpan3{
+    animation-delay: -1.0s;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    }
+
+    50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
