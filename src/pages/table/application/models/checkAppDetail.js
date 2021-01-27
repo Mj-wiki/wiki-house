@@ -7,7 +7,7 @@ import { Message } from 'antd';
 
 const initState = {
   fieldData: [],
-  dataSource: [],
+  dataSource: -1,
   total: 0,
   pageSize: 10,
   pageNum: 1,
