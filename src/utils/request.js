@@ -9,25 +9,40 @@ const request = extend({
 });
 
 request.interceptors.request.use((url, options) => {
-  if (url) {
+  console.log(url);
+  if (
+    url &&
+    (url.indexOf('apl/chart') > -1 || url.indexOf('apl/statistics') > -1)
+  ) {
+    return {
+      url: `${url}`,
+      options: {
+        ...options,
+      },
+    };
+  } else {
     loadingPublisher.add();
+    return {
+      url: `${url}`,
+      options: {
+        ...options,
+      },
+    };
   }
-  return {
-    url: `${url}`,
-    options: {
-      ...options,
-    },
-    // headers: {
-    //   'Access-Control-Allow-Origin': '*',
-    // },
-  };
 });
 
 request.interceptors.response.use(res => {
-  if (res && res.url) {
+  if (
+    res &&
+    res.url &&
+    (res.url.indexOf('apl/chart') > -1 ||
+      res.url.indexOf('apl/statistics') > -1)
+  ) {
+    return res;
+  } else {
     loadingPublisher.sub();
+    return res;
   }
-  return res;
 });
 
 // request.use(async (ctx, next) => {
