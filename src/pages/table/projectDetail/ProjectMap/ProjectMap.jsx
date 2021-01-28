@@ -939,7 +939,7 @@ class ProjectMap extends Component {
       animation: false,
       series: [
         {
-          zoom: 0.2,
+          zoom: 0.1,
           type: 'graph',
           layout: 'force',
           data: data,
@@ -972,7 +972,7 @@ class ProjectMap extends Component {
           force: {
             repulsion: 1000,
             gravity: 0,
-            edgeLength: 400,
+            edgeLength: 800,
             layoutAnimation: false,
             friction: 0.3,
             initLayout: 'none',
