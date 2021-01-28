@@ -5,7 +5,7 @@ const Auth = ({ children, auth, authLoading }) => {
     auth();
   }, []);
 
-  return <div>{children}</div>;
+  return <div style={{ height: '100%' }}>{children}</div>;
 };
 
 const mapDispatchProps = dispatch => {

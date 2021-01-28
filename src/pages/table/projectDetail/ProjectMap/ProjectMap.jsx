@@ -72,6 +72,8 @@ class ProjectMap extends Component {
     triples: '',
     concepts: '',
     codeData: '',
+    project_triples: '',
+    project_concepts: '',
   };
   formRef = React.createRef();
   render() {
@@ -100,6 +102,8 @@ class ProjectMap extends Component {
       triples,
       concepts,
       codeData,
+      project_triples,
+      project_concepts,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
@@ -261,6 +265,28 @@ class ProjectMap extends Component {
               >
                 -
               </Button>
+              {/* {concepts && triples ? (
+                <div className={Style.ProjectTotal}>
+                  <span className={Style.ProjectTotalTitle}>三元组数</span> ：
+                  {`${getNumAndUnit(triples, 0).num}${getNumAndUnit(triples, 0).unit
+                    }${getNumAndUnit(triples, 0).num1}${getNumAndUnit(triples, 0).unit1
+                    }${getNumAndUnit(triples, 0).num2}${getNumAndUnit(triples, 0).unit2
+                    }`}{' '}
+                  <span
+                    className={Style.ProjectTotalTitle}
+                    style={{ marginLeft: '10px' }}
+                  >
+                    概念总数
+                  </span>
+                  ：
+                  {`${getNumAndUnit(concepts, 0).num}${getNumAndUnit(concepts, 0).unit
+                    }${getNumAndUnit(concepts, 0).num1}${getNumAndUnit(concepts, 0).unit1
+                    }${getNumAndUnit(concepts, 0).num2}${getNumAndUnit(concepts, 0).unit2
+                    }`}
+                </div>
+              ) : (
+                  ''
+                )} */}
               {concepts && triples ? (
                 <div className={Style.ProjectTotal}>
                   <span className={Style.ProjectTotalTitle}>三元组数</span> ：
@@ -270,7 +296,15 @@ class ProjectMap extends Component {
                     getNumAndUnit(triples, 0).unit1
                   }${getNumAndUnit(triples, 0).num2}${
                     getNumAndUnit(triples, 0).unit2
-                  }`}{' '}
+                  }`}
+                  <span style={{ margin: '0px 3px' }}>/</span>
+                  {`${getNumAndUnit(project_triples, 0).num}${
+                    getNumAndUnit(project_triples, 0).unit
+                  }${getNumAndUnit(project_triples, 0).num1}${
+                    getNumAndUnit(project_triples, 0).unit1
+                  }${getNumAndUnit(project_triples, 0).num2}${
+                    getNumAndUnit(project_triples, 0).unit2
+                  }`}
                   <span
                     className={Style.ProjectTotalTitle}
                     style={{ marginLeft: '10px' }}
@@ -285,10 +319,19 @@ class ProjectMap extends Component {
                   }${getNumAndUnit(concepts, 0).num2}${
                     getNumAndUnit(concepts, 0).unit2
                   }`}
+                  <span style={{ margin: '0px 3px' }}>/</span>
+                  {`${getNumAndUnit(project_concepts, 0).num}${
+                    getNumAndUnit(project_concepts, 0).unit
+                  }${getNumAndUnit(project_concepts, 0).num1}${
+                    getNumAndUnit(project_concepts, 0).unit1
+                  }${getNumAndUnit(project_concepts, 0).num2}${
+                    getNumAndUnit(project_concepts, 0).unit2
+                  }`}
                 </div>
               ) : (
                 ''
               )}
+
               {OverFocus ? (
                 <Button
                   type="primary"
@@ -491,7 +534,7 @@ class ProjectMap extends Component {
             </Form.Item>
 
             <Form.Item
-              label="概念类型"
+              label="关系类型"
               name="conceptType"
               rules={[
                 {
@@ -848,7 +891,12 @@ class ProjectMap extends Component {
   initEachartsID = ID => {
     ProjectDetail(ID).then(res => {
       if (res.result == 'success') {
-        const { trees, project_id, project_triples } = res.data;
+        const {
+          trees,
+          project_id,
+          project_triples,
+          project_concepts,
+        } = res.data;
         let nodesData = trees.nodes;
         let relsData = trees.rels;
         let count = nodesData.length;
@@ -861,6 +909,8 @@ class ProjectMap extends Component {
           ProjectId: project_id,
           triples: relsDataCount,
           concepts: count,
+          project_triples: project_triples,
+          project_concepts: project_concepts,
         });
         const myChart = this.refs.main ? echarts.init(this.refs.main) : null;
         if (myChart) {
@@ -898,6 +948,8 @@ class ProjectMap extends Component {
           nodeArray: nodesData,
           triples: relsDataCount,
           concepts: count,
+          project_triples: project_triples,
+          project_concepts: project_concepts,
         });
         myChart.setOption({
           series: [

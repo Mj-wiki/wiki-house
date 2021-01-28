@@ -23,7 +23,7 @@ const listData = [
     appId: 2,
   },
 ];
-function TableEdit(props) {
+function Application(props) {
   const { editData, history, onInit } = props;
   const {
     query: { uid },
@@ -94,4 +94,4 @@ const mapDispatchProps = dispatch => {
     },
   };
 };
-export default connect(mapStateProps, mapDispatchProps)(TableEdit);
+export default connect(mapStateProps, mapDispatchProps)(Application);
