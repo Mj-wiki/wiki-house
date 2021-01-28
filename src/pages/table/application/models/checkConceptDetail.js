@@ -167,14 +167,25 @@ export default {
         //属性对象和属性数组
         let propertyObject = {};
         let propertyList = [];
+        let keyList = [];
         let emptyObject = {};
+        let jointList = [];
         if (Array.isArray(data.data)) {
           data.data[0]?.graph?.rels.map((v, k) => {
             emptyObject = { name: v.name, source: v.target, target: v.target };
           });
           data.data[0]?.graph.rels.unshift(emptyObject);
           propertyObject = data.data[0].properties;
+          keyList = Object.keys(propertyObject);
           propertyList = Object.values(propertyObject);
+          jointList = keyList.map((c, j) => {
+            propertyList.map((v, k) => {
+              if (j === k) {
+                c = `${c} : ${v}`;
+              }
+            });
+            return c;
+          });
         }
         if (data.result === 'success') {
           yield put({
@@ -183,7 +194,7 @@ export default {
               dataSource: data.data,
               total: data.total,
               endFocusStatus: 0,
-              properties: propertyList,
+              properties: jointList,
             },
           });
         } else {
