@@ -68,7 +68,7 @@ export default class componentName extends Component {
       yAxis: [
         {
           type: 'value',
-          name: '项目数',
+          // name: '项目数',
           nameLocation: 'middle',
           min: 0,
           max: NUmberBig,

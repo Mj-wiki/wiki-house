@@ -48,6 +48,8 @@ export default class projectManagement extends Component {
     locationCount: '',
     locationshow: false,
     oderProjectId: '',
+    listFlage: true,
+    title: '',
   };
   formRef = React.createRef();
   //  form = Form.useForm();
@@ -77,6 +79,8 @@ export default class projectManagement extends Component {
       GetfieldList,
       locationCount,
       locationshow,
+      listFlage,
+      title,
     } = this.state;
     const layout = {
       labelCol: { span: 6 },
@@ -97,6 +101,7 @@ export default class projectManagement extends Component {
       <div className={Style.projectwrapper}>
         <SearchFrom
           SearchFromValue={(select, ipt) => this.SearchFromValue(select, ipt)}
+          ref="Searfrom"
         />
         <div className={Style.projectBox}>
           <div className={Style.projectheader}>
@@ -111,7 +116,7 @@ export default class projectManagement extends Component {
             </Button>
           </div>
         </div>
-        {ProjectData.length ? (
+        {listFlage ? (
           <div className={Style.List}>
             {ProjectData.map((item, index) => {
               return (
@@ -229,7 +234,7 @@ export default class projectManagement extends Component {
           Blundeventcancelproject={() => this.Blundeventcloseproject()}
           cancelText={'返回'}
           okText={'提交'}
-          title={'创建项目'}
+          title={title}
           closable={false}
           centered={true}
           width={620}
@@ -332,9 +337,9 @@ export default class projectManagement extends Component {
       fileloadShow: false,
       uploadkeys: 3,
       oderProjectId: project_id,
+      title: '复制项目',
     });
     const form = this.formRef.current;
-    // console.log(form)
     form.setFieldsValue({
       project_name,
       project_fieldcode,
@@ -344,15 +349,38 @@ export default class projectManagement extends Component {
     });
   };
   SearchFromValue = (select, ipt) => {
-    this.setState({
-      locationshow: true,
+    this.SeachgListData(select, ipt);
+  };
+  SeachgListData = (projectFieldcode, projectName) => {
+    let obj = {
+      project_fieldcode: projectFieldcode,
+      project_name: projectName,
+    };
+    GetProjectList(obj).then(res => {
+      if (res.result == 'success') {
+        this.setState({
+          ProjectData: res.data,
+          locationCount: res.total,
+          listFlage: true,
+          locationshow: true,
+        });
+        if (res.data.length == 0) {
+          message.error('未查询到相关项目');
+          this.setState({
+            listFlage: false,
+            locationshow: true,
+          });
+        }
+      } else {
+        return;
+      }
     });
-    this.initProjectlist(select, ipt);
   };
   Blundeventshowproject = item => {
     this.setState({
       isModalVisible: true,
       fileloadShow: true,
+      title: '创建项目',
     });
   };
   Blundeventcloseproject = async () => {
@@ -454,6 +482,7 @@ export default class projectManagement extends Component {
     } catch (err) {
       // console.log(err)
     }
+    this.refs.Searfrom.SethandelChange();
   };
   CoypProject = res => {
     const { oderProjectId } = this.state;
@@ -619,11 +648,7 @@ export default class projectManagement extends Component {
       if (res.result == 'success') {
         this.setState({
           ProjectData: res.data,
-          locationCount: res.total,
         });
-        if (res.data.length == 0) {
-          message.error('未查询到相关项目');
-        }
       } else {
         return;
       }

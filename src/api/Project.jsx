@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-// import request from './request';
+//  import http from './request';
 import { url } from '../../env';
 
 //新增项目
@@ -31,6 +31,7 @@ export const deleteProject = data => {
 export const initHomeStatistics = data => {
   return request(`/apl/statistics/`, {
     method: 'get',
+    params: data,
   });
 };
 

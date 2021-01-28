@@ -11,7 +11,7 @@ export default class SearchFrom extends Component {
     GetfieldList: [],
   };
   render() {
-    const { GetfieldList } = this.state;
+    const { GetfieldList, optionValue } = this.state;
     return (
       <div className={Style.wrapper}>
         <span className={Style.wrappertitle}>项目管理</span>
@@ -21,6 +21,7 @@ export default class SearchFrom extends Component {
               defaultValue="全部领域"
               style={{ width: 150 }}
               onChange={this.handleChange}
+              value={optionValue}
             >
               {GetfieldList.map((item, index) => {
                 return (
@@ -44,6 +45,11 @@ export default class SearchFrom extends Component {
   handleChange = value => {
     this.setState({
       optionValue: value,
+    });
+  };
+  SethandelChange = () => {
+    this.setState({
+      optionValue: '全部领域',
     });
   };
   onSearch = value => {

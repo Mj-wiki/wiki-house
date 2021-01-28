@@ -114,7 +114,9 @@ class ProjectOverview extends Component {
           <div className={Style.linheight}>
             <div className={Style.zuzhi}>
               <AlertTwoTone className={Style.icon} />
-              <p className={Style.postionright}>组织</p>
+              <p className={Style.postionright}>
+                <span>组织</span>
+              </p>
             </div>
             <p className={Style.bordertop}>{project_code}</p>
           </div>

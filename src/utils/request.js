@@ -17,9 +17,6 @@ request.interceptors.request.use((url, options) => {
     options: {
       ...options,
     },
-    // headers: {
-    //   'Access-Control-Allow-Origin': '*',
-    // },
   };
 });
 
@@ -29,14 +26,4 @@ request.interceptors.response.use(res => {
   }
   return res;
 });
-
-// request.use(async (ctx, next) => {
-//   await next();
-//   const { res } = ctx;
-//   if (res.code !== 0) {
-//     // 错误公共部分
-//     console.log(res.msg)
-//   }
-// })
-
 export default request;

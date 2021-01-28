@@ -39,7 +39,7 @@ function TableList(props) {
               <div className={styles.eacharstext}>
                 <p>项目总数</p>
                 <div className={styles.eachrsp}>
-                  {projects ? (
+                  {projects >= 0 ? (
                     <span>{`${getNumAndUnit(projects, 0).num}${
                       getNumAndUnit(projects, 0).unit
                     }${getNumAndUnit(projects, 0).num1}${
@@ -63,7 +63,7 @@ function TableList(props) {
               <div className={styles.eacharstext}>
                 <p>三元组数</p>
                 <div className={styles.eachrsp}>
-                  {triples ? (
+                  {triples >= 0 ? (
                     <span>{`${getNumAndUnit(triples, 0).num}${
                       getNumAndUnit(triples, 0).unit
                     }${getNumAndUnit(triples, 0).num1}${
@@ -87,7 +87,7 @@ function TableList(props) {
               <div className={styles.eacharstext}>
                 <p>概念总数</p>
                 <div className={styles.eachrsp}>
-                  {concepts ? (
+                  {concepts >= 0 ? (
                     <span>{`${getNumAndUnit(concepts, 0).num}${
                       getNumAndUnit(concepts, 0).unit
                     }${getNumAndUnit(concepts, 0).num1}${
@@ -107,6 +107,7 @@ function TableList(props) {
           <div className={styles.eachartright}>
             <EachartsTable />
             <p className={styles.textadd}>项目数趋势图</p>
+            <p className={styles.ProjectCount}>项目数</p>
           </div>
         </div>
         <div className={styles.autobottom}>
