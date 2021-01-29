@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.less';
-
+import { CloseSquareOutlined } from '@ant-design/icons';
 const DiaLog = props => {
   const { x, y, hidden, item, onClick } = props;
   // 点击聚焦
@@ -18,6 +18,7 @@ const DiaLog = props => {
         }}
       >
         <div className={styles.items} onClick={clickFocus.bind(this)}>
+          <CloseSquareOutlined className={styles.iconRight} />
           聚焦
         </div>
         {/* <div className={styles.items}>添加关系</div>
