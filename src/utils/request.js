@@ -7,13 +7,14 @@ import { loadingPublisher } from '../components/Loading/Loading';
 const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
-
+// /apl/project/upload/
 request.interceptors.request.use((url, options) => {
   if (
     url &&
     (url.indexOf('apl/chart') > -1 ||
       url.indexOf('apl/statistics') > -1 ||
-      url.indexOf('apl/project/copy/') > -1)
+      url.indexOf('apl/project/copy/') > -1 ||
+      url.indexOf('apl/project/upload/') > -1)
   ) {
     return {
       url: `${url}`,
@@ -37,7 +38,8 @@ request.interceptors.response.use(res => {
     res.url &&
     (res.url.indexOf('apl/chart') > -1 ||
       res.url.indexOf('apl/statistics') > -1 ||
-      res.url.indexOf('apl/project/copy/') > -1)
+      res.url.indexOf('apl/project/copy/') > -1 ||
+      res.url.indexOf('apl/project/upload/') > -1)
   ) {
     return res;
   } else {

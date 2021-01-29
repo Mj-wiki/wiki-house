@@ -5,14 +5,7 @@ import * as echarts from 'echarts';
 import { initEachartsData } from '@/api/Project.jsx';
 export default class componentName extends Component {
   render() {
-    return (
-      <div
-        className={Style.eachwrapper}
-        id="main"
-        ref="main"
-        style={{ width: '100%', height: '100%' }}
-      ></div>
-    );
+    return <div className={Style.eachwrapper} id="main" ref="main"></div>;
   }
   componentDidMount() {
     const myChart = this.refs.main ? echarts.init(this.refs.main) : null;
@@ -58,7 +51,7 @@ export default class componentName extends Component {
         nameGap: 42.5,
       },
       grid: {
-        height: '76%',
+        height: '77%',
         width: '90%',
         backgroundColor: '#fff',
         show: true,

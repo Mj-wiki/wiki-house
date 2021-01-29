@@ -287,16 +287,14 @@ class ProjectOverview extends Component {
     myChart.getZr().on('click', function(params) {
       SetTapIndex();
     });
-    setTimeout(() => {
-      myChart.hideLoading();
-    }, 1000);
+    myChart.hideLoading();
     setTimeout(() => {
       let pageData = myChart.getConnectedDataURL({
         pixelRatio: 2,
         backgroundColor: '#fff',
       });
       that.bluneventimg(pageData);
-    }, 1500);
+    }, 1000);
   };
   bluneventimg = base64String => {
     const { Image } = this.state;
