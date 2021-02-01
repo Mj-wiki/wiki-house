@@ -33,7 +33,7 @@ class projectDetail extends Component {
               <ProjectOverview {...this.props} SetTapIndex={this.SetTapIndex} />
             </TabPane>
             <TabPane tab="项目图谱" key="2" className={Styles.wrapperBox}>
-              <ProjectMap {...this.props} ref="Projectmap" />
+              <ProjectMap {...this.props} />
             </TabPane>
           </Tabs>
         </div>

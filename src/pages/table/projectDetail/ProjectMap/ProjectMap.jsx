@@ -730,7 +730,7 @@ class ProjectMap extends Component {
           edit_list: [],
           triples: links.length,
           concepts: node.length,
-          preservation: false,
+          preservation: true,
           // isEidet: false,
           // eidetText: false
         });

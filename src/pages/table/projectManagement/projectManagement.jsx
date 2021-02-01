@@ -27,7 +27,6 @@ import {
 } from '@/api/Project.jsx';
 // import UpFile from './index'
 import { transformationTime } from '@/utils/dateUtil.js';
-import { origin } from '../../../../env.js';
 // import  url from  '../../../../public/xlsx/词表上传模板.xlsx'
 const radioStyle = {
   width: '150px',
@@ -392,6 +391,9 @@ export default class projectManagement extends Component {
     });
   };
   SearchFromValue = (select, ipt) => {
+    if (select === '全部领域') {
+      select = '';
+    }
     this.SeachgListData(select, ipt);
   };
   SeachgListData = (projectFieldcode, projectName) => {
@@ -716,6 +718,7 @@ export default class projectManagement extends Component {
           ProjectData: res.data,
           locationshow: false,
           locationCount: res.total,
+          listFlage: true,
         });
       } else {
         return;

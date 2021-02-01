@@ -320,7 +320,12 @@ class ProjectOverview extends Component {
     uploadImg(fd).then(res => {
       if (res.code == 0) {
         const { fileUrl, envPath } = res.data;
-        let url = envPath + '/' + fileUrl;
+
+        let path =
+          process.env.NODE_ENV === 'production'
+            ? window.location.origin
+            : 'http://120.221.160.5:9002';
+        let url = path + '/' + fileUrl;
         updatePrijectImg({
           photo: url,
           id: Id,
