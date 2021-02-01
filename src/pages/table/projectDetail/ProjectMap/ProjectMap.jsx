@@ -658,6 +658,7 @@ class ProjectMap extends Component {
       };
       links.push(linksdata);
       node.push(nodedata);
+      console.log(links, node);
       myChart.setOption({
         series: [
           {
@@ -736,6 +737,7 @@ class ProjectMap extends Component {
         });
         message.success('保存成功');
       } else {
+        message.success('保存失败');
         return;
       }
     });
@@ -1078,18 +1080,13 @@ class ProjectMap extends Component {
         }
         let solidName = params.data.name;
         let ClasName = params.data.labels ? params.data.labels[0] : '';
-        let Typelabel = '';
-        if (ClasName == '标准词') {
-          Typelabel = '属于';
-        } else {
-          Typelabel = '标准化为';
-        }
+        // let Typelabel = '';
+        // if (ClasName == '标准词') {
+        //   Typelabel = '属于';
+        // } else {
+        //   Typelabel = '标准化为';
+        // }
         if (id) {
-          if (ClasName == '标准词') {
-            Typelabel = '属于';
-          } else {
-            Typelabel = '标准化为';
-          }
           that.setState(state => {
             return {
               diglogHidden: true, //是否展示右键弹出层
@@ -1097,7 +1094,7 @@ class ProjectMap extends Component {
               U_ID: uid,
               x: params.event.offsetX,
               y: params.event.offsetY,
-              ClasName: Typelabel,
+              // ClasName: Typelabel,
               solidName: solidName,
               source: source,
               target: target,
@@ -1149,6 +1146,8 @@ class ProjectMap extends Component {
         let id = seriesdata[dataInd] ? seriesdata[dataInd].id : '';
         let Uid = seriesdata[dataInd] ? seriesdata[dataInd].properties.uid : '';
         let sourename = seriesdata[dataInd].name;
+        let labels = seriesdata[dataInd] ? seriesdata[dataInd].labels[0] : '';
+        let labelsname = labels == '标准词' ? '属于' : '标准化为';
         if (that.state.AddRelationship) {
           if (RightBtnId == id) {
             message.warning('不能与自己添加关系请重新选择');
@@ -1164,6 +1163,7 @@ class ProjectMap extends Component {
               sourename: sourename,
               SolidId: id,
               Uid: Uid,
+              ClasName: labelsname,
             };
           });
           myChart.setOption({

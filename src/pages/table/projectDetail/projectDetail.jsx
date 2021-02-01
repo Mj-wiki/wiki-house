@@ -47,7 +47,6 @@ class projectDetail extends Component {
     this.setState({
       TapIndex: val,
     });
-    console.log(this);
   };
   SetTapIndex = () => {
     this.setState({
