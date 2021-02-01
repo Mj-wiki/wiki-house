@@ -3,6 +3,7 @@ import '../../../assets/css/index.css';
 import Style from './projectManagement.less';
 import SearchFrom from '../../../components/SearchFrom/SearchFrom';
 import AddPorject from '../../../components/Addproject/Addproject';
+// import fildimg  from '../../../assets/xlsx/Template.xlsx'
 import {
   Button,
   Form,
@@ -13,7 +14,7 @@ import {
   Empty,
   Spin,
 } from 'antd';
-import { SwitcherTwoTone, DeleteTwoTone } from '@ant-design/icons';
+import { SnippetsOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
   CreateProject,
   GetProjectList,
@@ -22,9 +23,11 @@ import {
   Getfield,
   PrijectUpdate,
   copyProjectId,
+  ProjectOrgList,
 } from '@/api/Project.jsx';
 // import UpFile from './index'
 import { transformationTime } from '@/utils/dateUtil.js';
+// import  url from  '../../../../public/xlsx/词表上传模板.xlsx'
 const radioStyle = {
   width: '150px',
   height: '30px',
@@ -50,10 +53,9 @@ export default class projectManagement extends Component {
     oderProjectId: '',
     listFlage: true,
     title: '',
+    orgListOption: [],
   };
   formRef = React.createRef();
-  //  form = Form.useForm();
-  //  Form.useForm();
   uploadprops = {
     name: 'file',
     headers: {
@@ -81,6 +83,7 @@ export default class projectManagement extends Component {
       locationshow,
       listFlage,
       title,
+      orgListOption,
     } = this.state;
     const layout = {
       labelCol: { span: 6 },
@@ -124,11 +127,12 @@ export default class projectManagement extends Component {
                   <div className={Style.list_header}>
                     <div></div>
                     <div>
-                      <SwitcherTwoTone
+                      <SnippetsOutlined
                         onClick={() => this.BlundeventCopyProject(item)}
+                        style={{ color: '#ccc' }}
                       />
-                      <DeleteTwoTone
-                        style={{ marginLeft: '10px' }}
+                      <DeleteOutlined
+                        style={{ marginLeft: '10px', color: '#ccc' }}
                         onClick={() => this.blundeventremovelist(item)}
                       />
                     </div>
@@ -160,7 +164,7 @@ export default class projectManagement extends Component {
                     </span>
                   </p>
                   <p className={Style.xiangmuname}>
-                    三元数组：
+                    三元组数：
                     <span className={Style.marginLeft}>
                       {item.project_triples}
                     </span>
@@ -283,14 +287,29 @@ export default class projectManagement extends Component {
                 rules={[
                   {
                     required: true,
+                    message: '项目领域不能为空',
+                  },
+                  {
+                    validator: this.validateServiceName,
+                  },
+                ]}
+              >
+                <Select options={orgListOption} onChange={this.blundSelect} />
+              </Form.Item>
+              {/* <Form.Item
+                name="project_code"
+                label="项目组织"
+                rules={[
+                  {
+                    required: true,
                     message: '项目组织不能为空！',
                   },
                 ]}
               >
                 <Input maxLength="50" />
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item name="project_introduction" label="项目简介">
-                <Input.TextArea maxLength="50" />
+                <Input.TextArea maxLength="100" />
               </Form.Item>
               {fileloadShow ? (
                 <Form.Item
@@ -305,6 +324,15 @@ export default class projectManagement extends Component {
                   </Upload>
                 </Form.Item>
               ) : null}
+              <Form.Item name="getTemplate" label="下载模版">
+                {/* <a href='../../../assets/xlsx/Template.xlsx' download='Template.xlsx'>模版.xlsx</a> */}
+                <a
+                  href="https://stage.linkhealth-cloud.cn/new-ihp/de52f6be-f610-44ba-bc06-d65938ddcdb8.xlsx"
+                  download="模版.xlsx"
+                >
+                  模版.xlsx
+                </a>
+              </Form.Item>
             </Form>
           </div>
         </AddPorject>
@@ -505,10 +533,11 @@ export default class projectManagement extends Component {
     formData.append('file', fileList[0]);
     formData.append('project_id', data);
     uploadFile(formData).then(res => {
-      this.initProjectlist();
       if (res.result == 'success') {
+        this.initProjectlist();
         message.success('文件上传成功！');
       } else {
+        this.initProjectlist();
         message.error('文件上传失败！');
         return;
       }
@@ -568,6 +597,7 @@ export default class projectManagement extends Component {
       isModalVisible: true,
       uploadkeys: 2,
       ProjectId: id,
+      title: '创建项目',
     });
     const {
       project_name,
@@ -615,11 +645,32 @@ export default class projectManagement extends Component {
   componentDidMount() {
     this.initProjectlist();
     this.initfiled();
+    this.initOrgList();
     let username = localStorage.getItem('username');
     this.setState({
       username: username,
     });
   }
+  initOrgList = () => {
+    ProjectOrgList().then(res => {
+      if (res.result == 'success') {
+        let data = [];
+        res.data.forEach(item => {
+          let obj = {
+            label: item.org_code,
+            value: item.org_name,
+          };
+          data.push(obj);
+        });
+
+        this.setState({
+          orgListOption: data,
+        });
+      } else {
+        return;
+      }
+    });
+  };
   initfiled = () => {
     Getfield().then(res => {
       if (res.result == 'success') {
@@ -648,6 +699,8 @@ export default class projectManagement extends Component {
       if (res.result == 'success') {
         this.setState({
           ProjectData: res.data,
+          locationshow: false,
+          locationCount: res.total,
         });
       } else {
         return;

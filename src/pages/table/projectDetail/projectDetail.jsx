@@ -27,13 +27,13 @@ class projectDetail extends Component {
             centered={true}
             size={'default'}
             tabBarGutter={100}
+            className={Styles.wrapperBox}
           >
-            <TabPane tab="项目概览" key="1">
+            <TabPane tab="项目概览" key="1" className={Styles.wrapperBox}>
               <ProjectOverview {...this.props} SetTapIndex={this.SetTapIndex} />
             </TabPane>
-            <TabPane tab="项目图谱" key="2">
-              <ProjectMap {...this.props} />
-              {/* <Graph/> */}
+            <TabPane tab="项目图谱" key="2" className={Styles.wrapperBox}>
+              <ProjectMap {...this.props} ref="Projectmap" />
             </TabPane>
           </Tabs>
         </div>
@@ -47,6 +47,7 @@ class projectDetail extends Component {
     this.setState({
       TapIndex: val,
     });
+    console.log(this);
   };
   SetTapIndex = () => {
     this.setState({

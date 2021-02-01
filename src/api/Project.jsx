@@ -11,7 +11,7 @@ export const CreateProject = data => {
 };
 //项目列表
 export const GetProjectList = data => {
-  return request(`/apl/project/list/`, {
+  return request(`/apl/project/listV2/`, {
     method: 'get',
     params: data,
   });
@@ -29,7 +29,7 @@ export const deleteProject = data => {
 };
 
 export const initHomeStatistics = data => {
-  return request(`/apl/statistics/`, {
+  return request(`/apl/statisticsV2/`, {
     method: 'get',
     params: data,
   });
@@ -115,5 +115,11 @@ export const PreservationAtlas = data => {
     data: data,
   });
 };
-///apl/project/updateProjectConcepts/
-//http://127.0.0.1:8000/api/project/focusProjectConceptInfo/?project_id=PJ1dacfe724fc411ebb771fa163eac98f2&node_id=8540670
+
+export const ProjectOrgList = data => {
+  return request(`/apl/project/orgList/`, {
+    method: 'get',
+  });
+};
+
+///apl/project/orgList/

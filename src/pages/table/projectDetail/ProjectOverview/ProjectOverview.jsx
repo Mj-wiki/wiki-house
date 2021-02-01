@@ -287,7 +287,9 @@ class ProjectOverview extends Component {
     myChart.getZr().on('click', function(params) {
       SetTapIndex();
     });
-    myChart.hideLoading();
+    setTimeout(() => {
+      myChart.hideLoading();
+    }, 700);
     setTimeout(() => {
       let pageData = myChart.getConnectedDataURL({
         pixelRatio: 2,

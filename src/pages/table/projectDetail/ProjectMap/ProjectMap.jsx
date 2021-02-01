@@ -74,6 +74,8 @@ class ProjectMap extends Component {
     codeData: '',
     project_triples: '',
     project_concepts: '',
+    ProjectTitle: '',
+    preservation: false,
   };
   formRef = React.createRef();
   render() {
@@ -104,47 +106,58 @@ class ProjectMap extends Component {
       codeData,
       project_triples,
       project_concepts,
+      ProjectTitle,
+      preservation,
     } = this.state;
     return (
       <div className={Style.atlasWrapper}>
         <div className={Style.ProjectMap}>
           <div className={Style.projecttext}>
-            <div className={Style.Account}></div>
+            <div className={Style.Account}>{ProjectTitle}</div>
             <div className={Style.detailtext}>
-              <p className={Style.gainian}>概念名：{ConceptName}</p>
               <p className={Style.gainian}>
-                属性：
+                <span className={Style.TitleText}>概念名：</span>
+                {ConceptName}
+              </p>
+              <p className={Style.gainian}>
+                <span className={Style.TitleText}>属性：</span>
                 {codeData ? <span>code：{codeData}</span> : ''}
                 {properties ? (
-                  <p style={{ margin: '0px 0px 0px 35px' }}>
+                  <span
+                    style={{ margin: '0px 0px 0px 99px', display: 'block' }}
+                  >
                     class：{properties}
-                  </p>
+                  </span>
                 ) : (
                   ''
                 )}
               </p>
-              <p className={Style.gainian}>
-                路径：
-                {path.map((item, index) => {
-                  if (index == path.length - 1) {
-                    return (
-                      <span key={index}>
-                        <span className={Style.routeMargin}>{item}</span>
-                      </span>
-                    );
-                  } else {
-                    return (
-                      <span key={index}>
-                        <span className={Style.routeMargin}> {item}</span> /
-                      </span>
-                    );
-                  }
-                })}
-              </p>
-              <p className={Style.gainian}>标准词：{std_vocab}</p>
               <div className={Style.gainian} style={{ display: 'flex' }}>
-                {/* syn_vocab */}
-                <span>同义词：</span>{' '}
+                <span className={Style.TitleText}>路径：</span>
+                <div>
+                  {path.map((item, index) => {
+                    if (index == path.length - 1) {
+                      return (
+                        <span key={index}>
+                          <span className={Style.routeMargin}>{item}</span>
+                        </span>
+                      );
+                    } else {
+                      return (
+                        <span key={index}>
+                          <span className={Style.routeMargin}> {item}</span> /
+                        </span>
+                      );
+                    }
+                  })}
+                </div>
+              </div>
+              <p className={Style.gainian}>
+                <span className={Style.TitleText}>标准词：</span>
+                {std_vocab}
+              </p>
+              <div className={Style.gainian} style={{ display: 'flex' }}>
+                <span className={Style.TitleText}> 同义词：</span>
                 <div className={Style.openwrapper}>
                   {syn_vocab.length > 8 ? (
                     <div>
@@ -265,28 +278,6 @@ class ProjectMap extends Component {
               >
                 -
               </Button>
-              {/* {concepts && triples ? (
-                <div className={Style.ProjectTotal}>
-                  <span className={Style.ProjectTotalTitle}>三元组数</span> ：
-                  {`${getNumAndUnit(triples, 0).num}${getNumAndUnit(triples, 0).unit
-                    }${getNumAndUnit(triples, 0).num1}${getNumAndUnit(triples, 0).unit1
-                    }${getNumAndUnit(triples, 0).num2}${getNumAndUnit(triples, 0).unit2
-                    }`}{' '}
-                  <span
-                    className={Style.ProjectTotalTitle}
-                    style={{ marginLeft: '10px' }}
-                  >
-                    概念总数
-                  </span>
-                  ：
-                  {`${getNumAndUnit(concepts, 0).num}${getNumAndUnit(concepts, 0).unit
-                    }${getNumAndUnit(concepts, 0).num1}${getNumAndUnit(concepts, 0).unit1
-                    }${getNumAndUnit(concepts, 0).num2}${getNumAndUnit(concepts, 0).unit2
-                    }`}
-                </div>
-              ) : (
-                  ''
-                )} */}
               {concepts && triples ? (
                 <div className={Style.ProjectTotal}>
                   <span className={Style.ProjectTotalTitle}>三元组数</span> ：
@@ -458,7 +449,7 @@ class ProjectMap extends Component {
                 </p>
               </div>
             ) : null}
-            {isEidet ? (
+            {preservation ? (
               <Button
                 type="primary"
                 onClick={() => this.blundeventpreservationeidet()}
@@ -711,6 +702,8 @@ class ProjectMap extends Component {
       isEidet: true,
       diglogHidden: false,
       deleteProject: false,
+      eidetText: false,
+      preservation: true,
     });
   };
   //保存
@@ -734,11 +727,14 @@ class ProjectMap extends Component {
         let node = option.data;
         let links = option.links;
         this.setState({
-          isEidet: false,
           edit_list: [],
           triples: links.length,
           concepts: node.length,
+          preservation: false,
+          // isEidet: false,
+          // eidetText: false
         });
+        message.success('保存成功');
       } else {
         return;
       }
@@ -754,6 +750,7 @@ class ProjectMap extends Component {
     this.Setstateinnerhtml();
     this.setState({
       OverFocus: false,
+      eidetText: false,
     });
   };
   handleOk = () => {
@@ -776,6 +773,7 @@ class ProjectMap extends Component {
       edit_list: [],
       triples: lintArray.length,
       concepts: nodeArray.length,
+      preservation: false,
     });
   };
   blundeventeidetRemove = () => {
@@ -799,6 +797,8 @@ class ProjectMap extends Component {
       diglogHidden: false,
       deleteProject: false,
       edit_list: [],
+      eidetText: false,
+      preservation: false,
     });
   };
   BlundeventshowDialog = () => {
@@ -896,6 +896,7 @@ class ProjectMap extends Component {
           project_id,
           project_triples,
           project_concepts,
+          project_name,
         } = res.data;
         let nodesData = trees.nodes;
         let relsData = trees.rels;
@@ -911,6 +912,7 @@ class ProjectMap extends Component {
           concepts: count,
           project_triples: project_triples,
           project_concepts: project_concepts,
+          ProjectTitle: project_name,
         });
         const myChart = this.refs.main ? echarts.init(this.refs.main) : null;
         if (myChart) {
@@ -1100,6 +1102,7 @@ class ProjectMap extends Component {
               source: source,
               target: target,
               type: type,
+              eidetText: false,
             };
           });
         } else {
@@ -1123,6 +1126,7 @@ class ProjectMap extends Component {
       that.setState({
         diglogHidden: false,
         deleteProject: false,
+        eidetText: false,
       });
       if (!params.target) {
         myChart.setOption({
@@ -1183,8 +1187,16 @@ class ProjectMap extends Component {
       }
     });
     // 拖动中
+    myChart.on('mouseup', function(params) {
+      if (myChart.getOption()?.series?.[0].data[params.dataIndex] == undefined)
+        return;
+      var optionS = myChart.getOption();
+      if (myChart.getOption()) {
+        optionS.series[0].data[params.dataIndex].fixed = true;
+      }
+      myChart.setOption(optionS);
+    });
     myChart.on('mousemove', function(params) {});
-    myChart.on('mouseup', function(params) {});
     // 关闭loding
     setTimeout(() => {
       myChart.hideLoading();
@@ -1222,6 +1234,9 @@ class ProjectMap extends Component {
           zoom: currentZoom * increaseAmplitude,
         },
       ],
+    });
+    this.setState({
+      eidetText: false,
     });
   };
   GetPrijectState = text => {
