@@ -98,7 +98,7 @@ export default {
       handleData[0].graph.nodes = nodeData;
       handleData[0].graph.rels = relsData;
       if (relsData.length === 0) {
-        message.error('未查询到相应聚焦图例！');
+        message.error('未查询到相关概念！');
         // Modal.error({
         //   title: '提示',
         //   content: '未查询到相应聚焦图例！',
