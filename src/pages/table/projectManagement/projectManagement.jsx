@@ -27,6 +27,7 @@ import {
 } from '@/api/Project.jsx';
 // import UpFile from './index'
 import { transformationTime } from '@/utils/dateUtil.js';
+import { origin } from '../../../../env.js';
 // import  url from  '../../../../public/xlsx/词表上传模板.xlsx'
 const radioStyle = {
   width: '150px',
@@ -326,15 +327,15 @@ export default class projectManagement extends Component {
               ) : null}
               {fileloadShow ? (
                 <Form.Item name="getTemplate" label="下载模版">
-                  {/* <a
-                  href="http://120.221.160.5:9002/new-ihp/668094d3-772c-471d-aea7-b3dce66162e0.xlsx"
-                  download="模版.xlsx"
-                >
-                词表上传模版.xlsx
-                </a> */}
-                  <div onClick={() => this.blundeventfileurl()}>
+                  <a
+                    href="http://120.221.160.1:8000/new-ihp/668094d3-772c-471d-aea7-b3dce66162e0.xlsx"
+                    download="词表上传模版.xlsx"
+                  >
                     词表上传模版.xlsx
-                  </div>
+                  </a>
+                  {/* <div onClick={() => this.blundeventfileurl()}>
+                    词表上传模版.xlsx
+                  </div> */}
                 </Form.Item>
               ) : null}
             </Form>
