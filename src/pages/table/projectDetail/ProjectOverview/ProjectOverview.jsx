@@ -17,6 +17,7 @@ import { getNumAndUnit } from '@/utils/numberUtil';
 import HomeLoading from '../../../../components/homeLoading/homeLoading';
 class ProjectOverview extends Component {
   state = {
+    show: true,
     project_code: '',
     project_fieldcode: '',
     project_fieldname: '',
@@ -37,6 +38,7 @@ class ProjectOverview extends Component {
       update_user,
       project_concepts,
       project_triples,
+      show,
     } = this.state;
     return (
       <div className={Style.OverViewWrapper} ref="wrapper">
@@ -51,14 +53,13 @@ class ProjectOverview extends Component {
             <FundTwoTone />
             <span className={Style.imagespan}>图谱</span>
           </div>
-          <div className={Style.eachartsbox} ref="box">
-            <div style={{ width: '100%', height: '100%' }}>
-              <div
-                id="main"
-                ref="main"
-                style={{ width: '100%', height: '100%' }}
-              ></div>
-            </div>
+          <div className={Style.eachartsbox}>
+            <div
+              id="main"
+              ref="main"
+              style={{ width: '100%', height: '100%' }}
+            ></div>
+            {show ? <div className={Style.eachartsdialog}></div> : null}
           </div>
         </div>
         <div className={Style.OverViewRight}>
@@ -191,7 +192,6 @@ class ProjectOverview extends Component {
           return false;
         };
         if (myChart) {
-          myChart.showLoading();
           this.myEcharts(
             SetSolidData(nodesData),
             myChart,
@@ -288,9 +288,6 @@ class ProjectOverview extends Component {
       SetTapIndex();
     });
     setTimeout(() => {
-      myChart.hideLoading();
-    }, 700);
-    setTimeout(() => {
       let pageData = myChart.getConnectedDataURL({
         pixelRatio: 2,
         backgroundColor: '#fff',
@@ -300,6 +297,9 @@ class ProjectOverview extends Component {
   };
   bluneventimg = base64String => {
     const { Image } = this.state;
+    this.setState({
+      show: false,
+    });
     if (Image) return;
     let bytes = window.atob(base64String.split(',')[1]);
     let array = [];

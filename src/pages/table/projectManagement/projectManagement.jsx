@@ -3,7 +3,7 @@ import '../../../assets/css/index.css';
 import Style from './projectManagement.less';
 import SearchFrom from '../../../components/SearchFrom/SearchFrom';
 import AddPorject from '../../../components/Addproject/Addproject';
-// import fildimg  from '../../../assets/xlsx/Template.xlsx'
+// import fildimg from '../../../assets/xlsx/Template.xlsx'
 import {
   Button,
   Form,
@@ -324,15 +324,19 @@ export default class projectManagement extends Component {
                   </Upload>
                 </Form.Item>
               ) : null}
-              <Form.Item name="getTemplate" label="下载模版">
-                {/* <a href='../../../assets/xlsx/Template.xlsx' download='Template.xlsx'>模版.xlsx</a> */}
-                <a
-                  href="https://stage.linkhealth-cloud.cn/new-ihp/de52f6be-f610-44ba-bc06-d65938ddcdb8.xlsx"
+              {fileloadShow ? (
+                <Form.Item name="getTemplate" label="下载模版">
+                  {/* <a
+                  href="http://120.221.160.5:9002/new-ihp/668094d3-772c-471d-aea7-b3dce66162e0.xlsx"
                   download="模版.xlsx"
                 >
-                  模版.xlsx
-                </a>
-              </Form.Item>
+                词表上传模版.xlsx
+                </a> */}
+                  <div onClick={() => this.blundeventfileurl()}>
+                    词表上传模版.xlsx
+                  </div>
+                </Form.Item>
+              ) : null}
             </Form>
           </div>
         </AddPorject>
@@ -352,6 +356,16 @@ export default class projectManagement extends Component {
       </div>
     );
   }
+  blundeventfileurl = () => {
+    // const url = window.URL.createObjectURL(new Blob('http://120.221.160.5:9002/new-ihp/668094d3-772c-471d-aea7-b3dce66162e0.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    const link = document.createElement('a');
+    link.style.display = 'none';
+    link.href =
+      'http://120.221.160.1:8000/new-ihp/668094d3-772c-471d-aea7-b3dce66162e0.xlsx';
+    link.setAttribute('download', '词表上传模版.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  };
   BlundeventCopyProject = item => {
     const {
       project_name,
