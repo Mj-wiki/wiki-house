@@ -1,13 +1,5 @@
 import request from '@/utils/request';
 import { objToSearchUrl } from '@/utils/stringUtil';
-//登录
-export const Login = data => {
-  console.log(data);
-  request('/api/site/login', {
-    method: 'post',
-    data,
-  });
-};
 
 //领域下拉框列表
 export function requestGetFieldList(values) {

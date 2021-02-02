@@ -1,5 +1,7 @@
 import request from '@/utils/request';
 //登陆状态检测
-export const heartbeat = params => {
-  return request('/api/site/check');
+export const heartbeat = () => {
+  return request('/apl/check_login/', {
+    method: 'post',
+  });
 };

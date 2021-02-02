@@ -62,23 +62,6 @@ const Model = {
           },
         });
       }
-
-      // if (result.code === 0) {
-      //   yield put({
-      //     type: 'save',
-      //     payload: {
-      //       errorInfo: '',
-      //     },
-      //   });
-      //   history.replace('/table/homePage');
-      // } else {
-      //   yield put({
-      //     type: 'save',
-      //     payload: {
-      //       errorInfo: result.msg,
-      //     },
-      //   });
-      // }
     },
     *signout({ payload }, { call }) {
       const result = yield call(logout);

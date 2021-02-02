@@ -9,7 +9,7 @@ export const Login = data => {
 
 //退出登陆
 export const logout = () => {
-  return request('/apl/logout', {
+  return request('/apl/logout/', {
     method: 'post',
   });
 };
