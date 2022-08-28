@@ -41,27 +41,28 @@ const Model = {
         });
         return;
       }
-      const result = yield call(Login, {
-        username: userName,
-        password: passWord,
-      });
-      if (result.result === 'success') {
-        yield put({
-          type: 'save',
-          payload: {
-            errorInfo: '',
-          },
-        });
-        localStorage.setItem('username', result.data);
-        history.replace('/table/homePage');
-      } else {
-        yield put({
-          type: 'save',
-          payload: {
-            errorInfo: '登录账号或密码错误,请重新登录!',
-          },
-        });
-      }
+      // const result = yield call(Login, {
+      //   username: userName,
+      //   password: passWord,
+      // });
+      history.replace('/table/homePage');
+      // if (result.result === 'success') {
+      //   yield put({
+      //     type: 'save',
+      //     payload: {
+      //       errorInfo: '',
+      //     },
+      //   });
+      //   localStorage.setItem('username', result.data);
+      //   history.replace('/table/homePage');
+      // } else {
+      //   yield put({
+      //     type: 'save',
+      //     payload: {
+      //       errorInfo: '登录账号或密码错误,请重新登录!',
+      //     },
+      //   });
+      // }
     },
     *signout({ payload }, { call }) {
       const result = yield call(logout);
