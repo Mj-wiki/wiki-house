@@ -7,6 +7,8 @@ import SearchNormalizeCard from '@/components/SearchNormalizeCard';
 import coverUrl from '../../../assets/layouticon/KG_2.jpg';
 import noData from '../../../assets/img/noData.png';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import SortableList, { SortableItem } from 'react-easy-sort';
+import arrayMove from 'array-move';
 const { Option } = Select;
 const { Search } = Input;
 
@@ -31,6 +33,23 @@ function CheckAppDetail(props) {
   //搜索关键字
   const [hotWord, setHotWord] = useState(null);
   const btnElement = useRef(null);
+
+  //---拖拽
+  const [voteitems, setVoteitems] = useState([
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+  ]);
+  const onSortEnd = (oldIndex, newIndex) => {
+    setVoteitems(array => arrayMove(array, oldIndex, newIndex));
+  };
+  console.log(voteitems);
   const {
     query: { uid },
   } = history.location;
@@ -136,6 +155,17 @@ function CheckAppDetail(props) {
   };
   return (
     <div className={styles.content}>
+      <SortableList
+        onSortEnd={onSortEnd}
+        className="list"
+        draggedItemClassName="dragged"
+      >
+        {voteitems.map(item => (
+          <SortableItem key={item}>
+            <div className="voteitems">{item}</div>
+          </SortableItem>
+        ))}
+      </SortableList>
       <div className={styles.checkTitle}>归一查询</div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div className={styles.searchArea}>

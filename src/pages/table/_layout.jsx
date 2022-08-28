@@ -88,7 +88,7 @@ function BackStageLayout(props) {
                 fontSize: '18px',
               }}
             >
-              联仁归一工具
+              wiki
             </Menu.Item>
           </Menu>
         </Header>
@@ -116,7 +116,7 @@ function BackStageLayout(props) {
                 fontSize: '18px',
               }}
             >
-              联仁归一工具
+              wiki
             </Menu.Item>
 
             <Menu.Item
