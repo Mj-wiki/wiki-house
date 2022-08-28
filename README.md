@@ -14,5 +14,8 @@ Start the dev server,
 $ yarn start
 ```
 
-```react + dva
+Technology stack
+
+```bash
+react + dva + antd + echarts
 ```
