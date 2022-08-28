@@ -3,7 +3,9 @@ import styles from './_layout.less';
 import { Layout, Menu, Button, notification, Breadcrumb } from 'antd';
 import { UserOutlined, SettingOutlined } from '@ant-design/icons';
 import backIcon from '../../assets/layouticon/back.png';
+import uniLogo from '../../assets/chart/uniLogo.svg';
 import { connect } from 'umi';
+import { YMLoading } from '../../components/Loading/Loading'; //全局loading
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -51,10 +53,11 @@ function BackStageLayout(props) {
     });
   };
   const checkPersonalMessage = () => {
-    console.log('点击查看个人信息');
+    console.log('点击查看系统设置');
+    console.log(props);
   };
   const checkSystemState = () => {
-    console.log('点击查看系统设置');
+    console.log('点击查看个人信息');
   };
   const goHomePage = () => {
     history.push('/table/homePage');
@@ -66,12 +69,17 @@ function BackStageLayout(props) {
     history.push('/table/application');
   };
 
-  return (
+  return props.location.pathname.indexOf('/table/checkAppDetail/') > -1 ||
+    props.location.pathname.indexOf('/table/checkConceptDetail/') > -1 ? (
     <div className={styles.normal}>
       <Layout>
-        <Header className="header" style={{ padding: 0 }}>
+        <Header style={{ padding: 0 }}>
           <Menu theme="dark" mode="horizontal" selectable="false">
-            <Menu.Item key="0"></Menu.Item>
+            <Menu.Item key="0">
+              <div>
+                <img src={uniLogo} alt="" style={{ width: '40px' }} />
+              </div>
+            </Menu.Item>
             <Menu.Item
               key="1"
               style={{
@@ -80,11 +88,44 @@ function BackStageLayout(props) {
                 fontSize: '18px',
               }}
             >
-              联仁归一工具
+              wiki
+            </Menu.Item>
+          </Menu>
+        </Header>
+        <Layout>
+          <Content className={styles.site}>{props.children}</Content>
+        </Layout>
+      </Layout>
+      <YMLoading />
+    </div>
+  ) : (
+    <div className={styles.normal}>
+      <Layout>
+        <Header style={{ padding: 0 }}>
+          <Menu theme="dark" mode="horizontal" selectable="false">
+            <Menu.Item key="0">
+              <div>
+                <img src={uniLogo} alt="" style={{ width: '40px' }} />
+              </div>
             </Menu.Item>
             <Menu.Item
+              key="1"
+              style={{
+                background: 'none',
+                color: 'rgba(255, 255, 255, 0.65)',
+                fontSize: '18px',
+              }}
+            >
+              wiki
+            </Menu.Item>
+
+            <Menu.Item
               key="5"
-              style={{ ...titleMiddleStyle, marginLeft: '25%' }}
+              style={{
+                ...titleMiddleStyle,
+                marginLeft:
+                  document?.documentElement?.clientWidth > 1800 ? '30%' : '26%',
+              }}
             >
               <span onClick={goHomePage}>首页</span>
             </Menu.Item>
@@ -131,20 +172,11 @@ function BackStageLayout(props) {
             </Menu.Item>
           </Menu>
         </Header>
-        <Layout style={{ padding: '30px' }}>
-          <Content
-            className={styles.site}
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 610,
-              //height: '100%',
-            }}
-          >
-            {props.children}
-          </Content>
+        <Layout>
+          <Content className={styles.site}>{props.children}</Content>
         </Layout>
       </Layout>
+      <YMLoading />
     </div>
   );
 }

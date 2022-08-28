@@ -1,33 +1,50 @@
 import { extend } from 'umi-request';
 import qs from 'qs';
-
+import { loadingPublisher } from '../components/Loading/Loading';
 /**
  * 配置request请求时的默认参数
  */
 const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
-
+// /apl/project/upload/
 request.interceptors.request.use((url, options) => {
-  return {
-    url: `${url}`,
-    options: {
-      ...options,
-      data: qs.stringify(options.data),
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+  if (
+    url &&
+    (url.indexOf('apl/chart') > -1 ||
+      url.indexOf('apl/statistics') > -1 ||
+      url.indexOf('apl/project/copy/') > -1 ||
+      url.indexOf('apl/project/upload/') > -1)
+  ) {
+    return {
+      url: `${url}`,
+      options: {
+        ...options,
       },
-    },
-  };
+    };
+  } else {
+    loadingPublisher.add();
+    return {
+      url: `${url}`,
+      options: {
+        ...options,
+      },
+    };
+  }
 });
-
-// request.use(async (ctx, next) => {
-//   await next();
-//   const { res } = ctx;
-//   if (res.code !== 0) {
-//     // 错误公共部分
-//     console.log(res.msg)
-//   }
-// })
-
+request.interceptors.response.use(res => {
+  if (
+    res &&
+    res.url &&
+    (res.url.indexOf('apl/chart') > -1 ||
+      res.url.indexOf('apl/statistics') > -1 ||
+      res.url.indexOf('apl/project/copy/') > -1 ||
+      res.url.indexOf('apl/project/upload/') > -1)
+  ) {
+    return res;
+  } else {
+    loadingPublisher.sub();
+    return res;
+  }
+});
 export default request;

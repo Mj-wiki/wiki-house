@@ -17,9 +17,8 @@ const Login = props => {
     };
   };
   const signin = () => {
-    console.log('登录');
-    //signIn();
-    history.push('/table/homePage');
+    signIn();
+    if (errorInfo) return;
   };
   const onEnter = e => {
     if (e.nativeEvent.keyCode !== 13) return;
@@ -39,7 +38,7 @@ const Login = props => {
           <img src={zhs} alt="" />
         </div>
         <div className={styles.right}>
-          <div className={styles.title}>欢迎登录联仁归一工具系统</div>
+          <div className={styles.title}>欢迎登录wiki知识库系统</div>
           <div className={styles.from}>
             <div
               className={classnames({

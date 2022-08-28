@@ -1,0 +1,265 @@
+@colorB: #353d58;
+@colorG: #4abf61;
+.content {
+  max-width: 1200px;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  .bigBox {
+    display: flex;
+    .informationBox {
+      width: 350px;
+      margin-right: 20px;
+      .lecturerLayout {
+        color: #333;
+        text-align: left;
+        .lecturerLeft {
+          z-index: 99;
+          font-weight: 600;
+          position: relative;
+          top: 10px;
+          font-size: 20px;
+        }
+      }
+      .bottomBox {
+        position: relative;
+        height: auto;
+        border-radius: 0px 0px 10px 10px;
+        background: #fff;
+        margin-top: 40px;
+        text-align: left;
+        .lectureHospital,
+        .properties {
+          margin-top: 20px;
+          font-weight: 400;
+          color: rgba(102, 102, 102, 1);
+          white-space: normal;
+          overflow-wrap: break-word;
+          line-height: 30px;
+          .projectName,
+          .synonym {
+            display: inline-block;
+            width: 65px;
+            margin-right: 20px;
+            font-weight: 600;
+          }
+          .synonymCotent {
+            width: 220px;
+            overflow: hidden;
+            color: rgba(51, 51, 51, 1);
+            &.unfold {
+              //max-height: 120px;
+              overflow: auto;
+            }
+          }
+          // 展开收起小箭头
+          .unfold_button {
+            height: 20px;
+            width: 40px;
+            position: relative;
+            cursor: pointer;
+            color: #59a4f9;
+            &::after {
+              content: '';
+              display: inline-block;
+              width: 6px;
+              height: 6px;
+              position: absolute;
+              right: 8px;
+              cursor: pointer;
+              transform: rotate(45deg);
+            }
+            &.packup::after {
+              border-right: 1px solid #59a4f9;
+              border-bottom: 1px solid #59a4f9;
+              bottom: 6px;
+              right: -16px;
+            }
+            &.unfold::after {
+              border-left: 1px solid #59a4f9;
+              border-top: 1px solid #59a4f9;
+              top: 10px;
+              right: -14px;
+            }
+          }
+        }
+        .properties {
+          display: flex;
+        }
+      }
+    }
+    .echartsBox {
+      width: 850px;
+      padding: 20px;
+      border: 1px solid @colorB;
+      position: relative;
+      .EachartsState {
+        position: absolute;
+        z-index: 101;
+        bottom: 10px;
+        left: 10px;
+        border: 1px solid;
+        width: 120px;
+        height: 130px;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      .borderslide {
+        width: 100%;
+        line-height: 30px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0px;
+      }
+
+      .borderOrange {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: orange;
+        margin-right: 5px;
+      }
+
+      .borderBlue,
+      .borderRed {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #59a4f9;
+        margin-right: 9px;
+      }
+      .borderRed {
+        background: transparent;
+        border: 2px solid #f40;
+      }
+      .legend {
+        display: flex;
+        justify-content: space-between;
+        height: 50px;
+
+        .minus {
+          width: 400px;
+        }
+
+        .line_hover {
+          position: relative;
+          top: 1px;
+          width: 200px;
+          height: auto;
+          line-height: 24px;
+          padding: 10px;
+          border-top: 0px;
+          text-align: center;
+          background: rgba(255, 255, 255, 1);
+          box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.09);
+          border-radius: 4px;
+          z-index: 1000;
+
+          .cookieLine {
+            text-align: left;
+            cursor: pointer;
+            font-weight: 400;
+            color: #999999;
+            &:hover {
+              color: #4abf61;
+            }
+          }
+        }
+        .hotWordSearch {
+          display: inline-block;
+          text-align: right;
+          .emptyHistory {
+            width: 200px;
+            //height: 20px;
+            background: rgba(232, 232, 232, 0.3);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #666666;
+            border: 0px;
+          }
+          .hotSearch {
+            color: #333333;
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
+  .checkTitle {
+    color: #333;
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+    top: 10px;
+    font-size: 20px;
+  }
+  .searchArea {
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    justify-content: center;
+    width: 600px;
+    height: 50px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    .line {
+      width: 1px;
+      height: 20px;
+      background: rgba(0, 0, 0, 0.15);
+      margin-top: 14px;
+    }
+    :global {
+      .ant-btn-primary {
+        color: #fff;
+        background-color: @colorB;
+        border-color: @colorB;
+      }
+      .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+        color: #fff;
+        background: @colorB !important;
+        border-color: transparent;
+        box-shadow: -1px 0 0 0 transparent;
+        -webkit-box-shadow: -1px 0 0 0 transparent;
+      }
+      .ant-input-wrapper {
+        .ant-input-search,
+        .ant-input-search-enter-button,
+        .ant-input-affix-wrapper {
+          height: 47px;
+        }
+        .ant-input-group-addon {
+          .ant-btn,
+          .ant-input-search-button,
+          .ant-btn-primary {
+            width: 105%;
+            height: 48px;
+            z-index: 10;
+          }
+        }
+      }
+      .ant-select-selector {
+        border: 0px;
+        height: 48px;
+        padding: 10px 11px;
+      }
+      .ant-input {
+        border: 0;
+      }
+      .ant-input-affix-wrapper:hover {
+        border: 0px;
+        border-color: transparent;
+      }
+      .ant-input-affix-wrapper {
+        border: 0px;
+      }
+      .ant-input-affix-wrapper:focus {
+        box-shadow: transparent !important;
+      }
+    }
+  }
+}

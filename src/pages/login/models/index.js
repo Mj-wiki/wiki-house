@@ -26,7 +26,7 @@ const Model = {
         yield put({
           type: 'save',
           payload: {
-            errorInfo: 'Username不能为空。',
+            errorInfo: '用户名不能为空。',
           },
         });
         return;
@@ -36,28 +36,29 @@ const Model = {
         yield put({
           type: 'save',
           payload: {
-            errorInfo: 'PassWord不能为空。',
+            errorInfo: '密码不能为空。',
           },
         });
         return;
       }
       const result = yield call(Login, {
-        email: userName,
+        username: userName,
         password: passWord,
       });
-      if (result.code === 0) {
+      if (result.result === 'success') {
         yield put({
           type: 'save',
           payload: {
             errorInfo: '',
           },
         });
+        localStorage.setItem('username', result.data);
         history.replace('/table/homePage');
       } else {
         yield put({
           type: 'save',
           payload: {
-            errorInfo: result.msg,
+            errorInfo: '登录账号或密码错误,请重新登录!',
           },
         });
       }
